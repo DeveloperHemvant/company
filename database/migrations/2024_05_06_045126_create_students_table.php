@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('UNIVERSITY');
             $table->foreign('UNIVERSITY')->references('id')->on('universities')->cascadeOnDelete();
-            $table->string('ASSOCIATE', 255);
+            $table->unsignedBigInteger('ASSOCIATE');
+            $table->foreign('ASSOCIATE')->references('id')->on('associates')->cascadeOnDelete();
             $table->string('SOURCE', 255);
             $table->integer('SR_NO');
             $table->string('UNI_REG_NO', 255);
