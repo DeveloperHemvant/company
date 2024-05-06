@@ -45,17 +45,7 @@ class CoursesDetails extends Component
             'late_fee.required' => 'The Late fee is required.',
             'late_fee.numeric' => 'The Late fee must be a number.',            
         ]);
-        $course = new Cousre;
-        $course->course_name = $this->course_name;
-        $course->	programmes_id = $this->programme_id;
-        $course->admission_fee = $this->admission_fee;
-        $course->exam_fee = $this->exam_fee;
-        $course->late_fee = $this->late_fee;
-
-        $course->save();
-        $this->programme_id = '';
-        $this->course_name = '';
-        $this->showAddForm = false;
+        
     }
     public function delete($id){
         Cousre::find($id)->delete();

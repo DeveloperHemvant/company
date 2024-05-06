@@ -11,10 +11,18 @@ use Livewire\Attributes\Validate;
 
 class AddStudent extends Component
 {
+    public $session_name;
+    public $programme_id;
+    public $course_id;
+    #[Validate('required', message:'Please Enter the Programme Name',translate:false)]
     public $programmes;
+    #[Validate('required', message:'Please Enter the Session',translate:false)]
     public $sessions;
+    #[Validate('required', message:'Please Enter the Course',translate:false)]
     public $courses;
+    #[Validate('required', message:'Please Enter the University',translate:false)]
     public $university;
+   
     public $selectedProgramme=null;
     public $selectedCourseFee = null;
     #[Validate('required', message:'Please Enter the First Name',translate:false)]
@@ -55,22 +63,11 @@ class AddStudent extends Component
     public $medium;
     #[Validate('required', message:'Please Enter the Board Name',translate:false)]
     public $board;
-    public $skills = [];
-    public function addSkill($index)
-    {
-        // Insert an empty string at the specified index
-        array_splice($this->skills, $index + 1, 0, '');
-    }
-
-    public function removeSkill($index)
-    {
-        // Remove the item at the specified index
-        unset($this->skills[$index]);
-        // Re-index the array
-        $this->skills = array_values($this->skills);
-    }
+   
     // public $telephone;
+    public function addstudent(){
 
+    }
     public function mount()
     {
         $this->programmes = Programme::all();

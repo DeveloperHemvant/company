@@ -1,5 +1,3 @@
-<!-- livewire/form-component.blade.php -->
-
 <div class="container mx-auto px-4 py-8">
     <form wire:submit.prevent="submitForm" class="max-w-lg mx-auto">
         <div class="flex flex-wrap -mx-3 mb-6">
@@ -7,7 +5,7 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     University
                 </label>
-                <select wire:model="session_name" id="university" class="form-select">
+                <select wire:model="university" id="university" class="form-select">
                     <option value="" selected>Choose University</option>
                     @foreach ($university as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->university_name }}</option>
