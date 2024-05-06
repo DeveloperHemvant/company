@@ -71,6 +71,19 @@
                             <!-- Other dropdown links for programmes -->
                         </x-slot>
                     </x-dropdown>
+                    <x-dropdown>
+                        <x-slot name="trigger">
+                            <x-nav-link :active="request()->routeIs('course-details*')" class="cursor-pointer hover:text-blue-600">
+                                {{ __('Students') }}
+                            </x-nav-link>
+                        </x-slot>
+                
+                        <x-slot name="content" class="py-2 bg-white border rounded shadow-lg">
+                            <x-dropdown-link :href="route('add-student')" class="block px-4 py-2 hover:bg-gray-100">Add Student</x-dropdown-link>
+                            {{-- <x-dropdown-link :href="route('course-details')" class="block px-4 py-2 hover:bg-gray-100">All Courses</x-dropdown-link> --}}
+                            <!-- Other dropdown links for programmes -->
+                        </x-slot>
+                    </x-dropdown>
                 </div>
                 
             </div>

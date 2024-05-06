@@ -1,7 +1,7 @@
 <div>
     <div>
     <button wire:click="toggleAddForm" class="bg-blue-500 hover:bg-blue-700  font-bold py-2 px-4 rounded mb-4">
-        {{ $showAddForm ? 'Cancel' : 'Add Session' }}
+        {{ $showAddForm ? 'Cancel' : 'Add Programme' }}
     </button>
 
     @if ($showAddForm)

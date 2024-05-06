@@ -45,7 +45,10 @@ Route::get('/session-details', function () {
 Route::get('/programe-details', function () {
     return view('admin/programe' );
 })->name('programe-details');
-    Route::get('/course-details', function () {
+Route::get('/course-details', function () {
         return view('admin/course-details');
     })->name('course-details');
 });
+Route::get('/add-student', function () {
+    return view('admin/addstudent');
+})->name('add-student');
