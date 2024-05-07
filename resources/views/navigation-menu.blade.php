@@ -60,15 +60,14 @@
                     <!-- Dropdown menu for Programmes -->
                     <x-dropdown>
                         <x-slot name="trigger">
-                            <x-nav-link :active="request()->routeIs('programe-details*')" class="cursor-pointer hover:text-blue-600">
-                                {{ __('Programmes and Courses') }}
+                            <x-nav-link :active="request()->routeIs('specialization-details*')" class="cursor-pointer hover:text-blue-600">
+                                {{ __('Courses and Specialization ') }}
                             </x-nav-link>
                         </x-slot>
                 
                         <x-slot name="content" class="py-2 bg-white border rounded shadow-lg">
-                            <x-dropdown-link :href="route('programe-details')" class="block px-4 py-2 hover:bg-gray-100">All Programmes</x-dropdown-link>
                             <x-dropdown-link :href="route('course-details')" class="block px-4 py-2 hover:bg-gray-100">All Courses</x-dropdown-link>
-                            
+                            <x-dropdown-link :href="route('specialization-details')" class="block px-4 py-2 hover:bg-gray-100">All Specialization</x-dropdown-link>                            
                         </x-slot>
                     </x-dropdown>
                     <x-dropdown>

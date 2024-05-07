@@ -24,10 +24,10 @@ class ProgrameDetails extends Component
     
     public function save(){
         $validatedData = $this->validate([
-            'programme_name' => 'required|min:3|unique:programmes', 
+            'programme_name' => 'required|unique:programmes', 
         ], [
             'programme_name.required' => 'The university name is required.',
-            'programme_name.min' => 'The university name must be at least 3 characters.',
+            // 'programme_name.min' => 'The university name must be at least 3 characters.',
             'programme_name.unique' => 'The programme is already exists.',
         ]);
         $programmeName = $this->programme_name;
@@ -50,8 +50,8 @@ class ProgrameDetails extends Component
         $validatedData = $this->validate([
             'oprogramme_name' => 'required|min:3|unique:programmes,programme_name', 
         ], [
-            'oprogramme_name.required' => 'The university name is required.',
-            'oprogramme_name.min' => 'The university name must be at least 3 characters.',
+            'oprogramme_name.required' => 'The programme name is required.',
+            
             'oprogramme_name.unique' => 'The programme is already exists.',
         ]);
         $updatedprograme = $this->oprogramme_name;

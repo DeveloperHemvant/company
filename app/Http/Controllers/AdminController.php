@@ -9,7 +9,7 @@ class AdminController extends Controller
 {
    public function index(){
         if (Auth::user()->usertype=='staff') {
-           
+            
             return view('dashboard');
         }else{
             // dd('admin');

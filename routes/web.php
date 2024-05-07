@@ -42,9 +42,9 @@ Route::get('/associate-details', function () {
 Route::get('/session-details', function () {
     return view('admin/session-details' );
 })->name('all-session');
-Route::get('/programe-details', function () {
-    return view('admin/programe' );
-})->name('programe-details');
+Route::get('/specialization-details', function () {
+    return view('admin/specialization' );
+})->name('specialization-details');
 Route::get('/course-details', function () {
         return view('admin/course-details');
     })->name('course-details');

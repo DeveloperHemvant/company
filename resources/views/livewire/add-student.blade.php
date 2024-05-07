@@ -1,13 +1,13 @@
 <div class="container mx-auto px-4 py-8">
-    <form wire:submit.prevent="submitForm" class="max-w-lg mx-auto">
+    <form wire:submit.prevent="addstudent" class="max-w-lg mx-auto">
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class=" md:w-1/2 px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     University
                 </label>
-                <select wire:model="university" id="university" class="form-select">
+                <select wire:model="universities" id="universities" class="form-select">
                     <option value="" selected>Choose University</option>
-                    @foreach ($university as $mb)
+                    @foreach ($universities as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->university_name }}</option>
                     @endforeach
                 </select>
@@ -34,7 +34,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            {{-- <div class=" md:w-1/2 px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
                     Course Name
                 </label>
@@ -46,12 +46,19 @@
                         @endforeach
                     @endif
                 </select>
-            </div>
+            </div> --}}
             <div class=" md:w-1/2 px-3 mb-6">
-                {{-- <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    First Name
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
+                    Admission Type
                 </label>
-                <input type="text" name="fname" id="fname"> --}}
+                <select wire:model="course_id" id="course" class="form-select" >
+                    <option value="0" selected>Choose Course</option>
+                    <option value="1" selected>PLAIN</option>
+                    <option value="2" selected>Choose Course</option>
+                    <option value="3" selected>Choose Course</option>
+                    <option value="4" selected>Choose Course</option>
+                   
+                </select>
             </div>
             <div class=" md:w-1/2 px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">

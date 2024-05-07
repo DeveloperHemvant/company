@@ -15,8 +15,8 @@ class AddUniversity extends Component
     public function save()
     {
         $validatedData = $this->validate([
-            'university_name' => 'required|min:3|unique:universities', 
-            'university_code' => 'required|min:3|unique:universities',
+            'university_name' => 'required|unique:universities', 
+            'university_code' => 'required|unique:universities',
         ], [
             'university_name.required' => 'The university name is required.',
             'university_name.min' => 'The university name must be at least 3 characters.',

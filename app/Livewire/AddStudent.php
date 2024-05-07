@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\students;
 use Livewire\Component;
 use App\Models\admission_session;
 use App\Models\Programme;
@@ -21,7 +22,7 @@ class AddStudent extends Component
     #[Validate('required', message:'Please Enter the Course',translate:false)]
     public $courses;
     #[Validate('required', message:'Please Enter the University',translate:false)]
-    public $university;
+    public $universities;
    
     public $selectedProgramme=null;
     public $selectedCourseFee = null;
@@ -66,18 +67,27 @@ class AddStudent extends Component
    
     // public $telephone;
     public function addstudent(){
-
+        $student = new students;
+        $student->NAME = $this->fname . ' ' . $this->lname;
+        $student->FATHER_NAME = $this->father_name;
+        $student->MOTHER_NAME = $this->mother_name;
+        $student->DOB = $this->dob;
+        $student->EMAIL = $this->email;
+        $student->MOB_NO = $this->mob;
+        $student->ADDRESS = $this->address;
+        $student->ACADEMIC;
+        
     }
     public function mount()
     {
         $this->programmes = Programme::all();
         $this->sessions = admission_session::all();
-        $this->university = University::all();
+        $this->universities = University::all();
         
     }
-    public function updatedSelectedProgramme($selectedProgramme){
-        $this->courses = Cousre::where('programmes_id', $selectedProgramme)->get();
-    }
+    // public function updatedSelectedProgramme($selectedProgramme){
+    //     $this->courses = Cousre::where('programmes_id', $selectedProgramme)->get();
+    // }
     // public function updatedSelectedCourseFee($selectedCourseFee){
     //     $this->selectedCourseFee = Cousre::find($selectedCourseFee);
        
