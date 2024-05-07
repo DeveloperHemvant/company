@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        
         Schema::create('specializations', function (Blueprint $table) {
             $table->id();
             $table->string('specialization_name');
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->foreign('course_id')->references('id')->on('cousres')->cascadeOnDelete();
             $table->timestamps();
         });
-        
+
     }
 
     /**

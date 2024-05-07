@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Livewire;
+
 use App\Models\University;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Redirect;
+
 class EditUniversity extends Component
 {
     public $university;
@@ -52,8 +54,8 @@ class EditUniversity extends Component
 
     public function render()
     {
-        
-        
-        return view('livewire.edit-university',['university'=>$this->university]);
+
+
+        return view('livewire.edit-university', ['university' => $this->university]);
     }
 }

@@ -15,58 +15,59 @@ class AddStudent extends Component
     public $session_name;
     public $programme_id;
     public $course_id;
-    #[Validate('required', message:'Please Enter the Programme Name',translate:false)]
+    #[Validate('required', message: 'Please Enter the Programme Name', translate: false)]
     public $programmes;
-    #[Validate('required', message:'Please Enter the Session',translate:false)]
+    #[Validate('required', message: 'Please Enter the Session', translate: false)]
     public $sessions;
-    #[Validate('required', message:'Please Enter the Course',translate:false)]
+    #[Validate('required', message: 'Please Enter the Course', translate: false)]
     public $courses;
-    #[Validate('required', message:'Please Enter the University',translate:false)]
+    #[Validate('required', message: 'Please Enter the University', translate: false)]
     public $universities;
-   
-    public $selectedProgramme=null;
+
+    public $selectedProgramme = null;
     public $selectedCourseFee = null;
-    #[Validate('required', message:'Please Enter the First Name',translate:false)]
+    #[Validate('required', message: 'Please Enter the First Name', translate: false)]
     public $fname;
-    #[Validate('required', message:'Please Enter the Last Name',translate:false)]
+    #[Validate('required', message: 'Please Enter the Last Name', translate: false)]
     public $lname;
-    #[Validate('required', message:'Please Enter the Father Name',translate:false)]
+    #[Validate('required', message: 'Please Enter the Father Name', translate: false)]
     public $father_name;
-    #[Validate('required', message:'Please Enter the Mother Name',translate:false)]
+    #[Validate('required', message: 'Please Enter the Mother Name', translate: false)]
     public $mother_name;
-    #[Validate('required', message:'Please Enter the Date of Birth',translate:false)]
+    #[Validate('required', message: 'Please Enter the Date of Birth', translate: false)]
     public $dob;
-    #[Validate('required', message:'Please Enter the Email',translate:false)]
+    #[Validate('required', message: 'Please Enter the Email', translate: false)]
     public $email;
-    #[Validate('required', message:'Please Enter the Mobile',translate:false)]
+    #[Validate('required', message: 'Please Enter the Mobile', translate: false)]
     public $mob;
-    #[Validate('required', message:'Please Enter the full address',translate:false)]
+    #[Validate('required', message: 'Please Enter the full address', translate: false)]
     public $address;
-    #[Validate('required', message:'Please Enter the City Name',translate:false)]
+    #[Validate('required', message: 'Please Enter the City Name', translate: false)]
     public $city;
-    #[Validate('required', message:'Please Enter the Pin code',translate:false)]
+    #[Validate('required', message: 'Please Enter the Pin code', translate: false)]
     public $pincode;
-    #[Validate('required', message:'Please Enter the State ',translate:false)]
+    #[Validate('required', message: 'Please Enter the State ', translate: false)]
     public $state;
-    #[Validate('required', message:'Please Enter the District',translate:false)]
+    #[Validate('required', message: 'Please Enter the District', translate: false)]
     public $distt;
-    #[Validate('required', message:'Please Enter the Academic Details',translate:false)]
+    #[Validate('required', message: 'Please Enter the Academic Details', translate: false)]
     public $academic;
-    #[Validate('required', message:'Please Enter the Subjects',translate:false)]
+    #[Validate('required', message: 'Please Enter the Subjects', translate: false)]
     public $subject;
-    #[Validate('required', message:'Please Enter the Passing Year',translate:false)]
+    #[Validate('required', message: 'Please Enter the Passing Year', translate: false)]
     public $passingyear;
-    #[Validate('required', message:'Please Enter the Division',translate:false)]
+    #[Validate('required', message: 'Please Enter the Division', translate: false)]
     public $division;
-    #[Validate('required', message:'Please Enter the Marks',translate:false)]
+    #[Validate('required', message: 'Please Enter the Marks', translate: false)]
     public $marks;
-    #[Validate('required', message:'Please Enter the Medium',translate:false)]
+    #[Validate('required', message: 'Please Enter the Medium', translate: false)]
     public $medium;
-    #[Validate('required', message:'Please Enter the Board Name',translate:false)]
+    #[Validate('required', message: 'Please Enter the Board Name', translate: false)]
     public $board;
-   
+
     // public $telephone;
-    public function addstudent(){
+    public function addstudent()
+    {
         $student = new students;
         $student->NAME = $this->fname . ' ' . $this->lname;
         $student->FATHER_NAME = $this->father_name;
@@ -76,27 +77,27 @@ class AddStudent extends Component
         $student->MOB_NO = $this->mob;
         $student->ADDRESS = $this->address;
         $student->ACADEMIC;
-        
+
     }
     public function mount()
     {
         $this->programmes = Programme::all();
         $this->sessions = admission_session::all();
         $this->universities = University::all();
-        
+
     }
     // public function updatedSelectedProgramme($selectedProgramme){
     //     $this->courses = Cousre::where('programmes_id', $selectedProgramme)->get();
     // }
     // public function updatedSelectedCourseFee($selectedCourseFee){
     //     $this->selectedCourseFee = Cousre::find($selectedCourseFee);
-       
+
     // }
-   
+
 
     public function render()
     {
-        
+
         return view('livewire.add-student');
     }
 }

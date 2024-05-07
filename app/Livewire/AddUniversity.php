@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use App\Models\University;
@@ -15,7 +16,7 @@ class AddUniversity extends Component
     public function save()
     {
         $validatedData = $this->validate([
-            'university_name' => 'required|unique:universities', 
+            'university_name' => 'required|unique:universities',
             'university_code' => 'required|unique:universities',
         ], [
             'university_name.required' => 'The university name is required.',
@@ -25,13 +26,13 @@ class AddUniversity extends Component
             'university_code.min' => 'The university code must be at least 3 characters.',
             'university_code.unique' => 'The university code has already been taken.',
         ]);
-    
+
         if (University::create($validatedData)) {
             session()->flash('status', 'Unversity created suucessfully');
         } else {
             session()->flash('status', 'University Not created');
         }
-    
+
         $this->resetForm();
     }
     public function resetForm()

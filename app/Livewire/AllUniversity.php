@@ -9,16 +9,17 @@ class AllUniversity extends Component
 {
 
     public $university_id;
-    public function delete($id){
-        
-            $this->university_id = $id;
-            University::find($this->university_id)->delete();
-            
-        
+    public function delete($id)
+    {
+
+        $this->university_id = $id;
+        University::find($this->university_id)->delete();
+
+
     }
     public function render()
     {
         $university = University::all();
-        return view('livewire.all-university',['universities'=>$university]);
+        return view('livewire.all-university', ['universities' => $university]);
     }
 }
