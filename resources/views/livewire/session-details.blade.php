@@ -95,13 +95,11 @@
                                     <div class="mb-4">
                                         <label for="selectedMonth"
                                             class="block text-gray-700 text-sm font-bold mb-2">Month:</label>
-                                        <select wire:model="u_month" id="selectedMonth"
+                                        <select wire:model="selectedMonth" id="selectedMonth"
                                             class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                             <option value="">Select Month</option>
                                             @foreach ($months as $key => $month)
-                                                @selected($month === $u_session->month ? 'disabled' : '')
-                                                <option value="{{ $month }}"
-                                                    {{ $month === $u_session->month ? 'disabled' : '' }}>
+                                                <option value="{{ $month }}">
                                                     {{ $month }}</option>
                                             @endforeach
                                         </select>
@@ -112,12 +110,11 @@
                                     <div class="mb-4">
                                         <label for="university"
                                             class="block text-gray-700 text-sm font-bold mb-2">University Name:</label>
-                                        <select wire:model="u_university" id="university"
+                                        <select wire:model="university" id="university"
                                             class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                             <option value="">Select University </option>
                                             @foreach ($universities as $uni)
-                                                <option value="{{ $uni->id }}"
-                                                    {{ $uni->id === $u_session->u_id ? 'disabled' : '' }}>
+                                                <option value="{{ $uni->id }}" >
                                                     {{ $uni->university_name }}</option>
                                             @endforeach
                                         </select>

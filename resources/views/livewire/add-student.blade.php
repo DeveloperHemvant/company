@@ -5,61 +5,75 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     University
                 </label>
-                <select wire:model="universities" id="universities" class="form-select">
-                    <option value="" selected>Choose University</option>
+                <select wire:model="university" id="universities" class="form-select">
+                    <option value="">Choose University</option>
                     @foreach ($universities as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->university_name }}</option>
                     @endforeach
                 </select>
+                @error('university')
+                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
             </div>
             <div class=" md:w-1/2 px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="session">
                     Session
                 </label>
                 <select wire:model="session_name" id="session" class="form-select">
-                    <option value="" selected>Choose Session</option>
+                    <option value="">Choose Session</option>
                     @foreach ($sessions as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->session_name }}</option>
                     @endforeach
                 </select>
+                @error('session_name')
+                   <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
             </div>
             <div class=" md:w-1/2 px-3 mb-6">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="programme">
-                    Programme Name
-                </label>
-                <select wire:model="programme_id" id="programme" class="form-select"
-                    wire:model.live="selectedProgramme">
-                    <option value="" selected>Choose Programme</option>
-                    @foreach ($programmes as $programme)
-                        <option value="{{ $programme->id }}">{{ $programme->programme_name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            {{-- <div class=" md:w-1/2 px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
                     Course Name
                 </label>
-                <select wire:model="course_id" id="course" class="form-select" >
-                    <option value="" selected>Choose Course</option>
-                    @if ($courses)
-                        @foreach ($courses as $course)
-                            <option value="{{ $course->id }}">{{ $course->course_name }}</option>
+                <select id="selectedCourse" class="form-select" wire:model.live="selectedCourse">
+                    <option value="">Choose Course</option>
+                    @foreach ($cousre as $data)
+                        <option value="{{ $data->id }}">{{ $data->course_name }}</option>
+                    @endforeach
+                </select>
+                @error('selectedCourse')
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+            </div>
+            <div class=" md:w-1/2 px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="programme">
+                    Specialization Name
+                </label>
+                <select wire:model="specialization" id="programme" class="form-select">
+                    <option value="">Choose Specialization</option>
+                    @if ($selectedCourse != null)
+                        @foreach ($specialization as $data)
+                            <option value="{{ $data->id }}">{{ $data->specialization_name }}</option>
                         @endforeach
                     @endif
                 </select>
-            </div> --}}
+                @error('specialization')
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+            </div>
             <div class=" md:w-1/2 px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
                     Admission Type
                 </label>
-                <select wire:model="course_id" id="course" class="form-select">
-                    <option value="0" selected>Choose Course</option>
-                    <option value="1" selected>PLAIN</option>
-                    <option value="2" selected>Choose Course</option>
-                    <option value="3" selected>Choose Course</option>
-                    <option value="4" selected>Choose Course</option>
+                <select wire:model="admission_type" id="course" class="form-select">
+                    <option value="">Admission Type</option>
+                    <option value="1">FRESH</option>
+                    <option value="2">RE REG</option>
+                    <option value="3">LATERAL</option>
+                    <option value="4">OD</option>
 
                 </select>
+                @error('admission_type')
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
             </div>
             <div class=" md:w-1/2 px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
@@ -68,7 +82,7 @@
                 <input type="text" name="fname" id="fname" wire:model="fname">
                 <div>
                     @error('fname')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -79,7 +93,7 @@
                 <input type="text" name="lname" id="lname" wire:model="lname">
                 <div>
                     @error('lname')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -90,7 +104,7 @@
                 <input type="text" name="father_name" id="father_name" wire:model="father_name">
                 <div>
                     @error('father_name')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -101,7 +115,7 @@
                 <input type="text" name="mother_name" id="mother_name" wire:model="mother_name">
                 <div>
                     @error('mother_name')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -114,7 +128,7 @@
                 <input type="date" name="dob" id="dob" wire:model="dob">
                 <div>
                     @error('dob')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -125,7 +139,19 @@
                 <input type="email" name="email" id="email" wire:model="email">
                 <div>
                     @error('email')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class=" md:w-1/2 px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="adhaar">
+                    Adhaar Card Number
+                </label>
+                <input type="tel" name="adhaar" id="adhaar" wire:model="adhaar"
+                    pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}">
+                <div>
+                    @error('adhaar')
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -136,13 +162,10 @@
                 <input type="tel" name="mob" id="mob" wire:model="mob">
                 <div>
                     @error('mob')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-
-        </div>
-        <div class="flex flex-wrap -mx-3 mb-6">
             <div class=" md:w-1/2 px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Address
@@ -150,52 +173,7 @@
                 <textarea wire:model="address"></textarea>
                 <div>
                     @error('address')
-                        {{ $message }}
-                    @enderror
-                </div>
-            </div>
-            <div class=" md:w-1/2 px-3 mb-6">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    City
-                </label>
-                <input type="text" name="city" id="city" wire:model="city">
-                <div>
-                    @error('city')
-                        {{ $message }}
-                    @enderror
-                </div>
-            </div>
-            <div class=" md:w-1/2 px-3 mb-6">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Pin Code
-                </label>
-                <input type="number" name="pincode" id="pincode" wire:model="pincode" min="6"
-                    max="6">
-                <div>
-                    @error('pincode')
-                        {{ $message }}
-                    @enderror
-                </div>
-            </div>
-            <div class=" md:w-1/2 px-3 mb-6">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    State
-                </label>
-                <input type="text" name="state" id="state" wire:model="state">
-                <div>
-                    @error('state')
-                        {{ $message }}
-                    @enderror
-                </div>
-            </div>
-            <div class=" md:w-1/2 px-3 mb-6">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    District
-                </label>
-                <input type="text" name="distt" id="distt" wire:model="distt">
-                <div>
-                    @error('distt')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -208,7 +186,7 @@
                 <input type="text" name="academic" id="academic" wire:model="academic">
                 <div>
                     @error('academic')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -219,7 +197,7 @@
                 <input type="text" name="subject" id="subject" wire:model="subject">
                 <div>
                     @error('subject')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -230,7 +208,7 @@
                 <input type="month" name="passingyear" id="passingyear" wire:model="passingyear">
                 <div>
                     @error('passingyear')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -241,7 +219,7 @@
                 <input type="text" name="division" id="division" wire:model="division">
                 <div>
                     @error('division')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -252,7 +230,7 @@
                 <input type="text" name="marks" id="marks" wire:model="marks">
                 <div>
                     @error('marks')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -263,7 +241,7 @@
                 <input type="text" name="medium" id="medium" wire:model="medium">
                 <div>
                     @error('medium')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -274,34 +252,11 @@
                 <input type="text" name="board" id="board" wire:model="board" data-role="tagsinput">
                 <div>
                     @error('board')
-                        {{ $message }}
+                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
         </div>
-        {{-- <div class="mt-8 overflow-x-auto">
-            @if ($selectedCourseFee)
-            <table class="w-full bg-white shadow-md rounded-xl">
-                <thead>
-                    <tr class="bg-blue-gray-100 text-gray-700">
-                        <th class="py-3 px-4 text-left">Admission Fee</th>
-                        <th class="py-3 px-4 text-left">Exam Fee</th>
-                        <th class="py-3 px-4 text-left">Late Fee</th>
-                        <th class="py-3 px-4 text-left">Total</th>
-                    </tr>
-                </thead>
-                <tbody class="text-blue-gray-900">
-                    <tr class="border-b border-blue-gray-200">
-                        <td class="py-3 px-4">{{$selectedCourseFee->admission_fee}}</td>
-                        <td class="py-3 px-4">{{$selectedCourseFee->exam_fee}}</td>
-                        <td class="py-3 px-4">{{$selectedCourseFee->late_fee}}</td>
-                        <td class="py-3 px-4">{{$selectedCourseFee->admission_fee+$selectedCourseFee->exam_fee+$selectedCourseFee->late_fee}}</td>
-                    </tr>
-                </tbody>
-            </table> 
-            @endif
-        </div> --}}
-
         <div class="flex items-center justify-center">
             <button
                 style="background-color: rgb(26, 149, 219); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
@@ -312,6 +267,4 @@
         </div>
 
     </form>
-
-
 </div>

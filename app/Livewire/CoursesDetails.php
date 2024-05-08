@@ -9,9 +9,9 @@ use Livewire\Attributes\Validate;
 
 class CoursesDetails extends Component
 {
-    public $showAddForm;
+    public $showAddForm = false;
     public $c_id;
-    public $showEditForm;
+    public $showEditForm=false;
     #[Validate('required', message: 'Please Enter the Course Name', translate: false)]
     public $course_name;
 
@@ -19,6 +19,7 @@ class CoursesDetails extends Component
     public function toggleAddForm()
     {
         $this->showAddForm = !$this->showAddForm;
+        $this->showEditForm = false;
     }
     public function save()
     {

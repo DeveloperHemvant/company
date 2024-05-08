@@ -47,6 +47,7 @@ class SessionDetails extends Component
 
         $this->showAddForm = !$this->showAddForm;
         $this->showEditForm = !$this->showEditForm;
+        $this->resetForm();
     }
     public function save()
     {
@@ -78,9 +79,13 @@ class SessionDetails extends Component
         $this->selectedMonth = '';
 
     }
+    public $u_id;
     public function edit($id)
     {
         $session = admission_session::with('university')->find($id);
+        $this->u_id = $session->u_id;
+        $this->university = $session->university->id;
+        $this->selectedMonth = $session->month;
         $this->session_id = $id;
         $this->u_session = $session;
         $this->showAddForm = false;
@@ -89,7 +94,7 @@ class SessionDetails extends Component
     public function update()
     {
         $session = admission_session::find($this->session_id);
-        $selectedMonth = str_pad($this->u_month, 2, '0', STR_PAD_LEFT);
+        $selectedMonth = str_pad($this->selectedMonth, 2, '0', STR_PAD_LEFT);
 
         $currentYear = Carbon::now()->year;
         $nextYear = Carbon::now()->addYear()->year;
@@ -97,7 +102,7 @@ class SessionDetails extends Component
         $sessionName = $selectedMonth . ' ' . $currentYear . '-' . $nextYear;
         if ($session) {
             $session->update([
-                'month' => $this->u_month,
+                'month' => $this->selectedMonth,
                 'u_id' => $this->university,
                 'session_name' => $sessionName
             ]);

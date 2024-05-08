@@ -13,7 +13,7 @@ class AssociateDetails extends Component
     {
         $associate_name = '';
         $this->showAddForm = !$this->showAddForm;
-        $this->showEditForm = !$this->showEditForm;
+        $this->showEditForm = false;
     }
 
     #[Validate('required', message: 'Please provide University Name', translate: false)]

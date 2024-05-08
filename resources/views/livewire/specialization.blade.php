@@ -37,7 +37,8 @@
 
                 </div>
 
-                <button type="submit" class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Add
+                <button type="submit" style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+                class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Add
                     Specialization</button>
             </form>
 
@@ -68,8 +69,10 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $proggramme->cousre->course_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button wire:click="edit({{ $proggramme->id }})"
+                                    style="background-color: #0fe419; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                     class="text-indigo-600 hover:text-indigo-900">Edit</button>
-                                <button wire:click="delete({{ $proggramme->id }})"
+                                <button style="background-color: #ff0000; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+                                wire:click="delete({{ $proggramme->id }})"
                                     class="text-red-600 hover:text-red-900 ml-2">Delete</button>
                             </td>
                         </tr>
@@ -83,25 +86,25 @@
                                         <div>
 
                                             <label for="name">Specialization Name:</label>
-                                            <x-input name="u_specialization_name" type="text"
+                                            <x-input name="specialization_name" type="text"
                                                 id="specialization_name" class="custom-class"
-                                                wire:model="u_specialization_name" required />
+                                                wire:model="specialization_name" required />
 
                                             <div>
-                                                @error('u_specialization_name')
+                                                @error('specialization_name')
                                                     {{ $message }}
                                                 @enderror
                                             </div>
                                         </div>
                                         <div>
-                                            <label for="u_course_name">Course Name:</label>
+                                            <label for="course_name">Course Name:</label>
 
-                                            <select wire:model="u_course_name" id="u_course_name"
+                                            <select wire:model="course_name" id="course_name"
                                                 class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                                 <option value="">Select Course</option>
                                                 @foreach ($courses as $course)
                                                     <option value="{{ $course->id }}"
-                                                        @if ($c_id == $course->id) disabled @endif>
+                                                       >
                                                         {{ $course->course_name }}</option>
                                                 @endforeach
 
