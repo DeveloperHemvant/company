@@ -2,126 +2,132 @@
 
 namespace App\Livewire;
 
-use App\Models\Associate;
+use Illuminate\Validation\Rule;
 use App\Models\admission_session;
-use App\Models\University;
 use Livewire\Component;
-// use Livewire\Attributes\Validate;
-use Carbon\Carbon;
+use DateTime;
 
 class SessionDetails extends Component
 {
-    public $u_month;
-    public $u_university;
     public $showAddForm = false;
-
     public $showEditForm = false;
-    public $selectedMonth;
-    public $university;
-    public $sessionName;
-    public $session_id;
-    public $month;
-    public $year;
-    public $u_session;
-    public $months = [
-        1 => 'January',
-        2 => 'February',
-        3 => 'March',
-        4 => 'April',
-        5 => 'May',
-        6 => 'June',
-        7 => 'July',
-        8 => 'August',
-        9 => 'September',
-        10 => 'Octuber',
-        11 => 'November',
-        12 => 'December'
-    ];
-
+    public $startmonth;
+    public $endmonth;
+    public $sessiondata;
+    public $name;
     public function mount()
     {
-        $this->selectedMonth = null;
+        $this->sessiondata = admission_session::all();
     }
     public function toggleAddForm()
     {
-
         $this->showAddForm = !$this->showAddForm;
-        $this->showEditForm = !$this->showEditForm;
-        $this->resetForm();
+        $this->showEditForm = false;
+        $this->resetdata();
     }
     public function save()
     {
-        $this->validate([
-            'university' => 'required',
-            'selectedMonth' => 'required',
+        $validatedData = $this->validate([
+            'startmonth' => 'required',
+            'endmonth' => 'required',
+        ], [
+            'startmonth.required' => 'The start month is required.',
+            'endmonth.required' => 'The end month is required.',
         ]);
 
-        $universityId = $this->university;
-        $selectedMonth = str_pad($this->selectedMonth, 2, '0', STR_PAD_LEFT);
+        // Generate the name
+        $startDateTime = new DateTime($this->startmonth);
+        $endDateTime = new DateTime($this->endmonth);
+        $name = $startDateTime->format('F') . '-' . $endDateTime->format('F') . ' ' . $startDateTime->format('Y');
+        // Validate unique name
+        $this->name = $name;
+        $validatedData['name'] = $name;
+        $this->validate([
+            'name' => [
+                'required',
+                Rule::unique('admission_sessions')->where(function ($query) {
+                    return $query->where('name', $this->name);
+                }),
+            ],
+        ], [
+            'name.required' => 'The session  is required.',
+            'name.unique' => 'The session  already exists.',
+        ]);
 
-        $currentYear = Carbon::now()->year;
-        $nextYear = Carbon::now()->addYear()->year;
+        // Create and save the admission session
+        $admission_session = new admission_session;
+        $admission_session->name = $name;
+        $admission_session->startmonth = $this->startmonth;
+        $admission_session->endmonth = $this->endmonth;
+        $admission_session->save();
 
-        $sessionName = $selectedMonth . ' ' . $currentYear . '-' . $nextYear;
-        $year = $currentYear . ' ' . $nextYear;
-        $admissionSession = new admission_session;
-        $admissionSession->session_name = $sessionName;
-        $admissionSession->month = $selectedMonth;
-        $admissionSession->year = $currentYear . ' ' . $nextYear;
-        $admissionSession->u_id = $universityId;
-        $admissionSession->save();
-        $this->resetForm();
-        $this->toggleAddForm();
+        $this->resetdata();
+        $this->refreshData();
+        $this->showAddForm = false;
     }
-    public function resetForm()
-    {
-        $this->university = '';
-        $this->selectedMonth = '';
-
-    }
-    public $u_id;
+    public $session_id;
     public function edit($id)
     {
-        $session = admission_session::with('university')->find($id);
-        $this->u_id = $session->u_id;
-        $this->university = $session->university->id;
-        $this->selectedMonth = $session->month;
-        $this->session_id = $id;
-        $this->u_session = $session;
-        $this->showAddForm = false;
         $this->showEditForm = true;
+        $data = admission_session::find($id);
+        $this->startmonth = $data->startmonth;
+        $this->endmonth = $data->endmonth;
+        $this->session_id = $data->id;
     }
     public function update()
     {
-        $session = admission_session::find($this->session_id);
-        $selectedMonth = str_pad($this->selectedMonth, 2, '0', STR_PAD_LEFT);
+        $validatedData = $this->validate([
+            'startmonth' => 'required',
+            'endmonth' => 'required',
+        ], [
+            'startmonth.required' => 'The start month is required.',
+            'endmonth.required' => 'The end month is required.',
+        ]);
+        $startDateTime = new DateTime($this->startmonth);
+        $endDateTime = new DateTime($this->endmonth);
+        $name = $startDateTime->format('F') . '-' . $endDateTime->format('F') . ' ' . $startDateTime->format('Y');
+        $validatedData['name'] = $name;
+        $this->validate([
+            'name' => [
+                'required',
+                Rule::unique('admission_sessions')->where(function ($query) {
+                    return $query->where('name', $this->name);
+                }),
+            ],
+        ], [
+            'name.required' => 'The session  is required.',
+            'name.unique' => 'The session  already exists.',
+        ]);
+        // Find the admission session record by its ID
+        $admission_session = admission_session::find($this->session_id);
 
-        $currentYear = Carbon::now()->year;
-        $nextYear = Carbon::now()->addYear()->year;
+        // Update the fields
+        $admission_session->name = $name;
+        $admission_session->startmonth = $this->startmonth;
+        $admission_session->endmonth = $this->endmonth;
 
-        $sessionName = $selectedMonth . ' ' . $currentYear . '-' . $nextYear;
-        if ($session) {
-            $session->update([
-                'month' => $this->selectedMonth,
-                'u_id' => $this->university,
-                'session_name' => $sessionName
-            ]);
-            session()->flash('status', 'Session updated successfully');
-        } else {
-            session()->flash('status', 'Failed to update Session');
-        }
-
+        // Save the changes
+        $admission_session->save();
+        $this->resetdata();
         $this->showEditForm = false;
+        $this->refreshData();
+    }
+
+    public function resetdata()
+    {
+        $this->startmonth = '';
+        $this->endmonth = '';
     }
     public function delete($id)
     {
         admission_session::find($id)->delete();
     }
+    public function refreshData(): void
+    {
+        $this->sessiondata = admission_session::all();
+    }
     public function render()
     {
-        $session = admission_session::all();
-        $university = University::all();
-        $associate = Associate::all();
-        return view('livewire.session-details', ['session' => $session, 'universities' => $university, 'associates' => $associate, 'months' => $this->months]);
+        return view('livewire.session-details');
     }
 }

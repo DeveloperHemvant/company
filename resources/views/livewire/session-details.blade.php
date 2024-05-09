@@ -5,51 +5,27 @@
     </button>
 
     @if ($showAddForm)
-        @if (session()->has('status'))
-            <div class="alert {{ session('status') ? 'alert-success' : 'alert-danger' }}">
-                {{ session('status') }}
-            </div>
-        @endif
+                @error('name')
+                <p class="text-red-500 text-xs italic">{{ $message }}</p>
+            @enderror
         <form wire:submit.prevent="save" class="mb-4">
             <div class="mb-4">
-                <label for="sessions" class="block text-gray-700 text-sm font-bold mb-2">Month:</label>
-                <select wire:model="selectedMonth" id="months"
-                    class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="">Select Month</option>
-                    @foreach ($months as $key => $month)
-                        <option value="{{ $month }}">{{ $month }}</option>
-                    @endforeach
-                </select>
+                <label for="sessions" class="block text-gray-700 text-sm font-bold mb-2">Starting Month:</label>
+                <input type="month" name="startmonth" wire:model.live="startmonth" id="startmonth">
                 @error('sessions_id')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="university" class="block text-gray-700 text-sm font-bold mb-2">University Name:</label>
-                <select wire:model="university" id="university"
-                    class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="">Select University</option>
-                    @foreach ($universities as $university)
-                        <option value="{{ $university->id }}">{{ $university->university_name }}</option>
-                    @endforeach
-                </select>
-                @error('university_id')
+                <label for="university" class="block text-gray-700 text-sm font-bold mb-2">Ending Month:</label>
+                <input type="month" name="endmonth" wire:model="endmonth" id="endmonth" min="{{$startmonth}}">
+                @error('sessions_id')
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
+                @error('endmonth')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
-
-            {{-- <div class="mb-4">
-                <label for="sessions" class="block text-gray-700 text-sm font-bold mb-2">sessions Name:</label>
-                <select wire:model="sessions_id" id="sessions" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="">Select sessions</option>
-                    @foreach ($sessionss as $sessions)
-                        <option value="{{ $sessions->id }}">{{ $sessions->sessions_name }}</option>
-                    @endforeach
-                </select>
-                @error('sessions_id') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
-            </div> --}}
-
-
             <button type="submit"
                 style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                 class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Add Session</button>
@@ -57,12 +33,14 @@
 
     @endif
 
-    @if (empty($session))
+    @if (empty($sessiondata))
         <p>No Session found.</p>
     @else
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SR No.</th>
                     <th scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                     <th scope="col"
@@ -71,9 +49,11 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @foreach ($session as $sessions)
+                {{-- {{$rotationCount = 1}} --}}
+                @foreach ($sessiondata as $sessions)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $sessions->session_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }} </td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $sessions->name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <button
                                 style="background-color: rgb(26, 149, 219); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
@@ -93,40 +73,25 @@
                                 <!-- Edit sessions Form -->
                                 <form wire:submit.prevent="update" class="mb-4">
                                     <div class="mb-4">
-                                        <label for="selectedMonth"
-                                            class="block text-gray-700 text-sm font-bold mb-2">Month:</label>
-                                        <select wire:model="selectedMonth" id="selectedMonth"
-                                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                            <option value="">Select Month</option>
-                                            @foreach ($months as $key => $month)
-                                                <option value="{{ $month }}">
-                                                    {{ $month }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('selectedMonth')
+                                        <label for="sessions" class="block text-gray-700 text-sm font-bold mb-2">Starting Month:</label>
+                                        <input type="month" name="startmonth" wire:model.live="startmonth" id="startmonth">
+                                        @error('sessions_id')
                                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="university"
-                                            class="block text-gray-700 text-sm font-bold mb-2">University Name:</label>
-                                        <select wire:model="university" id="university"
-                                            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                            <option value="">Select University </option>
-                                            @foreach ($universities as $uni)
-                                                <option value="{{ $uni->id }}" >
-                                                    {{ $uni->university_name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('university')
+                                        <label for="university" class="block text-gray-700 text-sm font-bold mb-2">Ending Month:</label>
+                                        <input type="month" name="endmonth" wire:model="endmonth" id="endmonth" min="{{$startmonth}}">
+                                        @error('sessions_id')
+                                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                                        @enderror
+                                        @error('endmonth')
                                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                                         @enderror
                                     </div>
-
                                     <button type="submit"
                                         style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                        class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Update
-                                        Session</button>
+                                        class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Update Session</button>
                                 </form>
 
                             </td>

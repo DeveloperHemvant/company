@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class University extends Model
 {
@@ -14,8 +14,10 @@ class University extends Model
         'university_code'
         // Add more columns here as needed
     ];
-    public function admissionsesssion()
+    public function post(): BelongsTo
     {
-        return $this->hasMany(admission_session::class,'u_id','id');
+        return $this->belongsTo(students::class,'UNIVERSITY','id');
     }
+
+    
 }

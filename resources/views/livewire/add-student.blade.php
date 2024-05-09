@@ -1,35 +1,35 @@
 <div class="container mx-auto px-4 py-8">
-    <form wire:submit.prevent="addstudent" class="max-w-lg mx-auto">
+    <form wire:submit.prevent="addstudent">
         <div class="flex flex-wrap -mx-3 mb-6">
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     University
                 </label>
-                <select wire:model="university" id="universities" class="form-select">
+                <select wire:model="university" id="university" class="form-select">
                     <option value="">Choose University</option>
                     @foreach ($universities as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->university_name }}</option>
                     @endforeach
                 </select>
                 @error('university')
-                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="session">
                     Session
                 </label>
                 <select wire:model="session_name" id="session" class="form-select">
                     <option value="">Choose Session</option>
                     @foreach ($sessions as $mb)
-                        <option value="{{ $mb->id }}">{{ $mb->session_name }}</option>
+                        <option value="{{ $mb->id }}">{{ $mb->name }}</option>
                     @endforeach
                 </select>
                 @error('session_name')
-                   <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
                     Course Name
                 </label>
@@ -40,14 +40,14 @@
                     @endforeach
                 </select>
                 @error('selectedCourse')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                    @enderror
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="programme">
                     Specialization Name
                 </label>
-                <select wire:model="specialization" id="programme" class="form-select">
+                <select wire:model="selectedspecialization" id="programme" class="form-select">
                     <option value="">Choose Specialization</option>
                     @if ($selectedCourse != null)
                         @foreach ($specialization as $data)
@@ -56,10 +56,10 @@
                     @endif
                 </select>
                 @error('specialization')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                    @enderror
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
                     Admission Type
                 </label>
@@ -72,190 +72,218 @@
 
                 </select>
                 @error('admission_type')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                    @enderror
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="semester">
+                    Semester/Year
+                </label>
+                <select wire:model="semester" id="semester" class="form-select">
+                    <option value="">Semester/Year</option>
+                    @for ($i = 1; $i < 9; $i++)
+                        <option value="{{ $i }}"> {{ $i }} Semester </option>
+                    @endfor
+
+                </select>
+                @error('semester')
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
+                    Source
+                </label>
+                <select wire:model.live="source" id="source" class="form-select">
+                    <option value="">Select Source</option>
+                    <option value="1">ASSOCIATE</option>
+                    <option value="2">DIRECT</option>
+                    <option value="3">SOCIAL MEDIA</option>
+                    <option value="4">REFERENCE</option>
+
+                </select>
+                @error('source')
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
+            </div>
+            @if ($source == 1)
+                <div class="    px-3 mb-6">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
+                        Associate
+                    </label>
+                    <select wire:model="selectedassociate" id="associate" class="form-select">
+                        <option value="">Select Associate</option>
+                        @foreach ($associate as $item)
+                            <option value="{{ $item->id }}">{{ $item->associate_name }}</option>
+                        @endforeach>
+
+                    </select>
+                    @error('associate')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            @endif
+
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    First Name
+                    Full Name
                 </label>
                 <input type="text" name="fname" id="fname" wire:model="fname">
                 <div>
                     @error('fname')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Last Name
-                </label>
-                <input type="text" name="lname" id="lname" wire:model="lname">
-                <div>
-                    @error('lname')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Father's Name
                 </label>
                 <input type="text" name="father_name" id="father_name" wire:model="father_name">
                 <div>
                     @error('father_name')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Mother's Name
                 </label>
                 <input type="text" name="mother_name" id="mother_name" wire:model="mother_name">
                 <div>
                     @error('mother_name')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
         </div>
         <div class="flex flex-wrap -mx-3 mb-6">
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Date of Birth
                 </label>
                 <input type="date" name="dob" id="dob" wire:model="dob">
                 <div>
                     @error('dob')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Email
                 </label>
                 <input type="email" name="email" id="email" wire:model="email">
                 <div>
                     @error('email')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="adhaar">
                     Adhaar Card Number
                 </label>
-                <input type="tel" name="adhaar" id="adhaar" wire:model="adhaar"
-                    pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}">
+                <input type="tel" name="adhaar" id="adhaar" wire:model="adhaar">
                 <div>
                     @error('adhaar')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Mobile Number
                 </label>
                 <input type="tel" name="mob" id="mob" wire:model="mob">
                 <div>
                     @error('mob')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Address
                 </label>
                 <textarea wire:model="address"></textarea>
                 <div>
                     @error('address')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
         </div>
         <div class="flex flex-wrap -mx-3 mb-6">
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Academic Qualification:
+                    Previous Migration:
                 </label>
-                <input type="text" name="academic" id="academic" wire:model="academic">
+                <input type="month" name="pmigration" id="pmigration" wire:model="pmigration">
                 <div>
-                    @error('academic')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @error('pmigration')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Main Subject
+                    Fee:
                 </label>
-                <input type="text" name="subject" id="subject" wire:model="subject">
+                <input type="text" name="fee" id="fee" wire:model="fee">
                 <div>
-                    @error('subject')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @error('fee')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Passing Year
+                    Exam Status
                 </label>
-                <input type="month" name="passingyear" id="passingyear" wire:model="passingyear">
+                <input type="text" name="exam_status" id="exam_status" wire:model="exam_status">
                 <div>
-                    @error('passingyear')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @error('exam_status')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Division
+                    Project Status
                 </label>
-                <input type="text" name="division" id="division" wire:model="division">
+                <input type="text" name="prj_status" id="prj_status" wire:model="prj_status">
                 <div>
-                    @error('division')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @error('prj_status')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    % of Marks
+                    UNI. Visit Date
                 </label>
-                <input type="text" name="marks" id="marks" wire:model="marks">
+                <input type="date" name="visit_date" id="visit_date" wire:model="visit_date">
                 <div>
-                    @error('marks')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @error('visit_date')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
+            <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Medium
+                    Pass/Back
                 </label>
-                <input type="text" name="medium" id="medium" wire:model="medium">
+                <input type="text" name="pass_back" id="pass_back" wire:model="pass_back">
                 <div>
-                    @error('medium')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @error('pass_back')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-            <div class=" md:w-1/2 px-3 mb-6">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Board
-                </label>
-                <input type="text" name="board" id="board" wire:model="board" data-role="tagsinput">
-                <div>
-                    @error('board')
-                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
+
         </div>
         <div class="flex items-center justify-center">
             <button

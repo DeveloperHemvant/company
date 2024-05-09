@@ -80,7 +80,7 @@
                 
                         <x-slot name="content" class="py-2 bg-white border rounded shadow-lg">
                             <x-dropdown-link :href="route('add-student')" class="block px-4 py-2 hover:bg-gray-100">Add Student</x-dropdown-link>
-                           
+                            <x-dropdown-link :href="route('all-student')" class="block px-4 py-2 hover:bg-gray-100">All Student</x-dropdown-link>
                             <!-- Other dropdown links for programmes -->
                         </x-slot>
                     </x-dropdown>

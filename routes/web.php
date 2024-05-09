@@ -52,5 +52,8 @@ Route::middleware([
     Route::get('/add-student', function () {
         return view('admin/addstudent');
     })->name('add-student');
+    Route::get('/all-student', function () {
+        return view('admin/allstudents');
+    })->name('all-student');
 });
 
