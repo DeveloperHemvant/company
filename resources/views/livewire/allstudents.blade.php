@@ -63,15 +63,15 @@
                             @foreach ($studentdata as $item)
                                 <tr class="border-b dark:border-gray-700">
                                     <td scope="row" class="px-4 py-3 font-medium text-black-900">
-                                        {{ $item->NAME }}</td>
-                                    <td class="px-4 py-3">{{ $item->EMAIL_ID }}</td>
+                                        {{ $item['NAME'] }}</td>
+                                    <td class="px-4 py-3">{{ $item['EMAIL_ID'] }}</td>
                                     <td class="px-4 py-3 ">
-                                        {{ $item->FATHER_NAME }}</td>
-                                    <td class="px-4 py-3">{{ $item->university->university_name }}</td>
-                                    <td class="px-4 py-3">{{ $item->course->course_name }}</td>
+                                        {{ $item['FATHER_NAME'] }}</td>
+                                    <td class="px-4 py-3">{{ $item['university']['university_name'] }}</td>
+                                    <td class="px-4 py-3">{{ $item['course']['course_name'] }}</td>
                                     <td class="px-4 py-3 flex items-center  ">
                                         <button class="px-3 py-1 bg-green-500 text-white rounded" >Update</button>
-                                        @livewire('confirm-alert', ['contactId' => $item->id])
+                                        {{-- @livewire('confirm-alert', ['contactId' => $item->id]) --}}
                                     </td>
                                     
                                 </tr>
@@ -92,7 +92,7 @@
                             </select>
                         </div>
                     </div>
-                    {{-- {{$studentdata->links()}} --}}
+                    {{$studentdata->links()}}
                 </div>
             </div>
         </div>

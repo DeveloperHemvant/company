@@ -8,8 +8,10 @@ use App\Models\Cousre;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+
 class Allstudents extends Component
 {
+    use WithPagination;
     public $search = '';
     public $u_search;
     public $studentdata;
@@ -36,7 +38,17 @@ class Allstudents extends Component
     function mount()
     {
 
-        //dd($this->studentdata);
+        $this->studentdata = students::with('university', 'associate', 'course', 'session')
+            ->where(function ($query) {
+                $query->where('NAME', 'like', '%' . $this->search . '%')
+                    ->orWhere('FATHER_NAME', 'like', '%' . $this->search . '%')
+                    ->orWhere('EMAIL_ID', 'like', '%' . $this->search . '%');
+            })
+            ->where('UNIVERSITY', 'like', '%' . $this->u_search . '%')->where('COURSE', 'like', '%' . $this->c_search . '%')
+            ->paginate(10)->items();
+        // dd(  $this->studentdata->items());
+
+        
         $this->university = University::all();
         $this->course = Cousre::all();
     }
@@ -46,14 +58,7 @@ class Allstudents extends Component
     }
     public function render()
     {
-        $this->studentdata = students::with('university', 'associate', 'course', 'session')
-            ->where(function ($query) {
-                $query->where('NAME', 'like', '%' . $this->search . '%')
-                    ->orWhere('FATHER_NAME', 'like', '%' . $this->search . '%')
-                    ->orWhere('EMAIL_ID', 'like', '%' . $this->search . '%');
-            })
-            ->where('UNIVERSITY', 'like', '%' . $this->u_search . '%')->where('COURSE', 'like', '%' . $this->c_search . '%')
-            ->get();
+        //$this->studentdata->paginate(10);
 
         return view('livewire.allstudents');
     }
