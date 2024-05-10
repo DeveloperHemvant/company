@@ -96,6 +96,7 @@ class AddStudent extends Component
         $student->save();
         $this->resetForm();
         
+        
     }
     private function resetForm()
     {

@@ -1,10 +1,9 @@
 <div>
     <div class="m-15">
         <button
-        style="background-color: rgb(28, 146, 4); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"><a
-            href="{{ route('add-student') }}" >Add Student</a></button>
+            style="background-color: rgb(28, 146, 4); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"><a
+                href="{{ route('add-student') }}">Add Student</a></button>
     </div>
-    
     <section class="mt-10">
         <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
             <!-- Start coding here -->
@@ -20,18 +19,29 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <input type="text"
+                            <input type="text" wire:model.live.debounce.150ms="search"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 "
-                                placeholder="Search" required="">
+                                placeholder="Search" >
                         </div>
                     </div>
                     <div class="flex space-x-3">
                         <div class="flex space-x-3 items-center">
                             <label class="w-40 text-sm font-medium text-gray-900">University:</label>
-                            <select
+                            <select wire:model.live="u_search"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                <option value=""> Select University </option>
                                 @foreach ($university as $item)
-                                    <option value=" {{ $item->id }} "> {{ $item->university_name }} </option>
+                                    <option value="{{ $item->id }}"> {{ $item->university_name }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex space-x-3 items-center">
+                            <label class="w-40 text-sm font-medium text-gray-900">Course:</label>
+                            <select wire:model.live="c_search"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                <option value=""> Select Course </option>
+                                @foreach ($course as $item)
+                                    <option value="{{ $item->id }}"> {{ $item->course_name }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -59,22 +69,21 @@
                                         {{ $item->FATHER_NAME }}</td>
                                     <td class="px-4 py-3">{{ $item->university->university_name }}</td>
                                     <td class="px-4 py-3">{{ $item->course->course_name }}</td>
-                                    <td class="px-4 py-3 flex items-center ">
-                                        <button class="px-3 py-1 bg-red-500 text-white rounded">X</button>
+                                    <td class="px-4 py-3 flex items-center  ">
+                                        <button class="px-3 py-1 bg-green-500 text-white rounded" >Update</button>
+                                        @livewire('confirm-alert', ['contactId' => $item->id])
                                     </td>
+                                    
                                 </tr>
                             @endforeach
-
-
                         </tbody>
                     </table>
                 </div>
-
                 <div class="py-4 px-3">
                     <div class="flex ">
                         <div class="flex space-x-4 items-center mb-3">
                             <label class="w-32 text-sm font-medium text-gray-900">Per Page</label>
-                            <select
+                            <select wire:model.live=""
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                                 <option value="10">10</option>
                                 <option value="20">20</option>
@@ -83,9 +92,48 @@
                             </select>
                         </div>
                     </div>
+                    {{-- {{$studentdata->links()}} --}}
                 </div>
             </div>
         </div>
     </section>
-
 </div>
+@push('scripts')
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            @this.on('triggerDelete', contactId => {
+                Swal.fire({
+                    title: 'Are You Sure?',
+                    text: 'Contact record will be deleted!',
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#aaa',
+                    confirmButtonText: 'Delete!'
+                }).then((result) => {
+                    // If user clicks on delete
+                    if (result.value) {
+                        // Calling destroy method to delete
+                        @this.call('destroy', contactId)
+                            .then(() => {
+                                // Success response
+                                Swal.fire({
+                                    title: 'Contact deleted successfully!',
+                                    icon: 'success'
+                                });
+                            })
+                            .catch(error => {
+                                // Handle any errors
+                                console.error(error);
+                            });
+                    } else {
+                        Swal.fire({
+                            title: 'Operation Cancelled!',
+                            icon: 'success'
+                        });
+                    }
+                });
+            });
+        })
+    </script>
+@endpush
