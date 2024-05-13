@@ -55,5 +55,8 @@ Route::middleware([
     Route::get('/all-student', function () {
         return view('admin/allstudents');
     })->name('all-student');
+    Route::get('/update-student/{id}', function ($id) {
+        return view('admin/updatestudent', ['id' => $id]);
+    })->name('update-student');
 });
 

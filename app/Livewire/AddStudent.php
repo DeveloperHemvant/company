@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\students;
+use App\Models\Students;
 use Livewire\Component;
 use App\Models\admission_session;
 use App\Models\Cousre;
@@ -70,7 +70,7 @@ class AddStudent extends Component
             'semester'=>'required'
         ]);
         // dd($validatedData);
-        $student = new students;
+        $student = new Students;
         $student->UNIVERSITY = $validatedData['university'];
         $student->ASSOCIATE = $validatedData['selectedassociate'];
         $student->SOURCE = $validatedData['source'];

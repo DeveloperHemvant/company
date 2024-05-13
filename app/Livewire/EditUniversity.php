@@ -1,12 +1,10 @@
 <?php
-
 namespace App\Livewire;
 
 use App\Models\University;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Redirect;
-
 class EditUniversity extends Component
 {
     public $university;
@@ -15,11 +13,6 @@ class EditUniversity extends Component
     public $university_name = '';
     #[Validate('required', message: 'Please provide University Code', translate: false)]
     public $university_code = '';
-    //public $showSuccessMessage = false;
-
-    // use WithPagination;
-
-
     public function mount($id)
     {
         $this->id = $id;
@@ -27,7 +20,6 @@ class EditUniversity extends Component
         $this->university_name = $this->university->university_name;
         $this->university_code = $this->university->university_code;
     }
-
     public function update()
     {
         $validatedData = $this->validate([
@@ -41,21 +33,15 @@ class EditUniversity extends Component
             'university_code.min' => 'The university code must be at least 3 characters.',
             'university_code.unique' => 'The university code has already been taken.',
         ]);
-
         $this->university->update([
             'university_name' => $this->university_name,
             'university_code' => $this->university_code,
         ]);
-
         session()->flash('status', 'University updated successfully.');
-
         return Redirect::route('all-university');
     }
-
     public function render()
     {
-
-
         return view('livewire.edit-university', ['university' => $this->university]);
     }
 }

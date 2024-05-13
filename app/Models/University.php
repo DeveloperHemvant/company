@@ -16,7 +16,7 @@ class University extends Model
     ];
     public function post(): BelongsTo
     {
-        return $this->belongsTo(students::class,'UNIVERSITY','id');
+        return $this->belongsTo(Students::class,'university','id');
     }
 
     
