@@ -1,4 +1,11 @@
 <div class="container mx-auto px-4 py-8">
+    <!-- Add this code to your Blade file where you want to display the error message -->
+    @if (session()->has('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form wire:submit.prevent="addstudent">
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class="    px-3 mb-6">
@@ -186,9 +193,9 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="adhaar">
                     Adhaar Card Number
                 </label>
-                <input type="tel" name="adhaar" id="adhaar" wire:model="adhaar">
+                <input type="tel" name="adhaar" id="adhaar" wire:model="aadhar_no">
                 <div>
-                    @error('adhaar')
+                    @error('aadhar_no')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
@@ -283,6 +290,23 @@
                     @enderror
                 </div>
             </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                    10 and 12 Marksheets
+                </label>
+                <input type="file" wire:model="documents" multiple>
+                <div>
+                    @if ($documents)
+                        @foreach ($documents as $item)
+                            <img id="previewImage" src="{{ $item->temporaryUrl() }}" alt="Documents">
+                        @endforeach
+
+                    @endif
+                    @error('documents')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
 
         </div>
         <div class="flex items-center justify-center">
@@ -295,4 +319,5 @@
         </div>
 
     </form>
+
 </div>

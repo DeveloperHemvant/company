@@ -45,6 +45,7 @@ class Updatestudent extends Component
     {
         $this->id = $id;
         $this->studentdata = Students::with('university', 'course', 'session', 'associate')->find($this->id);
+        // dd($this->studentdata);
         $this->uuniversity = $this->studentdata->university;
         $this->usession_name = $this->studentdata->session;
         $this->uselectedCourse = $this->studentdata->course;

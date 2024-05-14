@@ -7,6 +7,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Students extends Model
 {
+        protected $fillable = [
+                'id',
+                'university',
+                'source',
+                'associate',
+                'sr_no',
+                'uni_reg_no',
+                'password',
+                'name',
+                'father_name',
+                'mother_name',
+                'dob',
+                'aadhar_no',
+                'email_id',
+                'mob_no',
+                'address',
+                'course',
+                'spl',
+                'type',
+                'sem_year',
+                'session',
+                'previous_migration',
+                'fee',
+                'exam_status',
+                'project_status',
+                'uni_visit_date',
+                'pass_back',
+                'documents',
+                'created_at',
+                'updated_at'
+                
+            ];
     use HasFactory;
     // Public function university():BelongsTo
     // {

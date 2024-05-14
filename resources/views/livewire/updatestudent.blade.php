@@ -50,9 +50,9 @@
                 </label>
                 <select wire:model="uselectedspecialization" id="programme" class="form-select">
                     <option value="">Choose Specialization</option>
-                        @foreach ($specialization as $data)
-                            <option value="{{ $data->id }}">{{ $data->specialization_name }}</option>
-                        @endforeach
+                    @foreach ($specialization as $data)
+                        <option value="{{ $data->id }}">{{ $data->specialization_name }}</option>
+                    @endforeach
                 </select>
                 @error('uselectedspecialization')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -282,7 +282,14 @@
                     @enderror
                 </div>
             </div>
-
+            <div class="    px-3 mb-6">
+            @if ($studentdata->documents)
+                <div>
+                    <a href="{{ Storage::url($studentdata->documents) }}" target="_blank" style="background-color: rgb(50, 110, 32); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+                >View PDF</a>
+                </div>
+            @endif
+        </div>
         </div>
         <div class="flex items-center justify-center">
             <button

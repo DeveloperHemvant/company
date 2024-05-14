@@ -136,6 +136,7 @@
                                 @php
                                     $count++;
                                 @endphp
+
                             @empty
                                 <tr>
                                     <td colspan="6" class="text-center py-4 text-red-500">No Student found</td>
