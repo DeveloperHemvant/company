@@ -1,8 +1,34 @@
 <div>
     <div class="m-15">
-        <button
+        <button class="m-5"
             style="background-color: rgb(28, 146, 4); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"><a
                 href="{{ route('add-student') }}">Add Student</a></button>
+
+        <button class="m-5" wire:click='export_data'
+            style="background-color: rgb(4, 105, 236); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">Export
+            Students</button>
+        <button wire:click='import'
+            style="background-color: rgb(228, 14, 181); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">Import
+            Students</button>
+        @if ($importForm)
+            <tr>
+                <td colspan="2">
+                    <form wire:submit.prevent="importexceldata" class="mb-4">
+                        <div class="mb-4">
+                            <label for="importData" class="block text-gray-700 text-sm font-bold mb-2">Upload Excel sheet</label>
+                            <input type="file" wire:model="importData">
+                            @error('importData')
+                                <div class="text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Upload</button>
+                    </form>                    
+                    <button wire:click="cancelimportform"
+                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                </td>
+            </tr>
+        @endif
+
     </div>
     <section class="mt-10">
         <div class="mx-auto max-w-screen-xl px-4 lg:px-12">

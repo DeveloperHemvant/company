@@ -1,13 +1,20 @@
 <?php
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\Students;
 use App\Models\University;
 use App\Models\Cousre;
 use Livewire\Component;
+use App\Exports\ExportStudent;
+use Livewire\WithFileUploads;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\StudentsImport;
 
 class Allstudents extends Component
 {
+    use WithFileUploads;
+    public $importForm = false;
     public $search = '';
     public $u_search;
     public $studentdata;
@@ -20,6 +27,18 @@ class Allstudents extends Component
     public $uni_reg_no;
     public $upassword;
     public $showRegistrationForm = false;
+    public $importData;
+    public function import()
+    {
+        $this->importForm = true;
+    }
+    public function cancelimportform()
+    {
+
+        $this->importForm = false;
+        $this->importData = '';
+    }
+
     public function mount()
     {
         $this->university = University::all();
@@ -51,10 +70,38 @@ class Allstudents extends Component
     {
         $this->showRegistrationForm = false;
     }
-    public function delete($id){
+
+    public function delete($id)
+    {
         $student = Students::find($id);
         $student->delete();
     }
+    //export the data////
+
+    public function export_data()
+    {
+
+        $data = Students::with('university', 'course', 'session', 'associate')->get()->toArray();
+        // dd($data);
+
+        return Excel::download(new ExportStudent($data), 'students.xlsx');
+    }
+    public function importexceldata()
+    {
+        $validatedData = $this->validate([
+            'importData' => 'required|file|mimes:xlsx|max:10240',
+        ], [
+            'importData.mimes' => 'The :attribute must be an Excel file (xlsx).',
+        ]);
+        $fileName = time() . '_' . $this->importData->getClientOriginalName();
+        Storage::disk('public')->putFileAs('uploads', $this->importData, $fileName);
+
+        Excel::import(new StudentsImport, Storage::disk('public')->path('uploads/' . $fileName));
+
+        
+    }
+
+
     public function render()
     {
         $this->studentdata = Students::with('university', 'course')

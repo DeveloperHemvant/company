@@ -72,10 +72,10 @@
                 </label>
                 <select wire:model="admission_type" id="course" class="form-select">
                     <option value="">Admission Type</option>
-                    <option value="1">FRESH</option>
-                    <option value="2">RE REG</option>
-                    <option value="3">LATERAL</option>
-                    <option value="4">OD</option>
+                    <option value="FRESH">FRESH</option>
+                    <option value="RE REG">RE REG</option>
+                    <option value="LATERAL">LATERAL</option>
+                    <option value="OD">OD</option>
 
                 </select>
                 @error('admission_type')
@@ -89,7 +89,7 @@
                 <select wire:model="semester" id="semester" class="form-select">
                     <option value="">Semester/Year</option>
                     @for ($i = 1; $i < 9; $i++)
-                        <option value="{{ $i }}"> {{ $i }} Semester </option>
+                        <option value="{{ $i }} Semester"> {{ $i }} Semester </option>
                     @endfor
 
                 </select>
@@ -103,17 +103,17 @@
                 </label>
                 <select wire:model.live="source" id="source" class="form-select">
                     <option value="">Select Source</option>
-                    <option value="1">ASSOCIATE</option>
-                    <option value="2">DIRECT</option>
-                    <option value="3">SOCIAL MEDIA</option>
-                    <option value="4">REFERENCE</option>
+                    <option value="ASSOCIATE">ASSOCIATE</option>
+                    <option value="DIRECT">DIRECT</option>
+                    <option value="SOCIAL MEDIA">SOCIAL MEDIA</option>
+                    <option value="REFERENCE">REFERENCE</option>
 
                 </select>
                 @error('source')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
-            @if ($source == 1)
+            @if ($source == 'ASSOCIATE')
                 <div class="    px-3 mb-6">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
                         Associate
@@ -292,7 +292,7 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    10 and 12 Marksheets
+                    Documents
                 </label>
                 <input type="file" wire:model="documents" multiple>
                 <div>

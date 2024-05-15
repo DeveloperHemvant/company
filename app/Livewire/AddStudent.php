@@ -12,8 +12,11 @@ use App\Models\University;
 use App\Models\Associate;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithFileUploads;
-use Illuminate\Validation\Rule; 
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+// use Barryvdh\DomPDF\Facade as PDF;
+
+
 class AddStudent extends Component
 {
     public $session_name;
@@ -48,15 +51,15 @@ class AddStudent extends Component
     public $selectedspecialization;
     public $documents;
     public $aadhar_no;
-   
+
     use WithFileUploads;
 
     public function addstudent()
     {
         try {
-            
+
             $validatedData = $this->validate([
-               
+
                 'university' => 'required',
                 'session_name' => 'required',
                 'selectedCourse' => 'required',
@@ -80,8 +83,8 @@ class AddStudent extends Component
                     // Ensure uniqueness of aadhar_no, session, and course together
                     Rule::unique('students')->where(function ($query) {
                         return $query->where('aadhar_no', $this->aadhar_no)
-                                     ->where('session', $this->session_name)
-                                     ->where('course', $this->selectedCourse);
+                            ->where('session', $this->session_name)
+                            ->where('course', $this->selectedCourse);
                     }),
                 ],
                 'source' => 'required',
@@ -89,13 +92,13 @@ class AddStudent extends Component
                 'semester' => 'required',
                 'documents.*' => 'file|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
-    
+            // dd($validatedData);
             $lastId = Students::latest('id')->value('id');
             $newId = $lastId + 1;
-    
+
             // Create a new instance of the Students model
             $student = new Students;
-    
+
             // Set the attributes
             $student->id = $newId;
             $student->university = $validatedData['university'];
@@ -120,28 +123,37 @@ class AddStudent extends Component
             $student->uni_visit_date = $validatedData['visit_date'];
             $student->pass_back = $validatedData['pass_back'];
             $student->sem_year = $validatedData['semester'];
-    
+
             if ($this->documents != null) {
                 $documents = [];
                 foreach ($this->documents as $file) {
                     $path = $file->store('documents');
-                    $documents[] = storage_path('app/' . $path); // Full path for the image
+                    $documents[] = storage_path('app/' . $path); 
                 }
-    
+            
                 // Load the view and pass the image paths
                 $pdf = PDF::loadView('documentpdf', compact('documents'));
-    
+            
                 // Generate a unique name for the PDF file
                 $pdfFileName = uniqid() . '.pdf';
-    
-                // Save the PDF to the public storage and get its path
+            
+                // Define the temporary storage path for the PDF file
+                $tempPdfPath = 'temp/' . $pdfFileName;
+            
+                // Save the PDF to a temporary location
+                Storage::put($tempPdfPath, $pdf->output());
+            
+                // Define the storage path for the PDF file
                 $pdfPath = 'documentspdf/' . $pdfFileName;
-                Storage::disk('public')->put($pdfPath, $pdf->output());
-    
+            
+                // Move the PDF from the temporary location to the public storage
+                Storage::disk('public')->move($tempPdfPath, $pdfPath);
+            
                 // Save the public path to the student record
                 $student->documents = $pdfPath;
+                // dd($student->documents);
             }
-    
+
             $student->save();
             $this->resetForm();
         } catch (ValidationException $e) {

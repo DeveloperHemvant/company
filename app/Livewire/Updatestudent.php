@@ -7,8 +7,14 @@ use App\Models\Associate;
 use App\Models\admission_session;
 use Livewire\Component;
 use App\Models\specializations;
+use Livewire\WithFileUploads;
+use Illuminate\Validation\Rule; 
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfReader;
+
 class Updatestudent extends Component
 {
+    use WithFileUploads;
     public $id;
     public $studentdata;
     public $university;
@@ -32,7 +38,7 @@ class Updatestudent extends Component
     public $mother_name;
     public $dob;
     public $email;
-    public $adhaar;
+    public $aadhar_no;
     public $mob;
     public $address;
     public $pmigration;
@@ -41,6 +47,7 @@ class Updatestudent extends Component
     public $prj_status;
     public $visit_date;
     public $pass_back;
+    public $documents;
     public function mount($id)
     {
         $this->id = $id;
@@ -60,7 +67,7 @@ class Updatestudent extends Component
         $this->mother_name = $this->studentdata->mother_name;
         $this->dob = $this->studentdata->dob;
         $this->email = $this->studentdata->email_id;
-        $this->adhaar = $this->studentdata->aadhar_no;
+        $this->aadhar_no = $this->studentdata->aadhar_no;
         $this->mob = $this->studentdata->mob_no;
         $this->address = $this->studentdata->address;
         $this->pmigration = $this->studentdata->previous_migration;
@@ -90,7 +97,16 @@ class Updatestudent extends Component
             'mother_name' => 'required|string|max:255',
             'dob' => 'required|date',
             'email' => 'required|email',
-            'adhaar' => 'required|numeric|digits:12',
+            'aadhar_no' => [
+                'required',
+                'numeric',
+                'digits:12',
+                Rule::unique('students')->where(function ($query) {
+                    return $query->where('aadhar_no', $this->aadhar_no)
+                                 ->where('session', $this->usession_name)
+                                 ->where('course', $this->uselectedCourse);
+                })->ignore($this->id),
+            ],
             'mob' => 'required|numeric|digits:10',
             'address' => 'required|string',
             'pmigration' => 'required|date',
@@ -99,7 +115,9 @@ class Updatestudent extends Component
             'prj_status' => 'required|string',
             'visit_date' => 'required|date',
             'pass_back' => 'required|string',
+            'documents.*' => 'file|mimes:jpeg,png,jpg,gif|max:1024',
         ]);
+        //dd($validatedData);
         $student = Students::findOrFail($this->id);
         $student->university = $validatedData['uuniversity'];
         $student->associate = $validatedData['uassociate'];
@@ -108,7 +126,7 @@ class Updatestudent extends Component
         $student->father_name = $validatedData['father_name'];
         $student->mother_name = $validatedData['mother_name'];
         $student->dob = $validatedData['dob'];
-        $student->aadhar_no = $validatedData['adhaar'];
+        $student->aadhar_no = $validatedData['aadhar_no'];
         $student->email_id = $validatedData['email'];
         $student->address = $validatedData['address'];
         $student->mob_no = $validatedData['mob'];
@@ -123,6 +141,36 @@ class Updatestudent extends Component
         $student->uni_visit_date = $validatedData['visit_date'];
         $student->pass_back = $validatedData['pass_back'];
         $student->sem_year = $validatedData['usemester'];
+        if ($this->documents != null) {
+            $existingPdfPath = storage_path('app/public/' . $student->documents);
+    
+            // Initialize FPDI
+            $pdf = new Fpdi();
+            $pageCount = $pdf->setSourceFile($existingPdfPath);
+    
+            // Import all pages of the existing PDF
+            for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                $templateId = $pdf->importPage($pageNo);
+                $pdf->AddPage();
+                $pdf->useTemplate($templateId);
+            }
+    
+            // Add new images
+            foreach ($this->documents as $file) {
+                $imagePath = $file->store('documentspdf');
+                $imageFullPath = storage_path('app/' . $imagePath);
+    
+                $pdf->AddPage();
+                $pdf->Image($imageFullPath, 10, 10, 190, 0);
+            }
+    
+            // Save the updated PDF
+            $updatedPdfPath = 'documentspdf/' . uniqid() . '.pdf';
+            $pdf->Output(storage_path('app/public/' . $updatedPdfPath), 'F');
+    
+            // Update the student record with the new PDF path
+            $student->documents = $updatedPdfPath;
+        }
         $student->save();
         return redirect()->route('all-student');
     }

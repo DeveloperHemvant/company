@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Document PDF</title>
+    <title>Student Document's</title>
 </head>
 <body>
-    @foreach ($documents as $document)
-        <div style="page-break-after: always;">
+    @foreach ($documents as $index => $document)
+        <div @if($index < count($documents) - 1) style="page-break-after: always;" @endif>
             <img src="{{ $document }}" style="width: 100%;">
         </div>
     @endforeach

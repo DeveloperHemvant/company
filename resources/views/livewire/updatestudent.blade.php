@@ -185,9 +185,9 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="adhaar">
                     Adhaar Card Number
                 </label>
-                <input type="tel" name="adhaar" id="adhaar" wire:model="adhaar">
+                <input type="tel" name="adhaar" id="adhaar" wire:model="aadhar_no">
                 <div>
-                    @error('adhaar')
+                    @error('aadhar_no')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
@@ -283,13 +283,31 @@
                 </div>
             </div>
             <div class="    px-3 mb-6">
-            @if ($studentdata->documents)
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                    Documents
+                </label>
+                <input type="file" wire:model="documents" multiple>
                 <div>
-                    <a href="{{ Storage::url($studentdata->documents) }}" target="_blank" style="background-color: rgb(50, 110, 32); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                >View PDF</a>
+                    @if ($documents)
+                        @foreach ($documents as $item)
+                            <img id="previewImage" src="{{ $item->temporaryUrl() }}" alt="Documents">
+                        @endforeach
+
+                    @endif
+                    @error('documents')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
                 </div>
-            @endif
-        </div>
+            </div>
+            <div class="    px-3 mb-6">
+                @if ($studentdata->documents)
+                    <div>
+                        <a href="{{ Storage::url($studentdata->documents) }}" target="_blank"
+                            style="background-color: rgb(50, 110, 32); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">View
+                            PDF</a>
+                    </div>
+                @endif
+            </div>
         </div>
         <div class="flex items-center justify-center">
             <button
