@@ -14,6 +14,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+
 // use Barryvdh\DomPDF\Facade as PDF;
 
 
@@ -88,18 +89,14 @@ class AddStudent extends Component
                     }),
                 ],
                 'source' => 'required',
-                'selectedassociate' => 'required',
+                'selectedassociate' => 'required_if:source,ASSOCIATE',
                 'semester' => 'required',
                 'documents.*' => 'file|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
             // dd($validatedData);
             $lastId = Students::latest('id')->value('id');
             $newId = $lastId + 1;
-
-            // Create a new instance of the Students model
             $student = new Students;
-
-            // Set the attributes
             $student->id = $newId;
             $student->university = $validatedData['university'];
             $student->associate = $validatedData['selectedassociate'];
@@ -128,43 +125,25 @@ class AddStudent extends Component
                 $documents = [];
                 foreach ($this->documents as $file) {
                     $path = $file->store('documents');
-                    $documents[] = storage_path('app/' . $path); 
+                    $documents[] = storage_path('app/' . $path);
                 }
-            
-                // Load the view and pass the image paths
                 $pdf = PDF::loadView('documentpdf', compact('documents'));
-            
-                // Generate a unique name for the PDF file
                 $pdfFileName = uniqid() . '.pdf';
-            
-                // Define the temporary storage path for the PDF file
                 $tempPdfPath = 'temp/' . $pdfFileName;
-            
-                // Save the PDF to a temporary location
                 Storage::put($tempPdfPath, $pdf->output());
-            
-                // Define the storage path for the PDF file
                 $pdfPath = 'documentspdf/' . $pdfFileName;
-            
-                // Move the PDF from the temporary location to the public storage
-                Storage::disk('public')->move($tempPdfPath, $pdfPath);
-            
-                // Save the public path to the student record
+                Storage::disk('public')->put($pdfPath, $pdf->output());
                 $student->documents = $pdfPath;
-                // dd($student->documents);
             }
-
             $student->save();
             $this->resetForm();
         } catch (ValidationException $e) {
             $errors = $e->validator->errors()->all();
             session()->flash('error', $errors[0]);
         } catch (\Exception $e) {
-            // Handle other exceptions, such as database constraint violations
             session()->flash('error', $e->getMessage());
         }
     }
-
     private function resetForm()
     {
         $this->university = null;
@@ -209,7 +188,6 @@ class AddStudent extends Component
             $this->specialization = specializations::where('course_id', $selectedCourse)->get();
         }
     }
-
     public function render()
     {
         return view('livewire.add-student');

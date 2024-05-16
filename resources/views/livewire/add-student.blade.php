@@ -58,7 +58,7 @@
                     <option value="">Choose Specialization</option>
                     @if ($selectedCourse != null)
                         @foreach ($specialization as $data)
-                            <option value="{{ $data->id }}">{{ $data->specialization_name }}</option>
+                            <option value="{{ $data->specialization_name }}">{{ $data->specialization_name }}</option>
                         @endforeach
                     @endif
                 </select>
@@ -129,6 +129,8 @@
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
+                @else
+                @php $selectedassociate = null; @endphp <!-- Set $uassociate to null when $usource is not 'ASSOCIATE' -->
             @endif
 
             <div class="    px-3 mb-6">

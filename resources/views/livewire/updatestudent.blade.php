@@ -51,7 +51,7 @@
                 <select wire:model="uselectedspecialization" id="programme" class="form-select">
                     <option value="">Choose Specialization</option>
                     @foreach ($specialization as $data)
-                        <option value="{{ $data->id }}">{{ $data->specialization_name }}</option>
+                        <option value="{{ $data->specialization_name }}">{{ $data->specialization_name }}</option>
                     @endforeach
                 </select>
                 @error('uselectedspecialization')
@@ -64,10 +64,10 @@
                 </label>
                 <select wire:model="uadmission_type" id="course" class="form-select">
                     <option value="">Admission Type</option>
-                    <option value="1">FRESH</option>
-                    <option value="2">RE REG</option>
-                    <option value="3">LATERAL</option>
-                    <option value="4">OD</option>
+                    <option value="FRESH">FRESH</option>
+                    <option value="RE REG">RE REG</option>
+                    <option value="LATERAL">LATERAL</option>
+                    <option value="OD">OD</option>
 
                 </select>
                 @error('admission_type')
@@ -81,7 +81,7 @@
                 <select wire:model="usemester" id="semester" class="form-select">
                     <option value="">Semester/Year</option>
                     @for ($i = 1; $i < 9; $i++)
-                        <option value="{{ $i }}"> {{ $i }} Semester </option>
+                        <option value="{{ $i }} Semester"> {{ $i }} Semester </option>
                     @endfor
 
                 </select>
@@ -95,17 +95,17 @@
                 </label>
                 <select wire:model.live="usource" id="source" class="form-select">
                     <option value="">Select Source</option>
-                    <option value="1">ASSOCIATE</option>
-                    <option value="2">DIRECT</option>
-                    <option value="3">SOCIAL MEDIA</option>
-                    <option value="4">REFERENCE</option>
+                    <option value="ASSOCIATE">ASSOCIATE</option>
+                    <option value="DIRECT">DIRECT</option>
+                    <option value="SOCIAL MEDIA">SOCIAL MEDIA</option>
+                    <option value="REFERENCE">REFERENCE</option>
 
                 </select>
                 @error('source')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
-            @if ($usource == 1)
+            @if ($usource == 'ASSOCIATE')
                 <div class="    px-3 mb-6">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
                         Associate
@@ -121,6 +121,8 @@
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
+                @else
+                @php $uassociate = null; @endphp <!-- Set $uassociate to null when $usource is not 'ASSOCIATE' -->
             @endif
 
             <div class="    px-3 mb-6">

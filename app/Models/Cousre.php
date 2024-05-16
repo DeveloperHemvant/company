@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cousre extends Model
 {
@@ -12,8 +12,8 @@ class Cousre extends Model
     protected $fillable = [
         'course_name',
     ];
-    public function specializations(): hasMany
+    public function specializations(): BelongsTo
     {
-        return $this->hasMany(specializations::class,'course_id','id');
+        return $this->BelongsTo(specializations::class,'course_id','id');
     }
 }

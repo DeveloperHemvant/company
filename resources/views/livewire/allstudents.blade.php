@@ -10,6 +10,17 @@
         <button wire:click='import'
             style="background-color: rgb(228, 14, 181); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">Import
             Students</button>
+            @if(session('success') || session('error'))
+    <div class="alert alert-{{ session('success') ? 'success' : 'danger' }}">
+        {{ session('success') ? session('success') : session('error') }}
+    </div>
+@endif
+@if ($errorMessage)
+    <div class="alert alert-danger" role="alert">
+        {{ $errorMessage }}
+    </div>
+@endif
+
         @if ($importForm)
             <tr>
                 <td colspan="2">

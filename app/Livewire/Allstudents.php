@@ -14,6 +14,7 @@ use App\Imports\StudentsImport;
 class Allstudents extends Component
 {
     use WithFileUploads;
+    public $errorMessage;
     public $importForm = false;
     public $search = '';
     public $u_search;
@@ -34,11 +35,9 @@ class Allstudents extends Component
     }
     public function cancelimportform()
     {
-
         $this->importForm = false;
         $this->importData = '';
     }
-
     public function mount()
     {
         $this->university = University::all();
@@ -77,31 +76,48 @@ class Allstudents extends Component
         $student->delete();
     }
     //export the data////
-
     public function export_data()
     {
-
-        $data = Students::with('university', 'course', 'session', 'associate')->get()->toArray();
-        // dd($data);
-
+        $data = Students::with('university', 'course', 'session', 'associate', 'specialization')->get()->toArray();
         return Excel::download(new ExportStudent($data), 'students.xlsx');
     }
+    //Import the data//
     public function importexceldata()
     {
-        $validatedData = $this->validate([
-            'importData' => 'required|file|mimes:xlsx|max:10240',
-        ], [
-            'importData.mimes' => 'The :attribute must be an Excel file (xlsx).',
-        ]);
-        $fileName = time() . '_' . $this->importData->getClientOriginalName();
-        Storage::disk('public')->putFileAs('uploads', $this->importData, $fileName);
-
-        Excel::import(new StudentsImport, Storage::disk('public')->path('uploads/' . $fileName));
-
-        
+        try {
+            $validatedData = $this->validate([
+                'importData' => 'required|file|mimes:xlsx|max:10240',
+            ], [
+                'importData.mimes' => 'The :attribute must be an Excel file (xlsx).',
+            ]);
+    
+            $fileName = time() . '_' . $this->importData->getClientOriginalName();
+            Storage::disk('public')->putFileAs('uploads', $this->importData, $fileName);
+    
+            $import = new StudentsImport;
+            Excel::import($import, Storage::disk('public')->path('uploads/' . $fileName));
+    
+            $successCount = $import->getSuccessCount();
+            $failureCount = $import->getFailureCount();
+            $errors = $import->getErrors();
+            $skippedUniversities = $import->getSkippedUniversities();
+    
+            $skippedMessage = '';
+            if (!empty($skippedUniversities)) {
+                $skippedMessage = ' Skipped Universities: ' . json_encode($skippedUniversities);
+            }
+    
+            if (!empty($errors)) {
+                session()->flash('error', implode(', ', $errors) . $skippedMessage);
+            } else {
+                session()->flash('success', "{$successCount} records imported successfully, {$failureCount} records failed." . $skippedMessage);
+            }
+    
+            $this->importForm = false;
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
     }
-
-
     public function render()
     {
         $this->studentdata = Students::with('university', 'course')
@@ -109,7 +125,7 @@ class Allstudents extends Component
                 $query->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('father_name', 'like', '%' . $this->search . '%')
                     ->orWhere('email_id', 'like', '%' . $this->search . '%');
-            })->where('university', 'like', '%' . $this->u_search . '%')->where('course', 'like', '%' . $this->c_search . '%')->get()->toArray();
+            })->where('university', 'like', '%' . $this->u_search . '%')->where('course', 'like', '%' . $this->c_search . '%')->orderBy('id', 'desc')->get()->toArray();
         return view('livewire.allstudents');
     }
 }

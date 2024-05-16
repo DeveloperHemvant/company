@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\specializations;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -70,6 +71,7 @@ class ExportStudent implements FromCollection, WithHeadings, WithMapping
 
     public function map($row): array
     {
+
 
 
         return [

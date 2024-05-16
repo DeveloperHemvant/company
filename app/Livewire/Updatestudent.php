@@ -52,7 +52,7 @@ class Updatestudent extends Component
     {
         $this->id = $id;
         $this->studentdata = Students::with('university', 'course', 'session', 'associate')->find($this->id);
-        // dd($this->studentdata);
+        // dd($this->studentdata->spl);
         $this->uuniversity = $this->studentdata->university;
         $this->usession_name = $this->studentdata->session;
         $this->uselectedCourse = $this->studentdata->course;
@@ -91,7 +91,7 @@ class Updatestudent extends Component
             'uadmission_type' => 'required',
             'usemester' => 'required',
             'usource' => 'required',
-            'uassociate' => 'required_if:usource,1',
+            'uassociate' => 'required_if:usource,ASSOCIATE',
             'fname' => 'required|string|max:255',
             'father_name' => 'required|string|max:255',
             'mother_name' => 'required|string|max:255',

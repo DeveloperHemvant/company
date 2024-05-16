@@ -60,4 +60,8 @@ class Students extends Model
     {
         return $this->BelongsTo(University::class,'university','id');
     }
+    public function specialization(): BelongsTo
+    {
+        return $this->BelongsTo(specializations::class,'spl','id');
+    }
 }
