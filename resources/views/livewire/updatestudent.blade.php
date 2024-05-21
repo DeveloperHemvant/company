@@ -6,7 +6,7 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     University
                 </label>
-                <select wire:model="uuniversity" id="university" class="form-select">
+                <select wire:model.live="uuniversity" id="university" class="form-select">
                     <option value="">Choose University</option>
                     @foreach ($university as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->university_name }}</option>
@@ -113,7 +113,7 @@
                     <select wire:model="uassociate" id="associate" class="form-select">
                         <option value="">Select Associate</option>
                         @foreach ($associate as $item)
-                            <option value="{{ $item->id }}">{{ $item->associate_name }}</option>
+                            <option value="{{ $item->name }}">{{ $item->name }}</option>
                         @endforeach>
 
                     </select>
@@ -312,12 +312,7 @@
             </div>
         </div>
         <div class="flex items-center justify-center">
-            <button
-                style="background-color: rgb(26, 149, 219); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                class="hover:bg-blue-700" type="submit">
-                Update Student
-            </button>
-
+            <x-button type="submit" class="bg-blue-500 text-white font-bold px-4 py-2 rounded outline-none transition duration-300 ease-in-out focus:bg-blue-600">{{ __('Update Student') }}</x-button>
         </div>
 
     </form>

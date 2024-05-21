@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Auth;
 class AdminController extends Controller
 {
    public function index(){
-        if (Auth::user()->usertype=='staff') {
-            
+        if (Auth::user()->usertype=='Associate') {
+            // dd('associate');
             return view('dashboard');
         }else{
             // dd('admin');

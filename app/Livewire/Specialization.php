@@ -6,9 +6,11 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use App\Models\Cousre;
 use App\Models\specializations;
+use Livewire\WithPagination;
 
 class Specialization extends Component
 {
+    use WithPagination;
     public $showAddForm = false;
     public $showEditForm = false;
     public $courses;

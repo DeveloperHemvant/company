@@ -12,7 +12,7 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     University
                 </label>
-                <select wire:model="university" id="university" class="form-select">
+                <select wire:model.live="university" id="university" class="form-select">
                     <option value="">Choose University</option>
                     @foreach ($universities as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->university_name }}</option>
@@ -28,9 +28,11 @@
                 </label>
                 <select wire:model="session_name" id="session" class="form-select">
                     <option value="">Choose Session</option>
+                    @if ($university != null)
                     @foreach ($sessions as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->name }}</option>
                     @endforeach
+                    @endif
                 </select>
                 @error('session_name')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -42,9 +44,11 @@
                 </label>
                 <select id="selectedCourse" class="form-select" wire:model.live="selectedCourse">
                     <option value="">Choose Course</option>
-                    @foreach ($cousre as $data)
+                    @if ($university != null)
+                    @foreach ($course as $data)
                         <option value="{{ $data->id }}">{{ $data->course_name }}</option>
                     @endforeach
+                    @endif
                 </select>
                 @error('selectedCourse')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -121,7 +125,7 @@
                     <select wire:model="selectedassociate" id="associate" class="form-select">
                         <option value="">Select Associate</option>
                         @foreach ($associate as $item)
-                            <option value="{{ $item->id }}">{{ $item->associate_name }}</option>
+                            <option value="{{$item->name}}">{{ $item->name }}</option>
                         @endforeach>
 
                     </select>
@@ -312,12 +316,7 @@
 
         </div>
         <div class="flex items-center justify-center">
-            <button
-                style="background-color: rgb(26, 149, 219); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                class="hover:bg-blue-700" type="submit">
-                Add Student
-            </button>
-
+            <x-button type="submit" class="bg-blue-500 text-white font-bold px-4 py-2 rounded outline-none transition duration-300 ease-in-out focus:bg-blue-600">{{ __('Add Student') }}</x-button>
         </div>
 
     </form>

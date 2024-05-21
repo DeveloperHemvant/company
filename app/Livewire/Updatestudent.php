@@ -3,7 +3,7 @@ namespace App\Livewire;
 use App\Models\Students;
 use App\Models\University;
 use App\Models\Cousre;
-use App\Models\Associate;
+use App\Models\User;
 use App\Models\admission_session;
 use Livewire\Component;
 use App\Models\specializations;
@@ -52,10 +52,11 @@ class Updatestudent extends Component
     {
         $this->id = $id;
         $this->studentdata = Students::with('university', 'course', 'session', 'associate')->find($this->id);
-        // dd($this->studentdata->spl);
-        $this->uuniversity = $this->studentdata->university;
+        // dd($this->studentdata->course);
+        $this->uuniversity = $this->studentdata->university_id;
         $this->usession_name = $this->studentdata->session;
-        $this->uselectedCourse = $this->studentdata->course;
+        $this->uselectedCourse =  $this->studentdata->course_id;
+        // dd($this->uselectedCourse);
         $this->specialization = specializations::where('course_id', $this->uselectedCourse)->get();
         $this->uselectedspecialization = $this->studentdata->spl;
         $this->uadmission_type = $this->studentdata->type;
@@ -77,9 +78,11 @@ class Updatestudent extends Component
         $this->visit_date = $this->studentdata->uni_visit_date;
         $this->pass_back = $this->studentdata->pass_back;
         $this->university = University::all();
-        $this->cousre = Cousre::all();
-        $this->sessions = admission_session::all();
-        $this->associate = Associate::all();
+        $this->cousre = Cousre::where('university_id', $this->studentdata->university)->get();
+        $this->sessions = admission_session::where('university_id', $this->studentdata->university)->get();
+        $this->associate =  User::where('usertype', 'associate')->get();
+
+        // dd($this->associate);
     }
     public function updatestudent()
     {
@@ -104,7 +107,7 @@ class Updatestudent extends Component
                 Rule::unique('students')->where(function ($query) {
                     return $query->where('aadhar_no', $this->aadhar_no)
                                  ->where('session', $this->usession_name)
-                                 ->where('course', $this->uselectedCourse);
+                                 ->where('course_id', $this->uselectedCourse);
                 })->ignore($this->id),
             ],
             'mob' => 'required|numeric|digits:10',
@@ -119,7 +122,7 @@ class Updatestudent extends Component
         ]);
         //dd($validatedData);
         $student = Students::findOrFail($this->id);
-        $student->university = $validatedData['uuniversity'];
+        $student->university_id = $validatedData['uuniversity'];
         $student->associate = $validatedData['uassociate'];
         $student->source = $validatedData['usource'];
         $student->name = $validatedData['fname'];
@@ -130,7 +133,7 @@ class Updatestudent extends Component
         $student->email_id = $validatedData['email'];
         $student->address = $validatedData['address'];
         $student->mob_no = $validatedData['mob'];
-        $student->course = $validatedData['uselectedCourse'];
+        $student->course_id = $validatedData['uselectedCourse'];
         $student->spl = $validatedData['uselectedspecialization'];
         $student->type = $validatedData['uadmission_type'];
         $student->session = $validatedData['usession_name'];
@@ -174,11 +177,24 @@ class Updatestudent extends Component
         $student->save();
         return redirect()->route('all-student');
     }
-    public function updatedUselectedCourse($selectedCourse)
+    public function updatedUuniversity($uuniversity)
     {
-        if (!is_null($selectedCourse)) {
+        
+        
+            $this->cousre = Cousre::where('university_id', $this->uuniversity)->get();
+        $this->usession_name = '';
+        $this->uselectedCourse = '';
+        $this->uselectedspecialization = '';
+            $this->sessions = admission_session::where('university_id', $this->uuniversity)->get();
+            $courseIds = $this->cousre->pluck('id');
+            $this->specialization = specializations::whereIn('course_id', $courseIds)->get();
+        
+    }
+    public function updateduselectedCourse($selectedCourse)
+    {
+        $this->uselectedspecialization = '';
             $this->specialization = specializations::where('course_id', $selectedCourse)->get();
-        }
+        
     }
     public function render()
     {

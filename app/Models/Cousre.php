@@ -16,4 +16,8 @@ class Cousre extends Model
     {
         return $this->BelongsTo(specializations::class,'course_id','id');
     }
+    public function university(): BelongsTo
+    {
+        return $this->BelongsTo(University::class,'university_id','id');
+    }
 }

@@ -1,23 +1,30 @@
 <?php
-
 namespace App\Livewire;
 
+use App\Models\University;
 use Illuminate\Validation\Rule;
 use App\Models\admission_session;
 use Livewire\Component;
 use DateTime;
+use Livewire\WithPagination;
+use DB;
 
 class SessionDetails extends Component
 {
+    use WithPagination;
     public $showAddForm = false;
     public $showEditForm = false;
     public $startmonth;
     public $endmonth;
     public $sessiondata;
     public $name;
+    public $universities;
+    public $university_id;
+    public $paginationData;
     public function mount()
     {
-        $this->sessiondata = admission_session::all();
+        
+        $this->universities = University::all();
     }
     public function toggleAddForm()
     {
@@ -30,35 +37,33 @@ class SessionDetails extends Component
         $validatedData = $this->validate([
             'startmonth' => 'required',
             'endmonth' => 'required',
+            'university_id' => 'required'
         ], [
             'startmonth.required' => 'The start month is required.',
             'endmonth.required' => 'The end month is required.',
+            'university_id.required' => 'Select the University',
         ]);
-
-        // Generate the name
         $startDateTime = new DateTime($this->startmonth);
         $endDateTime = new DateTime($this->endmonth);
         $name = $startDateTime->format('F') . '-' . $endDateTime->format('F') . ' ' . $startDateTime->format('Y');
-        // Validate unique name
         $this->name = $name;
         $validatedData['name'] = $name;
         $this->validate([
             'name' => [
                 'required',
                 Rule::unique('admission_sessions')->where(function ($query) {
-                    return $query->where('name', $this->name);
+                    return $query->where('name', $this->name)->where('university_id', $this->university_id);
                 }),
             ],
         ], [
             'name.required' => 'The session  is required.',
             'name.unique' => 'The session  already exists.',
         ]);
-
-        // Create and save the admission session
         $admission_session = new admission_session;
         $admission_session->name = $name;
         $admission_session->startmonth = $this->startmonth;
         $admission_session->endmonth = $this->endmonth;
+        $admission_session->university_id = $this->university_id;
         $admission_session->save();
 
         $this->resetdata();
@@ -73,45 +78,41 @@ class SessionDetails extends Component
         $this->startmonth = $data->startmonth;
         $this->endmonth = $data->endmonth;
         $this->session_id = $data->id;
+        $this->university_id = $data->university_id;
     }
     public function update()
     {
         $validatedData = $this->validate([
             'startmonth' => 'required',
             'endmonth' => 'required',
+            'university_id' => 'required',
         ], [
             'startmonth.required' => 'The start month is required.',
             'endmonth.required' => 'The end month is required.',
+            'university_id.required' => 'Select the University',
         ]);
         $startDateTime = new DateTime($this->startmonth);
         $endDateTime = new DateTime($this->endmonth);
         $name = $startDateTime->format('F') . '-' . $endDateTime->format('F') . ' ' . $startDateTime->format('Y');
         $validatedData['name'] = $name;
-        $this->validate([
-            'name' => [
-                'required',
-                Rule::unique('admission_sessions')->where(function ($query) {
-                    return $query->where('name', $this->name);
-                }),
-            ],
-        ], [
-            'name.required' => 'The session  is required.',
-            'name.unique' => 'The session  already exists.',
-        ]);
-        // Find the admission session record by its ID
         $admission_session = admission_session::find($this->session_id);
-
-        // Update the fields
+        if (!$admission_session) {
+            return;
+        }
+        if ($admission_session->name !== $name && admission_session::where('name', $name)->exists()) {
+            $this->addError('name', 'The session already exists.');
+            return;
+        }
         $admission_session->name = $name;
         $admission_session->startmonth = $this->startmonth;
         $admission_session->endmonth = $this->endmonth;
-
-        // Save the changes
+        $admission_session->university_id = $this->university_id;
         $admission_session->save();
         $this->resetdata();
         $this->showEditForm = false;
         $this->refreshData();
     }
+
 
     public function resetdata()
     {
@@ -120,14 +121,28 @@ class SessionDetails extends Component
     }
     public function delete($id)
     {
-        admission_session::find($id)->delete();
+        $session = admission_session::find($id);
+        $session->delete();
+        $this->refreshData();
     }
     public function refreshData(): void
     {
-        $this->sessiondata = admission_session::all();
+        //$this->paginationData = admission_session::with('university')->paginate(1);
     }
     public function render()
     {
-        return view('livewire.session-details');
+        // DB::enableQueryLog();
+
+        // Fetch the paginated session data
+        $sessionData = admission_session::with('university')->paginate(10);
+    
+        // Retrieve the executed SQL queries
+        // $queries = DB::getQueryLog();
+        // dd($queries); // Check the generated SQL queries
+    
+        // Pass the session data to the view
+        return view('livewire.session-details', [
+            'sessionData' => $sessionData,
+        ]);
     }
 }

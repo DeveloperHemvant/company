@@ -124,6 +124,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{-- {{$special_data->links()}} --}}
         @endif
 
     </div>

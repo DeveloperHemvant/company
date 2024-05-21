@@ -50,7 +50,7 @@ class Students extends Model
     }
     Public function course():BelongsTo
     {
-            return $this->BelongsTo(Cousre::class,'course','id');
+            return $this->BelongsTo(Cousre::class);
     }
     Public function session():BelongsTo
     {
@@ -58,7 +58,7 @@ class Students extends Model
     }
     public function university(): BelongsTo
     {
-        return $this->BelongsTo(University::class,'university','id');
+        return $this->BelongsTo(University::class);
     }
     public function specialization(): BelongsTo
     {

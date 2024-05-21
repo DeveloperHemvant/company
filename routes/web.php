@@ -7,6 +7,9 @@ use App\Livewire\EditUniversity;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/user/login', function () {
+    return view('user/login');
+})->name('userlogin');
 
 Route::middleware([
     'auth:sanctum',

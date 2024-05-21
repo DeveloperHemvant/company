@@ -9,7 +9,7 @@ use App\Models\admission_session;
 use App\Models\Cousre;
 use App\Models\specializations;
 use App\Models\University;
-use App\Models\Associate;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
@@ -23,7 +23,7 @@ class AddStudent extends Component
     public $session_name;
     public $specialization;
     public $admission_type;
-    public $cousre;
+    public $course;
     public $sessions;
     public $courses;
     public $universities;
@@ -85,7 +85,7 @@ class AddStudent extends Component
                     Rule::unique('students')->where(function ($query) {
                         return $query->where('aadhar_no', $this->aadhar_no)
                             ->where('session', $this->session_name)
-                            ->where('course', $this->selectedCourse);
+                            ->where('course_id', $this->selectedCourse);
                     }),
                 ],
                 'source' => 'required',
@@ -98,7 +98,7 @@ class AddStudent extends Component
             $newId = $lastId + 1;
             $student = new Students;
             $student->id = $newId;
-            $student->university = $validatedData['university'];
+            $student->university_id = $validatedData['university'];
             $student->associate = $validatedData['selectedassociate'];
             $student->source = $validatedData['source'];
             $student->name = $validatedData['fname'];
@@ -109,7 +109,7 @@ class AddStudent extends Component
             $student->email_id = $validatedData['email'];
             $student->address = $validatedData['address'];
             $student->mob_no = $validatedData['mob'];
-            $student->course = $validatedData['selectedCourse'];
+            $student->course_id = $validatedData['selectedCourse'];
             $student->spl = $validatedData['selectedspecialization'];
             $student->type = $validatedData['admission_type'];
             $student->session = $validatedData['session_name'];
@@ -176,10 +176,17 @@ class AddStudent extends Component
 
     public function mount()
     {
-        $this->cousre = Cousre::all();
-        $this->sessions = admission_session::all();
+        
+        // $this->sessions = admission_session::all();
         $this->universities = University::all();
-        $this->associate = Associate::all();
+        $this->associate = User::where('usertype', 'associate')->get();
+    }
+    public function updatedUniversity($university){
+        if(!is_null($university)){
+            $this->sessions = admission_session::where('university_id', $university)->get();
+            $this->course = Cousre::where('university_id', $university)->get();
+            // dd($this->course);
+        }
     }
     /* method to for dropdown */
     public function updatedSelectedCourse($selectedCourse)

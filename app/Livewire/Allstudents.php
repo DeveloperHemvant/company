@@ -10,11 +10,16 @@ use App\Exports\ExportStudent;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
+use Livewire\WithPagination;
+
 
 class Allstudents extends Component
 {
+    use WithPagination;
+
     use WithFileUploads;
     public $errorMessage;
+    public $perPage=10;
     public $importForm = false;
     public $search = '';
     public $u_search;
@@ -78,7 +83,8 @@ class Allstudents extends Component
     //export the data////
     public function export_data()
     {
-        $data = Students::with('university', 'course', 'session', 'associate', 'specialization')->get()->toArray();
+        $data = Students::with('university', 'course', 'session', 'specialization')->get()->toArray();
+        // dd($data);
         return Excel::download(new ExportStudent($data), 'students.xlsx');
     }
     //Import the data//
@@ -118,14 +124,21 @@ class Allstudents extends Component
             session()->flash('error', $e->getMessage());
         }
     }
+    public function updatedPerPage()
+    {
+        $this->resetPage(); // Reset the pagination page to 1 when changing perPage
+    }
     public function render()
     {
-        $this->studentdata = Students::with('university', 'course')
+        $studentDatas = Students::with('university', 'course')
             ->where(function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('father_name', 'like', '%' . $this->search . '%')
                     ->orWhere('email_id', 'like', '%' . $this->search . '%');
-            })->where('university', 'like', '%' . $this->u_search . '%')->where('course', 'like', '%' . $this->c_search . '%')->orderBy('id', 'desc')->get()->toArray();
-        return view('livewire.allstudents');
+            })->where('university_id', 'like', '%' . $this->u_search . '%')->where('course_id', 'like', '%' . $this->c_search . '%')->paginate(10);
+        // dd(($studentData));
+        
+        return view('livewire.allstudents',['studentDatas'=>$studentDatas]);
+
     }
 }

@@ -14,10 +14,13 @@ class University extends Model
         'university_code'
         // Add more columns here as needed
     ];
-    public function post(): BelongsTo
-    {
-        return $this->belongsTo(Students::class,'university','id');
-    }
-
+    // public function post(): BelongsTo
+    // {
+    //     return $this->belongsTo(Students::class,'university','id');
+    // }
+    // public function courses()
+    // {
+    //     return $this->hasMany(Cousre::class,'university_id','id');
+    // }
     
 }

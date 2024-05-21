@@ -23,9 +23,11 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
     private $successCount = 0;
     private $failureCount = 0;
     private $errors = [];
+    private $skippedUniversities;
 
     public function model(array $row)
     {
+        // dd($row);   
         $databaseUniversity = University::pluck('university_name')->toArray();
         $validator = Validator::make($row, [
             'university_name' => 'required|in:' . implode(',', $databaseUniversity),
@@ -34,7 +36,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
                 Rule::unique('students')->where(function ($query) use ($row) {
                     return $query->where('aadhar_no', $row['aadhar_no'])
                         ->where('session', $row['session_name'])
-                        ->where('course', $row['course_name']);
+                        ->where('course_id', $row['course_name']);
                 }),
             ],
         ], [
@@ -62,6 +64,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
 
         // Fetch IDs and other relevant data
         $university = University::where('university_name', $row['university_name'])->value('id');
+        
         $course = Cousre::where('course_name', $row['course_name'])->value('id');
         $session = admission_session::where('name', $row['session_name'])->value('id');
         $associate = Associate::where('associate_name', $row['associate_name'])->value('id');
@@ -74,8 +77,8 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
 
         return new Students([
             'id' => $newId,
-            'university' => $university,
-            'associate' => $associate,
+            'university_id' => $university,
+            'associate' => $row['associate_name'],
             'source' => $row['source'],
             'sr_no' => $row['sr_no'],
             'uni_reg_no' => $row['university_registration_no'],
@@ -88,7 +91,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
             'email_id' => $row['email_id'],
             'address' => $row['address'],
             'mob_no' => $row['mobile_no'],
-            'course' => $course,
+            'course_id' => $course,
             'spl' => $specialization,
             'type' => $row['admission_type'],
             'sem_year' => $row['semesteryear'],
