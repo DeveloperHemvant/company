@@ -204,6 +204,7 @@
             <x-responsive-nav-link href="{{ route('dashboard') }}" wire:navigate :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @if (Auth::user()->usertype=='admin')
             <x-dropdown >
                 <x-slot name="trigger" >
                     <x-nav-link :active="request()->routeIs('add-university*')" class="cursor-pointer hover:text-blue-600 ">
@@ -217,6 +218,7 @@
                         University</x-dropdown-link> --}}
                 </x-slot>
             </x-dropdown>
+            @endif
             <!-- Dropdown menu for Associate -->
             <x-dropdown>
                 <x-slot name="trigger">

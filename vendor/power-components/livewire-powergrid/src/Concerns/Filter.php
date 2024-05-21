@@ -6,8 +6,6 @@ use DateTimeZone;
 use Illuminate\Support\{Arr, Carbon};
 use Livewire\Attributes\On;
 
-use function Livewire\store;
-
 trait Filter
 {
     public array $filters = [];
@@ -117,8 +115,8 @@ trait Filter
 
         $this->addEnabledFilters($field, $label);
 
-        $this->filters[$type][$field]['start'] = $startDate;
-        $this->filters[$type][$field]['end']   = $endDate;
+        $this->filters[$type][$field]['start'] = $startDate->toString();
+        $this->filters[$type][$field]['end']   = $endDate->toString();
 
         $this->filters[$type][$field]['formatted'] = $dateStr;
 
@@ -169,9 +167,6 @@ trait Filter
 
         $this->resetPage();
 
-        store($this)->set('filters.number.' . $field . '.thousands', $thousands);
-        store($this)->set('filters.number.' . $field . '.decimal', $decimal);
-
         $this->addEnabledFilters($field, $title);
 
         if (blank($value)) {
@@ -188,9 +183,6 @@ trait Filter
         extract($params);
 
         $this->resetPage();
-
-        store($this)->set('filters.number.' . $field . '.thousands', $thousands);
-        store($this)->set('filters.number.' . $field . '.decimal', $decimal);
 
         $this->addEnabledFilters($field, $title);
 
@@ -314,7 +306,7 @@ trait Filter
                         $attributes = array_values((array) data_get($filter, 'attributes'));
 
                         foreach ($attributes as $value) {
-                            if (is_string($value) && str_contains($value, 'filters.')) {
+                            if (is_string($value) && str_contains($value, 'filters.') && is_null(data_get($this->filters, str($value)->after('filters.')))) {
                                 data_set($this->filters, str($value)->replace('filters.', ''), null);
                             }
                         }

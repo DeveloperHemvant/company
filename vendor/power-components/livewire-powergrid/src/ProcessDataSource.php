@@ -89,6 +89,8 @@ class ProcessDataSource
 
         $results = $this->component->applySorting($filters);
 
+        $this->applySummaries($results);
+
         $this->component->total = $results->count();
 
         if ($results->count()) {
@@ -393,7 +395,7 @@ class ProcessDataSource
                 foreach ($summaries as $summary) {
                     if (data_get($column, $summary . '.header') || data_get($column, $summary . '.footer')) {
                         $value = $results->{$summary}($field);
-                        $applySummaryFormat($summary, $column, $field, $value);
+                        rescue(fn () => $applySummaryFormat($summary, $column, $field, $value), report: false);
                     }
                 }
 

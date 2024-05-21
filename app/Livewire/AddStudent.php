@@ -91,7 +91,7 @@ class AddStudent extends Component
                 'source' => 'required',
                 'selectedassociate' => 'required_if:source,ASSOCIATE',
                 'semester' => 'required',
-                'documents.*' => 'file|mimes:jpeg,png,jpg,gif|max:1024',
+                'documents.*' => 'file|mimes:jpeg,png,jpg|max:10240',
             ]);
             // dd($validatedData);
             $lastId = Students::latest('id')->value('id');
