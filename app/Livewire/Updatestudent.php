@@ -52,11 +52,11 @@ class Updatestudent extends Component
     {
         $this->id = $id;
         $this->studentdata = Students::with('university', 'course', 'session', 'associate')->find($this->id);
-        // dd($this->studentdata->course);
+        // dd($this->studentdata);
         $this->uuniversity = $this->studentdata->university_id;
         $this->usession_name = $this->studentdata->session;
         $this->uselectedCourse =  $this->studentdata->course_id;
-        // dd($this->uselectedCourse);
+        // dd($this->usession_name);
         $this->specialization = specializations::where('course_id', $this->uselectedCourse)->get();
         $this->uselectedspecialization = $this->studentdata->spl;
         $this->uadmission_type = $this->studentdata->type;
@@ -78,8 +78,8 @@ class Updatestudent extends Component
         $this->visit_date = $this->studentdata->uni_visit_date;
         $this->pass_back = $this->studentdata->pass_back;
         $this->university = University::all();
-        $this->cousre = Cousre::where('university_id', $this->studentdata->university)->get();
-        $this->sessions = admission_session::where('university_id', $this->studentdata->university)->get();
+        $this->cousre = Cousre::where('university_id', $this->studentdata->university_id)->get();
+        $this->sessions = admission_session::where('university_id', $this->studentdata->university_id)->get();
         $this->associate =  User::where('usertype', 'associate')->get();
 
         // dd($this->associate);

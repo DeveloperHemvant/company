@@ -134,9 +134,8 @@
                     @enderror
                 </div>
                 @else
-                @php $selectedassociate = null; @endphp <!-- Set $uassociate to null when $usource is not 'ASSOCIATE' -->
+                @php $selectedassociate = null; @endphp 
             @endif
-
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Full Name
@@ -148,7 +147,6 @@
                     @enderror
                 </div>
             </div>
-
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Father's Name
@@ -306,19 +304,15 @@
                         @foreach ($documents as $item)
                             <img id="previewImage" src="{{ $item->temporaryUrl() }}" alt="Documents">
                         @endforeach
-
                     @endif
                     @error('documents')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-
         </div>
         <div class="flex items-center justify-center">
             <x-button type="submit" class="bg-blue-500 text-white font-bold px-4 py-2 rounded outline-none transition duration-300 ease-in-out focus:bg-blue-600">{{ __('Add Student') }}</x-button>
         </div>
-
     </form>
-
 </div>

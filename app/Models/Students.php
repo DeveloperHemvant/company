@@ -9,7 +9,7 @@ class Students extends Model
 {
         protected $fillable = [
                 'id',
-                'university',
+                'university_id',
                 'source',
                 'associate',
                 'sr_no',
@@ -23,7 +23,7 @@ class Students extends Model
                 'email_id',
                 'mob_no',
                 'address',
-                'course',
+                'course_id',
                 'spl',
                 'type',
                 'sem_year',
