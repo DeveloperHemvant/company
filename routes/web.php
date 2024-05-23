@@ -14,7 +14,7 @@ Route::get('/login/user', [AdminController::class, 'usercreate'])
     ->name('login.user');
 Route::post('/login/user', [AdminController::class, 'userstore']);
 
-Route::get('y8NdO0gU2zj3X1TpAbVh6r4eFWqPk7vLsJICdYmZ9MfBQtxG5oRwlnuaEHSKyDc8/', [AdminController::class, 'admincreate'])
+Route::get('/admin/login/', [AdminController::class, 'admincreate'])
     ->name('login.admin');
 Route::post('/admin/login', [AdminController::class, 'adminstore']);
 

@@ -46,6 +46,7 @@ class AddUniversity extends Component
         } else {
             session()->flash('status', 'University Not created');
         }
+        $this->toggleAddForm();
 
         $this->resetForm();
     }
@@ -94,6 +95,14 @@ class AddUniversity extends Component
     // {
     //     return 'custom-pagination-links-view';
     // }
+    public function delete($id)
+    {
+
+        $this->university_id = $id;
+        University::find($this->university_id)->delete();
+
+
+    }
     public function render()
     {
         $data = University::paginate(10);

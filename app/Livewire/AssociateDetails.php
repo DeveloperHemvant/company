@@ -7,6 +7,8 @@ use Livewire\Component;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithPagination;
+use App\Mail\Associate;
+use Mail;
 
 class AssociateDetails extends Component
 {
@@ -119,6 +121,7 @@ class AssociateDetails extends Component
         ]);    
         if (User::create($validatedData)) {
             session()->flash('status', 'Associate created suucessfully');
+            Mail::to($validatedData['email'])->send(new Associate($validatedData));
         } else {
             session()->flash('status', 'Associate Not created');
         }

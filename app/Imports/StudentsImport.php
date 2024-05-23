@@ -148,7 +148,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
         'additional_docs' => $row['additional_docs'],
         'additional_remarks' => $row['additional_remarks'],
         'nc' => $row['nc'],
-        'add_by'=>Auth::user()->id,
+        'user_id'=>Auth::user()->id,
         'created_at' => $row['created_at'],
         'updated_at' => $row['updated_at'],
     ]);

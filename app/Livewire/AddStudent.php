@@ -120,7 +120,7 @@ class AddStudent extends Component
             $student->uni_visit_date = $validatedData['visit_date'];
             $student->pass_back = $validatedData['pass_back'];
             $student->sem_year = $validatedData['semester'];
-            $student->add_by = Auth::user()->id;
+            $student->user_id = Auth::user()->id;
 
             if ($this->documents != null) {
                 $documents = [];
