@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 21, 2024 at 04:32 PM
+-- Generation Time: May 23, 2024 at 03:07 PM
 -- Server version: 8.0.36-0ubuntu0.22.04.1
 -- PHP Version: 8.1.2-1ubuntu2.17
 
@@ -87,12 +87,14 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('356a192b7913b04c54574d18c28d46e6395428ab', 'i:1;', 1716286161),
-('356a192b7913b04c54574d18c28d46e6395428ab:timer', 'i:1716286161;', 1716286161),
-('509a8d0bf4ae0a9f97cc43dbdbb624ba', 'i:1;', 1716288999),
-('509a8d0bf4ae0a9f97cc43dbdbb624ba:timer', 'i:1716288999;', 1716288999),
-('b5a0d52329a0c82038e180aa7fe9ad52', 'i:1;', 1716288795),
-('b5a0d52329a0c82038e180aa7fe9ad52:timer', 'i:1716288795;', 1716288795);
+('356a192b7913b04c54574d18c28d46e6395428ab', 'i:4;', 1716379885),
+('356a192b7913b04c54574d18c28d46e6395428ab:timer', 'i:1716379885;', 1716379885),
+('509a8d0bf4ae0a9f97cc43dbdbb624ba', 'i:1;', 1716349038),
+('509a8d0bf4ae0a9f97cc43dbdbb624ba:timer', 'i:1716349038;', 1716349038),
+('b5a0d52329a0c82038e180aa7fe9ad52', 'i:1;', 1716447231),
+('b5a0d52329a0c82038e180aa7fe9ad52:timer', 'i:1716447231;', 1716447231),
+('da4b9237bacccdf19c0760cab7aec4a8359010b0', 'i:1;', 1716295946),
+('da4b9237bacccdf19c0760cab7aec4a8359010b0:timer', 'i:1716295946;', 1716295946);
 
 -- --------------------------------------------------------
 
@@ -297,7 +299,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('PqvkvPfHJC4Chn1XpHAdfjUrwHv9Y7dlXzG1A9eU', 2, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiS2ZyYjJ1cWpEWm0wTFVEZlZ1ZTlraExkaEVObmxSRHFDQVRrN3huViI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9ob21lIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MjtzOjIxOiJwYXNzd29yZF9oYXNoX3NhbmN0dW0iO3M6NjA6IiQyeSQxMiRBdGJBVnRTdmc5R2R6R2FBOWtpRXEuZzdLMkhsSExDZXRkdzVTNGZuYVZrNVFDZ2piTjB6NiI7fQ==', 1716288939);
+('NDUPqUUpxrVqDS42SUvbA9ThETjYzXESHhq6kfDp', NULL, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMndWOGZhVHBiRkkxN1hUeGxZTXhWbllYOHFXRlJ1YmhSRXQ1S1BVOSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6ODY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC95OE5kTzBnVTJ6ajNYMVRwQWJWaDZyNGVGV3FQazd2THNKSUNkWW1aOU1mQlF0eEc1b1J3bG51YUVIU0t5RGM4Ijt9fQ==', 1716456960);
 
 -- --------------------------------------------------------
 
@@ -365,10 +367,29 @@ CREATE TABLE `students` (
   `additional_docs` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `additional_remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `nc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `add_by` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `documents` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`id`, `university_id`, `source`, `associate`, `sr_no`, `uni_reg_no`, `password`, `name`, `father_name`, `mother_name`, `dob`, `aadhar_no`, `email_id`, `address`, `mob_no`, `course_id`, `spl`, `type`, `sem_year`, `session`, `previous_migration`, `fee`, `exam_status`, `project_status`, `uni_visit_date`, `pass_back`, `marksheet_1st_sem`, `marksheet_2nd_sem`, `marksheet_3rd_sem`, `marksheet_4th_sem`, `marksheet_5th_sem`, `marksheet_6th_sem`, `marksheet_7th_sem`, `marksheet_8th_sem`, `provisional_diploma_degree`, `additional_docs`, `additional_remarks`, `nc`, `add_by`, `created_at`, `updated_at`, `documents`) VALUES
+(10, 8, 'ASSOCIATE', 'Hemvant', NULL, NULL, NULL, 'xyz', 'rajender', 'hello', '2024-04-30', '441258453589', 'hemvant@webguruz.in', 'xyz\nxyz', '7531596548', 19, 'Hindi', 'FRESH', '3 Semester', 11, '2024-01', '70000', 'pass', 'done', '2024-05-01', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 07:13:46', '2024-05-22 06:39:35', NULL),
+(12, 8, 'ASSOCIATE', 'Hemvant', NULL, NULL, NULL, 'xyz', 'sdfsadf', 'hello', '2024-04-30', '531715514190', 'hemvant@webguruz.in', 'xyz\nxyz', '8278309129', 19, 'Hindi', 'FRESH', '8 Semester', 10, '2024-01', '70000', 'pass', 'done', '2024-05-01', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 07:10:56', '2024-05-21 07:10:56', NULL),
+(7, 8, 'ASSOCIATE', 'Hemvant', NULL, NULL, NULL, 'xyz', 'rajender', 'hello', '2024-04-30', '741258453589', 'hemvant@webguruz.in', 'xyz\nxyz', '7531596548', 19, 'Hindi', 'FRESH', '3 Semester', 11, '2024-01', '70000', 'pass', 'done', '2024-05-01', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 07:13:46', '2024-05-22 07:00:57', NULL),
+(4, 8, 'ASSOCIATE', 'Hemvant', NULL, NULL, NULL, 'xyz', 'rajender', 'hello', '2024-04-30', '741258453589', 'hemvant@webguruz.in', 'xyz\nxyz', '7531596548', 19, 'Hindi', 'FRESH', '3 Semester', 14, '2024-01', '70000', 'pass', 'done', '2024-05-01', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 07:13:46', '2024-05-22 00:40:20', NULL),
+(3, 8, 'ASSOCIATE', 'Hemvant', NULL, NULL, NULL, 'xyz', 'rajender', 'hello', '2024-04-30', '741258963589', 'hemvant@webguruz.in', 'xyz\nxyz', '7531596548', 19, 'Hindi', 'FRESH', '3 Semester', 11, '2024-01', '70000', 'pass', 'done', '2024-05-01', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 07:13:46', '2024-05-21 07:21:27', 'documentspdf/664c98cfd9ee8.pdf'),
+(1, 8, 'ASSOCIATE', 'Testing', NULL, NULL, NULL, 'testing', 'testing', 'testing', '1998-10-22', '789456123321', 'hemvantkk45@gmail.com', 'askdhfkhfskhfshf', '7895462548', 19, 'Hindi', 'FRESH', '5 Semester', 11, '2021-05', '789789', 'done', 'done', '1998-10-22', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 06:47:50', '2024-05-21 06:47:50', 'documentspdf/664c90eec9f82.pdf'),
+(8, 8, 'ASSOCIATE', 'Testing', NULL, NULL, NULL, 'testing', 'testing', 'testing', '1998-10-22', '789458923321', 'hemvantkk45@gmail.com', 'askdhfkhfskhfshf', '7895462548', 19, 'Hindi', 'FRESH', '5 Semester', 10, '2021-05', '789789', 'done', 'done', '1998-10-22', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 06:47:50', '2024-05-21 06:47:50', NULL),
+(5, 8, 'ASSOCIATE', 'Testing', NULL, NULL, NULL, 'testing', 'testing', 'testing', '1998-10-22', '789458923321', 'hemvantkk45@gmail.com', 'askdhfkhfskhfshf', '7895462548', 19, 'Hindi', 'FRESH', '5 Semester', 14, '2021-05', '789789', 'done', 'done', '1998-10-22', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 06:47:50', '2024-05-22 00:40:26', NULL),
+(11, 8, 'ASSOCIATE', 'Testing', NULL, NULL, NULL, 'testing', 'testing', 'testing', '1998-10-22', '889458923321', 'hemvantkk45@gmail.com', 'askdhfkhfskhfshf', '7895462548', 19, 'Hindi', 'FRESH', '5 Semester', 10, '2021-05', '789789', 'done', 'done', '1998-10-22', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 06:47:50', '2024-05-21 06:47:50', NULL),
+(9, 8, 'ASSOCIATE', 'Hemvant', NULL, NULL, NULL, 'xyz', 'sdfsadf', 'hello', '2024-04-30', '931715514134', 'hemvant@webguruz.in', 'xyz\nxyz', '8278309129', 19, 'Hindi', 'FRESH', '8 Semester', 11, '2024-01', '70000', 'pass', 'done', '2024-05-01', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 07:10:56', '2024-05-22 07:00:32', 'documentspdf/664de568a68f0.pdf'),
+(6, 8, 'ASSOCIATE', 'Hemvant', NULL, NULL, NULL, 'xyz', 'sdfsadf', 'hello', '2024-04-30', '931715514190', 'hemvant@webguruz.in', 'xyz\nxyz', '8278309129', 19, 'Hindi', 'FRESH', '8 Semester', 11, '2024-01', '70000', 'pass', 'done', '2024-05-01', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 07:10:56', '2024-05-22 00:39:57', NULL),
+(2, 8, 'ASSOCIATE', 'Hemvant', NULL, NULL, NULL, 'xyz', 'sdfsadf', 'hello', '2024-04-30', '931762514190', 'hemvant@webguruz.in', 'xyz\nxyz', '8278309129', 19, 'Hindi', 'FRESH', '8 Semester', 11, '2024-01', '70000', 'pass', 'done', '2024-05-01', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2024-05-21 07:10:56', '2024-05-21 07:10:56', 'documentspdf/664c9658131a9.pdf');
 
 -- --------------------------------------------------------
 
@@ -432,11 +453,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `usertype`, `email_verified_at`, `password`, `mobile`, `address`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `current_team_id`, `profile_photo_path`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'hemvant@webguruz.in', 'admin', NULL, '$2y$12$KqDJ477DVc9jCIRHeMW81.ZJzPsOGD2XL1o02/ri39GPjNYsMtJCO', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-01 22:49:22', '2024-05-01 22:49:22'),
-(2, 'Hemvant', 'gurpreet@webguruz.in', 'Associate', NULL, '$2y$12$AtbAVtSvg9GdzGaA9kiEq.g7K2HlHLCetdw5S4fnaVk5QCgjbN0z6', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-01 22:50:16', '2024-05-01 22:50:16'),
+(1, 'Admin', 'admin@webguruz.in', 'admin', NULL, '$2y$12$KqDJ477DVc9jCIRHeMW81.ZJzPsOGD2XL1o02/ri39GPjNYsMtJCO', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-01 22:49:22', '2024-05-01 22:49:22'),
+(2, 'Hemvant', 'hemvant@webguruz.in', 'Associate', NULL, '$2y$12$AtbAVtSvg9GdzGaA9kiEq.g7K2HlHLCetdw5S4fnaVk5QCgjbN0z6', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-01 22:50:16', '2024-05-01 22:50:16'),
 (4, 'Testing', 'testing@webguruz.in', 'Associate', NULL, '$2y$12$nWFY3kIg/DEqwg/ea7ZDPu5TQdpGnGFIANg04hF39xrDFYsHHzwDW', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-17 07:03:14', '2024-05-17 07:03:14'),
-(7, 'asdfsadf', 'hemvant@gmail.com', 'Associate', NULL, NULL, '7894561230', 'mohali', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-20 01:57:58', '2024-05-20 01:57:58'),
-(8, 'good', 'hemvnalskaj@gmail.com', 'Associate', NULL, NULL, '7897897897', 'asjlkflsadf', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-20 02:02:30', '2024-05-20 02:07:59');
+(9, 'Final Testing ', 'associate@webguruz.in', 'Associate', NULL, '$2y$12$R3QLNZ6S6jrcljggebiQXebsS7Ycnd58sIFdylzU1QYu8QbasqzOu', '7878787878', 'asdfsfd', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-23 03:51:39', '2024-05-23 03:51:39');
 
 --
 -- Indexes for dumped tables
@@ -627,7 +647,7 @@ ALTER TABLE `universities`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
