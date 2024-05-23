@@ -39,6 +39,15 @@
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700 font-bold mb-2">Associate Password</label>
+                <input type="password" id="password" wire:model="password" autocomplete="off"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="Enter associate password">
+                @error('password')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
         
             <div class="mb-4">
                 <label for="address" class="block text-gray-700 font-bold mb-2">Associate Address</label>

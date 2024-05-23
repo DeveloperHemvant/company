@@ -28,7 +28,7 @@
                                 University</x-dropdown-link> --}}
                         </x-slot>
                     </x-dropdown>
-                    @endif
+                   
                     
                     <!-- Dropdown menu for Associate -->
                     <x-dropdown>
@@ -43,6 +43,7 @@
                             <!-- Other dropdown links for associates -->
                         </x-slot>
                     </x-dropdown>
+                    @endif
                     <!-- Dropdown menu for Session -->
                     <x-dropdown>
                         <x-slot name="trigger">
@@ -219,6 +220,7 @@
                 </x-slot>
             </x-dropdown>
             @endif
+            @if (Auth::user()->usertype=='admin')
             <!-- Dropdown menu for Associate -->
             <x-dropdown>
                 <x-slot name="trigger">
@@ -232,6 +234,7 @@
                     <!-- Other dropdown links for associates -->
                 </x-slot>
             </x-dropdown>
+            @endif
             <!-- Dropdown menu for Session -->
             <x-dropdown>
                 <x-slot name="trigger">

@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Auth;
 
 class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
 {
@@ -93,6 +94,12 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
         $this->errors[] = "Session ID not found for session name: " . $row['session_name'];
         return null; // Skip the row
     }
+    if (!$specialization) {
+        // Add appropriate handling if specialization is not found
+        $this->errors[] = "Specialization  not found : " . $row['specialization'];
+        return null; // Skip the row
+    }
+
 
     // Generate new student ID
     $lastId = Students::latest('id')->value('id');
@@ -141,6 +148,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
         'additional_docs' => $row['additional_docs'],
         'additional_remarks' => $row['additional_remarks'],
         'nc' => $row['nc'],
+        'add_by'=>Auth::user()->id,
         'created_at' => $row['created_at'],
         'updated_at' => $row['updated_at'],
     ]);

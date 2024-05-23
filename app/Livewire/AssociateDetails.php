@@ -18,12 +18,19 @@ class AssociateDetails extends Component
         $name = '';
         $this->showAddForm = !$this->showAddForm;
         $this->showEditForm = false;
+        $this->name = '';
+        $this->email = '';
+        $this->mobile = '';
+        $this->address = '';
+        $this->password = '';
+    
     }
 
     public $name;
     public $email;
     public $mobile;
     public $address;
+    public $password;
     public $updatename = '';
     public $showEditForm = false;
     public $id;
@@ -47,12 +54,14 @@ class AssociateDetails extends Component
     {
         $user = User::find($this->id);
     
-    $rules = [
-        'name' => 'required|min:3',
-        'email' => 'required|email',
-        'mobile'=>'required|digits:10',
-        'address'=>'required'
-    ];
+        $rules = [
+            'name' => 'required|min:3',
+            'email' => 'required|email',
+            'mobile' => 'required|digits:10',
+            'address' => 'required',
+            
+        ];
+        
     if ($user && $this->email !== $user->email) {
         $rules['email'] .= '|unique:users,email';
     }
@@ -64,6 +73,7 @@ class AssociateDetails extends Component
         'email.unique' => 'The associate email has already been taken.',
         'mobile.required' => 'The Mobile Number is required.',
         'address.required' => 'The Address is required.',
+        
     ]);
         // dd($validatedData);
     if ($user) {
@@ -85,7 +95,16 @@ class AssociateDetails extends Component
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'mobile'=>'required|digits:10',
-            'address'=>'required'
+            'address'=>'required',
+            'password' => [
+                'required',
+                'string',
+                'min:8',            
+                'regex:/[a-z]/',      
+                'regex:/[A-Z]/',      
+                'regex:/[0-9]/',      
+                'regex:/[@$!%*?&#]/' 
+            ],
         ], [
             'name.required' => 'The associate name is required.',
             'name.min' => 'The associate name must be at least 3 characters.',
@@ -95,12 +114,20 @@ class AssociateDetails extends Component
             'email.unique' => 'The associate email has already been taken.',
             'mobile.required' => 'The Mobile Number is required.',
             'address.required' => 'The Address is required.',
+            'password.required' => 'The password is required.',
+            'password.regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.',
         ]);    
         if (User::create($validatedData)) {
             session()->flash('status', 'Associate created suucessfully');
         } else {
             session()->flash('status', 'Associate Not created');
         }
+        $this->name = '';
+        $this->email = '';
+        $this->mobile = '';
+        $this->address = '';
+        $this->password = '';
+    
         $this->resetForm();
         $this->showAddForm = false;
     }
@@ -111,6 +138,7 @@ class AssociateDetails extends Component
         $this->email = '';
         $this->mobile = '';
         $this->address = '';
+        $this->password = '';
     }
     public function render()
     {

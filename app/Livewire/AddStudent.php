@@ -14,7 +14,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-
+use Auth;
 // use Barryvdh\DomPDF\Facade as PDF;
 
 
@@ -120,6 +120,7 @@ class AddStudent extends Component
             $student->uni_visit_date = $validatedData['visit_date'];
             $student->pass_back = $validatedData['pass_back'];
             $student->sem_year = $validatedData['semester'];
+            $student->add_by = Auth::user()->id;
 
             if ($this->documents != null) {
                 $documents = [];

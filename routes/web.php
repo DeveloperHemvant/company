@@ -14,7 +14,7 @@ Route::get('/login/user', [AdminController::class, 'usercreate'])
     ->name('login.user');
 Route::post('/login/user', [AdminController::class, 'userstore']);
 
-Route::get('/admin/login', [AdminController::class, 'admincreate'])
+Route::get('y8NdO0gU2zj3X1TpAbVh6r4eFWqPk7vLsJICdYmZ9MfBQtxG5oRwlnuaEHSKyDc8/', [AdminController::class, 'admincreate'])
     ->name('login.admin');
 Route::post('/admin/login', [AdminController::class, 'adminstore']);
 
@@ -34,9 +34,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/home', [AdminController::class, 'index']);
-
-
-    // Route::get('/create-data', AddUniversity::class);
     Route::get('/add-university', function () {
         return view('admin/adduniversity');
     })->name('add-university');
