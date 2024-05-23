@@ -1,5 +1,6 @@
 <?php
 namespace App\Livewire;
+
 use App\Models\Students;
 use App\Models\University;
 use App\Models\Cousre;
@@ -8,13 +9,14 @@ use App\Models\admission_session;
 use Livewire\Component;
 use App\Models\specializations;
 use Livewire\WithFileUploads;
-use Illuminate\Validation\Rule; 
+use Illuminate\Validation\Rule;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader;
 
 class Updatestudent extends Component
 {
     use WithFileUploads;
+    public $createNewPdf;
     public $id;
     public $studentdata;
     public $university;
@@ -55,7 +57,7 @@ class Updatestudent extends Component
         // dd($this->studentdata);
         $this->uuniversity = $this->studentdata->university_id;
         $this->usession_name = $this->studentdata->session;
-        $this->uselectedCourse =  $this->studentdata->course_id;
+        $this->uselectedCourse = $this->studentdata->course_id;
         // dd($this->usession_name);
         $this->specialization = specializations::where('course_id', $this->uselectedCourse)->get();
         $this->uselectedspecialization = $this->studentdata->spl;
@@ -80,7 +82,7 @@ class Updatestudent extends Component
         $this->university = University::all();
         $this->cousre = Cousre::where('university_id', $this->studentdata->university_id)->get();
         $this->sessions = admission_session::where('university_id', $this->studentdata->university_id)->get();
-        $this->associate =  User::where('usertype', 'associate')->get();
+        $this->associate = User::where('usertype', 'associate')->get();
 
         // dd($this->associate);
     }
@@ -106,8 +108,8 @@ class Updatestudent extends Component
                 'digits:12',
                 Rule::unique('students')->where(function ($query) {
                     return $query->where('aadhar_no', $this->aadhar_no)
-                                 ->where('session', $this->usession_name)
-                                 ->where('course_id', $this->uselectedCourse);
+                        ->where('session', $this->usession_name)
+                        ->where('course_id', $this->uselectedCourse);
                 })->ignore($this->id),
             ],
             'mob' => 'required|numeric|digits:10',
@@ -120,7 +122,7 @@ class Updatestudent extends Component
             'pass_back' => 'required|string',
             'documents.*' => 'file|mimes:jpeg,png,jpg,gif|max:1024',
         ]);
-        //dd($validatedData);
+        // dd($validatedData);
         $student = Students::findOrFail($this->id);
         $student->university_id = $validatedData['uuniversity'];
         $student->associate = $validatedData['uassociate'];
@@ -145,56 +147,88 @@ class Updatestudent extends Component
         $student->pass_back = $validatedData['pass_back'];
         $student->sem_year = $validatedData['usemester'];
         if ($this->documents != null) {
-            $existingPdfPath = storage_path('app/public/' . $student->documents);
-    
-            // Initialize FPDI
-            $pdf = new Fpdi();
-            $pageCount = $pdf->setSourceFile($existingPdfPath);
-    
-            // Import all pages of the existing PDF
-            for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-                $templateId = $pdf->importPage($pageNo);
-                $pdf->AddPage();
-                $pdf->useTemplate($templateId);
+            if ($student->documents != null) {
+                $existingPdfPath = storage_path('app/public/' . $student->documents);
+
+                if (file_exists($existingPdfPath)) {
+                    // Initialize FPDI
+                    $pdf = new Fpdi();
+                    $pageCount = $pdf->setSourceFile($existingPdfPath);
+
+                    // Import all pages of the existing PDF
+                    for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                        $templateId = $pdf->importPage($pageNo);
+                        $pdf->AddPage();
+                        $pdf->useTemplate($templateId);
+                    }
+
+                    // Add new images
+                    foreach ($this->documents as $file) {
+                        $imagePath = $file->store('documentspdf');
+                        $imageFullPath = storage_path('app/' . $imagePath);
+
+                        $pdf->AddPage();
+                        $pdf->Image($imageFullPath, 10, 10, 190, 0);
+                    }
+
+                    // Save the updated PDF
+                    $updatedPdfPath = 'documentspdf/' . uniqid() . '.pdf';
+                    $pdf->Output(storage_path('app/public/' . $updatedPdfPath), 'F');
+
+                    // Update the student record with the new PDF path
+                    $student->documents = $updatedPdfPath;
+                } else {
+                    // Existing PDF path is invalid, create new PDF
+                    $this->createNewPdf($this->documents, $student);
+                }
+            } else {
+                // No existing PDF, create new PDF
+                $this->createNewPdf($this->documents, $student);
             }
-    
-            // Add new images
-            foreach ($this->documents as $file) {
-                $imagePath = $file->store('documentspdf');
-                $imageFullPath = storage_path('app/' . $imagePath);
-    
-                $pdf->AddPage();
-                $pdf->Image($imageFullPath, 10, 10, 190, 0);
-            }
-    
-            // Save the updated PDF
-            $updatedPdfPath = 'documentspdf/' . uniqid() . '.pdf';
-            $pdf->Output(storage_path('app/public/' . $updatedPdfPath), 'F');
-    
-            // Update the student record with the new PDF path
-            $student->documents = $updatedPdfPath;
         }
         $student->save();
         return redirect()->route('all-student');
     }
+    function createNewPdf($documents, $student)
+    {
+        // Initialize a new PDF document
+        $pdf = new Fpdi();
+
+        // Add new images to the PDF
+        foreach ($documents as $file) {
+            $imagePath = $file->store('documentspdf');
+            $imageFullPath = storage_path('app/' . $imagePath);
+
+            $pdf->AddPage();
+            $pdf->Image($imageFullPath, 10, 10, 190, 0);
+        }
+
+        // Save the new PDF
+        $newPdfPath = 'documentspdf/' . uniqid() . '.pdf';
+        $pdf->Output(storage_path('app/public/' . $newPdfPath), 'F');
+
+        // Update the student record with the new PDF path
+        $student->documents = $newPdfPath;
+        $student->save();
+    }
     public function updatedUuniversity($uuniversity)
     {
-        
-        
-            $this->cousre = Cousre::where('university_id', $this->uuniversity)->get();
+
+
+        $this->cousre = Cousre::where('university_id', $this->uuniversity)->get();
         $this->usession_name = '';
         $this->uselectedCourse = '';
         $this->uselectedspecialization = '';
-            $this->sessions = admission_session::where('university_id', $this->uuniversity)->get();
-            $courseIds = $this->cousre->pluck('id');
-            $this->specialization = specializations::whereIn('course_id', $courseIds)->get();
-        
+        $this->sessions = admission_session::where('university_id', $this->uuniversity)->get();
+        $courseIds = $this->cousre->pluck('id');
+        $this->specialization = specializations::whereIn('course_id', $courseIds)->get();
+
     }
     public function updateduselectedCourse($selectedCourse)
     {
         $this->uselectedspecialization = '';
-            $this->specialization = specializations::where('course_id', $selectedCourse)->get();
-        
+        $this->specialization = specializations::where('course_id', $selectedCourse)->get();
+
     }
     public function render()
     {

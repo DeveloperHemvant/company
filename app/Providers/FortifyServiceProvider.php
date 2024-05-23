@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -33,14 +35,83 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
-        RateLimiter::for('login', function (Request $request) {
+      
+        RateLimiter::for('login:user', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
-
             return Limit::perMinute(5)->by($throttleKey);
         });
 
-        RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(5)->by($request->session()->get('login.id'));
+        RateLimiter::for('login:admin', function (Request $request) {
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+            return Limit::perMinute(5)->by($throttleKey);
+        });
+
+        $this->configureAuthentication();
+    }
+
+    protected function configureAuthentication()
+    {
+        Fortify::authenticateUsing(function (Request $request) {
+            if ($request->is('admin/*')) {
+                return $this->authenticateAdmin($request);
+            }
+
+            return $this->authenticateUser($request);
         });
     }
-}
+
+    protected function authenticateUser(Request $request)
+    {
+        $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+
+        if (RateLimiter::tooManyAttempts('login:user|'.$throttleKey, 5)) {
+            throw ValidationException::withMessages([
+                Fortify::username() => [trans('auth.throttle', [
+                    'seconds' => RateLimiter::availableIn('login:user|'.$throttleKey),
+                    'minutes' => ceil(RateLimiter::availableIn('login:user|'.$throttleKey) / 60),
+                ])],
+            ]);
+        }
+
+        $user = User::where('email', $request->email)->where('role', 'user')->first();
+
+        if ($user && Hash::check($request->password, $user->password)) {
+            RateLimiter::clear('login:user|'.$throttleKey);
+            return $user;
+        }
+
+        RateLimiter::hit('login:user|'.$throttleKey);
+
+        throw ValidationException::withMessages([
+            Fortify::username() => [trans('auth.failed')],
+        ]);
+    }
+
+    protected function authenticateAdmin(Request $request)
+    {
+        $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+
+        if (RateLimiter::tooManyAttempts('login:admin|'.$throttleKey, 5)) {
+            throw ValidationException::withMessages([
+                Fortify::username() => [trans('auth.throttle', [
+                    'seconds' => RateLimiter::availableIn('login:admin|'.$throttleKey),
+                    'minutes' => ceil(RateLimiter::availableIn('login:admin|'.$throttleKey) / 60),
+                ])],
+            ]);
+        }
+
+        $admin = User::where('email', $request->email)->where('role', 'admin')->first();
+
+        if ($admin && Hash::check($request->password, $admin->password)) {
+            RateLimiter::clear('login:admin|'.$throttleKey);
+            return $admin;
+        }
+
+        RateLimiter::hit('login:admin|'.$throttleKey);
+
+        throw ValidationException::withMessages([
+            Fortify::username() => [trans('auth.failed')],
+        ]);
+    }
+    }
+

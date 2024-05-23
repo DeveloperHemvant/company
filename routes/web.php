@@ -7,9 +7,16 @@ use App\Livewire\EditUniversity;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/user/login', function () {
-    return view('user/login');
-})->name('userlogin');
+// Route::get('/user/login', function () {
+//     return view('user/login');
+// })->name('userlogin');
+Route::get('/login/user', [AdminController::class, 'usercreate'])
+    ->name('login.user');
+Route::post('/login/user', [AdminController::class, 'userstore']);
+
+Route::get('/admin/login', [AdminController::class, 'admincreate'])
+    ->name('login.admin');
+Route::post('/admin/login', [AdminController::class, 'adminstore']);
 
 Route::middleware([
     'auth:sanctum',

@@ -135,7 +135,7 @@ class Allstudents extends Component
                 $query->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('father_name', 'like', '%' . $this->search . '%')
                     ->orWhere('email_id', 'like', '%' . $this->search . '%');
-            })->where('university_id', 'like', '%' . $this->u_search . '%')->where('course_id', 'like', '%' . $this->c_search . '%')->paginate(10);
+            })->where('university_id', 'like', '%' . $this->u_search . '%')->where('course_id', 'like', '%' . $this->c_search . '%')->paginate($this->perPage);
         // dd(($studentData));
         
         return view('livewire.allstudents',['studentDatas'=>$studentDatas]);

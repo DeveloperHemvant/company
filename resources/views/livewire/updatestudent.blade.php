@@ -1,5 +1,5 @@
 <div class="container mx-auto px-4 py-8">
-    <form wire:submit.prevent="updatestudent">
+    <form wire:submit="updatestudent">
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class="    px-3 mb-6">
 
