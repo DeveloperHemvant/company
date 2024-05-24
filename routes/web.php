@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Livewire\EditUniversity;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,9 +17,8 @@ Route::post('/login/user', [AdminController::class, 'userstore']);
 Route::get('/admin/login/', [AdminController::class, 'admincreate'])
     ->name('login.admin');
 Route::post('/admin/login', [AdminController::class, 'adminstore']);
-Route::get('/create/staff', [AdminController::class, 'staffcreate'])
-    ->name('login.staff');
-    Route::post('/staff/login', [AdminController::class, 'staffstore'])->name('logins.staffs');;
+Route::get('/create/staff', [AdminController::class, 'staffcreate'])->name('login.staff');
+    Route::post('/staff/login', [AdminController::class, 'staffstore']);
 
 Route::middleware([
     'auth:sanctum',

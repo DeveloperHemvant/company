@@ -83,6 +83,7 @@ class AdminController extends Controller
     }
     public function staffstore(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',

@@ -1,7 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            @if (Auth::user()->usertype == "admin")
             {{ __('Admin Dashboard') }}
+            @endif
+            {{ __('Staff Dashboard') }}
         </h2>
     </x-slot>
 
