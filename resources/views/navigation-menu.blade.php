@@ -85,6 +85,7 @@
                             <!-- Other dropdown links for programmes -->
                         </x-slot>
                     </x-dropdown>
+                    @if (Auth::user()->usertype=='admin')
                     <x-dropdown>
                         <x-slot name="trigger">
                             <x-nav-link :active="request()->routeIs('add-user*')" class="cursor-pointer hover:text-blue-600">
@@ -99,6 +100,8 @@
                             <!-- Other dropdown links for programmes -->
                         </x-slot>
                     </x-dropdown>
+                    @endif
+                    
                 </div>
             </div>
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -290,6 +293,22 @@
                     <!-- Other dropdown links for programmes -->
                 </x-slot>
             </x-dropdown>
+            @if (Auth::user()->usertype=='admin')
+            <x-dropdown>
+                <x-slot name="trigger">
+                    <x-nav-link :active="request()->routeIs('add-user*')" class="cursor-pointer hover:text-blue-600">
+                        {{ __('Users') }}
+                    </x-nav-link>
+                </x-slot>
+                <x-slot name="content" class="py-2 bg-white border rounded shadow-lg">
+                    <x-dropdown-link :href="route('add-user')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">Add
+                        User</x-dropdown-link>
+                    {{-- <x-dropdown-link :href="route('all-student')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">All
+                        Student</x-dropdown-link> --}}
+                    <!-- Other dropdown links for programmes -->
+                </x-slot>
+            </x-dropdown>
+            @endif
         </div>
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
