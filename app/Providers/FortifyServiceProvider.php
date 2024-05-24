@@ -52,12 +52,14 @@ class FortifyServiceProvider extends ServiceProvider
     protected function configureAuthentication()
     {
         Fortify::authenticateUsing(function (Request $request) {
-            if ($request->is('admin/*')) {
-                return $this->authenticateAdmin($request);
-            }
-
-            return $this->authenticateUser($request);
-        });
+        if ($request->is('admin/*')) {
+            return $this->authenticateAdmin($request);
+        }
+        if ($request->is('staff/*')) {
+            return $this->authenticateStaff($request);
+        }
+        return $this->authenticateUser($request);
+    });
     }
 
     protected function authenticateUser(Request $request)
@@ -113,5 +115,31 @@ class FortifyServiceProvider extends ServiceProvider
             Fortify::username() => [trans('auth.failed')],
         ]);
     }
+    protected function authenticateStaff(Request $request)
+{
+    $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+
+    if (RateLimiter::tooManyAttempts('login:staff|'.$throttleKey, 5)) {
+        throw ValidationException::withMessages([
+            Fortify::username() => [trans('auth.throttle', [
+                'seconds' => RateLimiter::availableIn('login:staff|'.$throttleKey),
+                'minutes' => ceil(RateLimiter::availableIn('login:staff|'.$throttleKey) / 60),
+            ])],
+        ]);
+    }
+
+    $staff = User::where('email', $request->email)->where('role', 'staff')->first();
+
+    if ($staff && Hash::check($request->password, $staff->password)) {
+        RateLimiter::clear('login:staff|'.$throttleKey);
+        return $staff;
+    }
+
+    RateLimiter::hit('login:staff|'.$throttleKey);
+
+    throw ValidationException::withMessages([
+        Fortify::username() => [trans('auth.failed')],
+    ]);
+}
     }
 

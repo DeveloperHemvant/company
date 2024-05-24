@@ -5,7 +5,7 @@
         </x-slot>
 
         <x-validation-errors class="mb-4" />
-        <form method="POST" action="{{ route('login.staff') }}">
+        <form method="POST" action="{{ route('logins.staffs') }}">
             @csrf
             <div>
                 <x-label for="email" value="{{ __('Email') }}" />

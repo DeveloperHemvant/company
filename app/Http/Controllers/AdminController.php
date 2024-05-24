@@ -81,6 +81,26 @@ class AdminController extends Controller
             'email' => [trans('auth.failed')],
         ]);
     }
+    public function staffstore(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+        
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'usertype' => 'staff'])) {
+            $request->session()->regenerate();
+           
+           
+            return redirect()->intended('/home  ');
+        }else{
+            session()->flash('error', 'Email and Password not matched');
+        }
+
+        throw ValidationException::withMessages([
+            'email' => [trans('auth.failed')],
+        ]);
+    }
      public function staffcreate()
     {
         return view('staff.login');
