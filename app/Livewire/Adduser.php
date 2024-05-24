@@ -11,7 +11,7 @@ use Livewire\WithPagination;
 use App\Mail\Associate;
 use Mail;
 
-class AssociateDetails extends Component
+class Adduser extends Component
 {
     use WithPagination;
 
@@ -37,6 +37,7 @@ class AssociateDetails extends Component
     public $updatename = '';
     public $showEditForm = false;
     public $id;
+    public $usertype;
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -123,8 +124,21 @@ class AssociateDetails extends Component
             'address.required' => 'The Address is required.',
             'password.required' => 'The password is required.',
             'password.regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.',
-        ]);    
-        if (User::create($validatedData)) {
+        ]);
+        $this->usertype = 'staff';
+
+// If the usertype is provided in the form, override the default value
+if(isset($this->usertype)) {
+    $validatedData['usertype'] = $this->usertype;
+}
+        $user = new User;
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->mobile = $validatedData['mobile'];
+        $user->address = $validatedData['address'];
+        $user->password = $validatedData['password'];
+        $user->usertype = "staff";
+        if ($user->save()) {
             session()->flash('status', 'Associate created suucessfully');
             Mail::to($validatedData['email'])->send(new Associate($validatedData));
         } else {
@@ -150,7 +164,7 @@ class AssociateDetails extends Component
     }
     public function render()
     {
-        $data = User::where('usertype', '<>', 'admin')->paginate(10);
-        return view('livewire.associate-details', ['data' => $data]);
+        $data = User::where('usertype', '=', 'staff')->paginate(10);
+        return view('livewire.adduser', ['data' => $data]);
     }
 }

@@ -12,7 +12,7 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     University
                 </label>
-                <select wire:model.live="university" id="university" class="form-select">
+                <select wire:model.live="selectedUniversity" id="selectedUniversity" class="form-select">
                     <option value="">Choose University</option>
                     @foreach ($universities as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->university_name }}</option>
@@ -28,11 +28,9 @@
                 </label>
                 <select wire:model="session_name" id="session" class="form-select">
                     <option value="">Choose Session</option>
-                    @if ($university != null)
                     @foreach ($sessions as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->name }}</option>
                     @endforeach
-                    @endif
                 </select>
                 @error('session_name')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -44,11 +42,12 @@
                 </label>
                 <select id="selectedCourse" class="form-select" wire:model.live="selectedCourse">
                     <option value="">Choose Course</option>
-                    @if ($university != null)
-                    @foreach ($course as $data)
-                        <option value="{{ $data->id }}">{{ $data->course_name }}</option>
-                    @endforeach
+                    @if ($selectedUniversity != null)
+                    @foreach ($cousre as $data)
+                    <option value="{{ $data->id }}">{{ $data->course_name }}</option>
+                @endforeach
                     @endif
+                    
                 </select>
                 @error('selectedCourse')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -62,7 +61,7 @@
                     <option value="">Choose Specialization</option>
                     @if ($selectedCourse != null)
                         @foreach ($specialization as $data)
-                            <option value="{{ $data->specialization_name }}">{{ $data->specialization_name }}</option>
+                            <option value="{{ $data->id }}">{{ $data->specialization_name }}</option>
                         @endforeach
                     @endif
                 </select>
@@ -91,10 +90,12 @@
                     Semester/Year
                 </label>
                 <select wire:model="semester" id="semester" class="form-select">
-                    <option value="">Semester/Year</option>
+                    <option value=""> Select Semester </option>
                     @for ($i = 1; $i < 9; $i++)
-                        <option value="{{ $i }} Semester"> {{ $i }} Semester </option>
-                    @endfor
+                    <option value="{{ $i }} Semester"> {{ $i }} Semester </option>
+                @endfor
+                    
+                    
 
                 </select>
                 @error('semester')
@@ -125,7 +126,7 @@
                     <select wire:model="selectedassociate" id="associate" class="form-select">
                         <option value="">Select Associate</option>
                         @foreach ($associate as $item)
-                            <option value="{{$item->name}}">{{ $item->name }}</option>
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach>
 
                     </select>
@@ -133,9 +134,8 @@
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
-                @else
-                @php $selectedassociate = null; @endphp 
             @endif
+
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Full Name
@@ -147,6 +147,7 @@
                     @enderror
                 </div>
             </div>
+
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                     Father's Name
@@ -296,7 +297,7 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Documents
+                    10 and 12 Marksheets
                 </label>
                 <input type="file" wire:model="documents" multiple>
                 <div>
@@ -304,15 +305,24 @@
                         @foreach ($documents as $item)
                             <img id="previewImage" src="{{ $item->temporaryUrl() }}" alt="Documents">
                         @endforeach
+
                     @endif
                     @error('documents')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
+
         </div>
         <div class="flex items-center justify-center">
-            <x-button type="submit" class="bg-blue-500 text-white font-bold px-4 py-2 rounded outline-none transition duration-300 ease-in-out focus:bg-blue-600">{{ __('Add Student') }}</x-button>
+            <button
+                style="background-color: rgb(26, 149, 219); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+                class="hover:bg-blue-700" type="submit">
+                Add Student
+            </button>
+
         </div>
+
     </form>
+
 </div>

@@ -51,7 +51,7 @@
                 <select wire:model="uselectedspecialization" id="programme" class="form-select">
                     <option value="">Choose Specialization</option>
                     @foreach ($specialization as $data)
-                        <option value="{{ $data->specialization_name }}">{{ $data->specialization_name }}</option>
+                        <option value="{{ $data->id }}">{{ $data->specialization_name }}</option>
                     @endforeach
                 </select>
                 @error('uselectedspecialization')
@@ -113,7 +113,7 @@
                     <select wire:model="uassociate" id="associate" class="form-select">
                         <option value="">Select Associate</option>
                         @foreach ($associate as $item)
-                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach>
 
                     </select>

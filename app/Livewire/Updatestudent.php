@@ -53,18 +53,20 @@ class Updatestudent extends Component
     public function mount($id)
     {
         $this->id = $id;
-        $this->studentdata = Students::with('university', 'course', 'session', 'associate')->find($this->id);
+        $this->studentdata = Students::with('university', 'course', 'session', 'associate','specialization')->find($this->id);
         // dd($this->studentdata);
         $this->uuniversity = $this->studentdata->university_id;
-        $this->usession_name = $this->studentdata->session;
+        $this->usession_name = $this->studentdata->session_id;
         $this->uselectedCourse = $this->studentdata->course_id;
         // dd($this->usession_name);
         $this->specialization = specializations::where('course_id', $this->uselectedCourse)->get();
-        $this->uselectedspecialization = $this->studentdata->spl;
+        $this->uselectedspecialization = $this->studentdata->specialization_id;
+        
         $this->uadmission_type = $this->studentdata->type;
+        // dd($this->uadmission_type);
         $this->usemester = $this->studentdata->sem_year;
         $this->usource = $this->studentdata->source;
-        $this->uassociate = $this->studentdata->associate;
+        $this->uassociate = $this->studentdata->user_id;
         $this->fname = $this->studentdata->name;
         $this->father_name = $this->studentdata->father_name;
         $this->mother_name = $this->studentdata->mother_name;
@@ -82,6 +84,7 @@ class Updatestudent extends Component
         $this->university = University::all();
         $this->cousre = Cousre::where('university_id', $this->studentdata->university_id)->get();
         $this->sessions = admission_session::where('university_id', $this->studentdata->university_id)->get();
+        // $this->usession_name = admission_session::where('id', $this->studentdata->session_id)->get()->value('name');
         $this->associate = User::where('usertype', 'associate')->get();
 
         // dd($this->associate);
@@ -108,7 +111,7 @@ class Updatestudent extends Component
                 'digits:12',
                 Rule::unique('students')->where(function ($query) {
                     return $query->where('aadhar_no', $this->aadhar_no)
-                        ->where('session', $this->usession_name)
+                        ->where('session_id', $this->usession_name)
                         ->where('course_id', $this->uselectedCourse);
                 })->ignore($this->id),
             ],
@@ -125,7 +128,9 @@ class Updatestudent extends Component
         // dd($validatedData);
         $student = Students::findOrFail($this->id);
         $student->university_id = $validatedData['uuniversity'];
-        $student->associate = $validatedData['uassociate'];
+        // $student->associate = $validatedData['uassociate'];
+        $student->user_id = $validatedData['uassociate'];
+        $student->associate = User::where(['id'=>$validatedData['uassociate']])->pluck('name')->first();
         $student->source = $validatedData['usource'];
         $student->name = $validatedData['fname'];
         $student->father_name = $validatedData['father_name'];
@@ -136,9 +141,9 @@ class Updatestudent extends Component
         $student->address = $validatedData['address'];
         $student->mob_no = $validatedData['mob'];
         $student->course_id = $validatedData['uselectedCourse'];
-        $student->spl = $validatedData['uselectedspecialization'];
+        $student->specialization_id = $validatedData['uselectedspecialization'];
         $student->type = $validatedData['uadmission_type'];
-        $student->session = $validatedData['usession_name'];
+        $student->session_id = $validatedData['usession_name'];
         $student->previous_migration = $validatedData['pmigration'];
         $student->fee = $validatedData['fee'];
         $student->exam_status = $validatedData['exam_status'];
@@ -216,17 +221,17 @@ class Updatestudent extends Component
 
 
         $this->cousre = Cousre::where('university_id', $this->uuniversity)->get();
-        $this->usession_name = '';
-        $this->uselectedCourse = '';
-        $this->uselectedspecialization = '';
+        // $this->usession_name = '';
+        // $this->uselectedCourse = '';
+        // $this->uselectedspecialization = '';
         $this->sessions = admission_session::where('university_id', $this->uuniversity)->get();
         $courseIds = $this->cousre->pluck('id');
-        $this->specialization = specializations::whereIn('course_id', $courseIds)->get();
+        $this->specialization = specializations::whereIn('course_id', $this->uuniversity)->get();
 
     }
     public function updateduselectedCourse($selectedCourse)
     {
-        $this->uselectedspecialization = '';
+        // $this->uselectedspecialization = '';
         $this->specialization = specializations::where('course_id', $selectedCourse)->get();
 
     }

@@ -98,8 +98,29 @@ class AddUniversity extends Component
     public function delete($id)
     {
 
-        $this->university_id = $id;
-        University::find($this->university_id)->delete();
+        $university = University::with('courses','students','admissionSessions')->find($id);
+        // dd($university->courses->count());
+
+    if ($university->courses->count() > 0 || 
+        $university->students->count() > 0 || 
+        $university->admissionSessions->count() > 0) {
+
+        $this->dispatch('alert', [
+            'type' => 'warning',
+            'title' => 'Warning',
+            'position' => 'center',
+            'text' => 'Please delete all the related data regarding this University first.'
+        ]);
+    } else {
+        $university->delete();
+
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'title' => 'Success',
+            'position' => 'center',
+            'text' => 'University deleted successfully.'
+        ]);
+    }
 
 
     }

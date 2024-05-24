@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Associate;
+use App\Models\Cousre;
+use App\Models\Students;
+use App\Models\University;
 use Illuminate\Http\Request;
 use app\Models\User;
+
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -11,7 +17,18 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.home');
+        $universityCount = University::count();
+        $associateCount = Associate::count();
+        $studentCount = Students::count();
+        $courses = Cousre::count();
+        $data = [
+            'universityCount' => $universityCount,
+            'associateCount' => $associateCount,
+            'studentCount' => $studentCount,
+            'courses' => $courses,
+        ];
+        
+        return view('admin.home',['universityCount'=>$universityCount,'associateCount'=>$associateCount,'studentCount'=>$studentCount,'courses'=>$courses]);
 
     }
     public function usercreate()
@@ -53,6 +70,8 @@ class AdminController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'usertype' => 'admin'])) {
             $request->session()->regenerate();
+           
+           
             return redirect()->intended('/home  ');
         }else{
             session()->flash('error', 'Email and Password not matched');
@@ -61,5 +80,9 @@ class AdminController extends Controller
         throw ValidationException::withMessages([
             'email' => [trans('auth.failed')],
         ]);
+    }
+     public function staffcreate()
+    {
+        return view('staff.login');
     }
 }

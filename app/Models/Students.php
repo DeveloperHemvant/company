@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Students extends Model
 {
+        use SoftDeletes;
         protected $fillable = [
                 'id',
                 'university_id',
@@ -54,7 +56,7 @@ class Students extends Model
     }
     Public function session():BelongsTo
     {
-            return $this->BelongsTo(admission_session::class,'session','id');
+            return $this->BelongsTo(admission_session::class,'session_id','id');
     }
     public function university(): BelongsTo
     {
@@ -62,6 +64,6 @@ class Students extends Model
     }
     public function specialization(): BelongsTo
     {
-        return $this->BelongsTo(specializations::class,'spl','id');
+        return $this->BelongsTo(specializations::class);
     }
 }

@@ -74,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                {{$studentDatas}}
+                {{-- {{$studentDatas}} --}}
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white">
                         <thead class="bg-gray-50">

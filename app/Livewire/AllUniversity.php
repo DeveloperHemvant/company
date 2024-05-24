@@ -20,6 +20,8 @@ class AllUniversity extends Component
     public function render()
     {
         $university = University::all();
+        //$alluniversity = University::withTrashed()->get();
+        
         return view('livewire.all-university', ['universities' => $university]);
     }
 }

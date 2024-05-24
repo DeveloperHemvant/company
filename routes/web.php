@@ -17,6 +17,8 @@ Route::post('/login/user', [AdminController::class, 'userstore']);
 Route::get('/admin/login/', [AdminController::class, 'admincreate'])
     ->name('login.admin');
 Route::post('/admin/login', [AdminController::class, 'adminstore']);
+Route::get('/create/staff', [AdminController::class, 'staffcreate'])
+    ->name('login.staff');
 
 Route::middleware([
     'auth:sanctum',
@@ -65,5 +67,8 @@ Route::middleware([
     Route::get('/update-student/{id}', function ($id) {
         return view('admin/updatestudent', ['id' => $id]);
     })->name('update-student');
+    Route::get('/add-user', function () {
+        return view('user/adduser');
+    })->name('add-user');
 });
 
