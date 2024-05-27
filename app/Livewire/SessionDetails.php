@@ -8,6 +8,8 @@ use Livewire\Component;
 use DateTime;
 use Livewire\WithPagination;
 use DB;
+use Livewire\Attributes\On;
+
 
 class SessionDetails extends Component
 {
@@ -119,10 +121,39 @@ class SessionDetails extends Component
         $this->startmonth = '';
         $this->endmonth = '';
     }
-    public function delete($id)
+    public $postIdToDelete;
+    public function confirmDelete($postId)
     {
-        $session = admission_session::find($id);
-        $session->delete();
+        $this->postIdToDelete = $postId;
+        // dd($this->postIdToDelete);
+
+        $this->dispatch('delete');
+    }
+    #[On('goOn-Delete')]
+    public function delete()
+    {
+        $session = admission_session::with('student')->find($this->postIdToDelete);
+        // dd($session->student->count());
+        if ($session->student->count() > 0 ) {
+        
+            $this->dispatch('alert', [
+                'type' => 'warning',
+                'title' => 'Warning',
+                'position' => 'center',
+                'text' => 'Please delete all the related data regarding this Session first.'
+            ]);
+        } else {
+            $session->delete();
+    
+            $this->dispatch('alert', [
+                'type' => 'success',
+                'title' => 'Success',
+                'position' => 'center',
+                'text' => 'Session deleted successfully.'
+            ]);
+            $this->refreshData();
+        }
+        
         $this->refreshData();
     }
     public function refreshData(): void

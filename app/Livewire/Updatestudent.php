@@ -59,7 +59,7 @@ class Updatestudent extends Component
         $this->usession_name = $this->studentdata->session_id;
         $this->uselectedCourse = $this->studentdata->course_id;
         // dd($this->usession_name);
-        $this->specialization = specializations::where('course_id', $this->uselectedCourse)->get();
+        $this->specialization = specializations::where('cousre_id', $this->uselectedCourse)->get();
         $this->uselectedspecialization = $this->studentdata->specialization_id;
         
         $this->uadmission_type = $this->studentdata->type;
@@ -226,13 +226,13 @@ class Updatestudent extends Component
         // $this->uselectedspecialization = '';
         $this->sessions = admission_session::where('university_id', $this->uuniversity)->get();
         $courseIds = $this->cousre->pluck('id');
-        $this->specialization = specializations::whereIn('course_id', $this->uuniversity)->get();
+        $this->specialization = specializations::whereIn('cousre_id', $this->uuniversity)->get();
 
     }
     public function updateduselectedCourse($selectedCourse)
     {
         // $this->uselectedspecialization = '';
-        $this->specialization = specializations::where('course_id', $selectedCourse)->get();
+        $this->specialization = specializations::where('cousre_id', $selectedCourse)->get();
 
     }
     public function render()

@@ -16,10 +16,10 @@ class specializations extends Model
     ];
     public function cousre(): belongsTo
     {
-        return $this->belongsTo(Cousre::class,'course_id','id');
+        return $this->belongsTo(Cousre::class);
     }
     public function students():hasMany
     {
-        return $this->hasMany(Students::class);
+        return $this->hasMany(Students::class,'specialization_id');
     }
 }

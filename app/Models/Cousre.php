@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\hasMany;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
 class Cousre extends Model
 {
@@ -13,12 +15,12 @@ class Cousre extends Model
     protected $fillable = [
         'course_name',
     ];
-    public function specializations(): BelongsTo
+    public function specializations(): hasMany
     {
-        return $this->BelongsTo(specializations::class,'course_id','id');
+        return $this->hasMany(specializations::class);
     }
     public function university(): BelongsTo
     {
-        return $this->BelongsTo(University::class,'university_id','id');
+        return $this->BelongsTo(University::class);
     }
 }

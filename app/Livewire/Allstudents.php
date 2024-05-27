@@ -11,6 +11,7 @@ use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
 
 
 class Allstudents extends Component
@@ -74,10 +75,20 @@ class Allstudents extends Component
     {
         $this->showRegistrationForm = false;
     }
-
-    public function delete($id)
+    public $postIdToDelete;
+    public function confirmDelete($postId)
     {
-        $student = Students::find($id);
+        $this->postIdToDelete = $postId;
+        
+
+        $this->dispatch('delete');
+    }
+    #[On('goOn-Delete')]
+    public function delete()
+    {
+        $student = Students::find($this->postIdToDelete);
+        $student->aadhar_no = $student->aadhar_no . '_DEL';
+        $student->save();
         $student->delete();
     }
     //export the data////

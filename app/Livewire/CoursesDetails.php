@@ -8,6 +8,8 @@ use App\Models\University;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
+
 
 class CoursesDetails extends Component
 {
@@ -61,9 +63,38 @@ class CoursesDetails extends Component
         $this->toggleAddForm();
 
     }
-    public function delete($id)
+    public $postIdToDelete;
+    public function confirmDelete($postId)
     {
-        Cousre::find($id)->delete();
+        $this->postIdToDelete = $postId;
+        // dd($this->postIdToDelete);
+
+        $this->dispatch('delete');
+    }
+    #[On('goOn-Delete')]
+    public function delete()
+    {
+
+        $course=Cousre::with('specializations')->findOrFail($this->postIdToDelete);
+        // dd($course);
+        if ($course->specializations->count() > 0 ) {
+
+        $this->dispatch('alert', [
+            'type' => 'warning',
+            'title' => 'Warning',
+            'position' => 'center',
+            'text' => 'Please delete all the related data regarding this Course first.'
+        ]);
+    } else {
+        $course->delete();
+
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'title' => 'Success',
+            'position' => 'center',
+            'text' => 'Course deleted successfully.'
+        ]);
+    }
     }
     public $oldcourse;
 

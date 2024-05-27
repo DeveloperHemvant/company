@@ -71,11 +71,11 @@ class Adduser extends Component
         $rules['email'] .= '|unique:users,email';
     }
     $validatedData = $this->validate($rules, [
-        'name.required' => 'The associate name is required.',
-        'name.min' => 'The associate name must be at least 3 characters.',
-        'email.required' => 'The associate email is required.',
-        'email.email' => 'The associate email must be a valid email address.',
-        'email.unique' => 'The associate email has already been taken.',
+        'name.required' => 'The User name is required.',
+        'name.min' => 'The User name must be at least 3 characters.',
+        'email.required' => 'The User email is required.',
+        'email.email' => 'The User email must be a valid email address.',
+        'email.unique' => 'The User email has already been taken.',
         'mobile.required' => 'The Mobile Number is required.',
         'address.required' => 'The Address is required.',
         
@@ -91,7 +91,7 @@ class Adduser extends Component
             'mobile'=>$validatedData['mobile'],
             'address'=>$validatedData['address'],
         ]);
-        session()->flash('status', 'Associate updated successfully');
+        session()->flash('status', 'User updated successfully');
     } else {
         session()->flash('status', 'Failed to update associate');
     }
@@ -114,12 +114,12 @@ class Adduser extends Component
                 'regex:/[@$!%*?&#]/' 
             ],
         ], [
-            'name.required' => 'The associate name is required.',
-            'name.min' => 'The associate name must be at least 3 characters.',
-            'name.unique' => 'The associate name has already been taken.',
-            'email.required' => 'The associate email is required.',
-            'email.email' => 'The associate email must be a valid email address.',
-            'email.unique' => 'The associate email has already been taken.',
+            'name.required' => 'The User name is required.',
+            'name.min' => 'The User name must be at least 3 characters.',
+            'name.unique' => 'The User name has already been taken.',
+            'email.required' => 'The User email is required.',
+            'email.email' => 'The User email must be a valid email address.',
+            'email.unique' => 'The User email has already been taken.',
             'mobile.required' => 'The Mobile Number is required.',
             'address.required' => 'The Address is required.',
             'password.required' => 'The password is required.',
@@ -139,10 +139,10 @@ if(isset($this->usertype)) {
         $user->password = $validatedData['password'];
         $user->usertype = "staff";
         if ($user->save()) {
-            session()->flash('status', 'Associate created suucessfully');
+            session()->flash('status', 'User created suucessfully');
             Mail::to($validatedData['email'])->send(new Associate($validatedData));
         } else {
-            session()->flash('status', 'Associate Not created');
+            session()->flash('status', 'User Not created');
         }
         $this->name = '';
         $this->email = '';

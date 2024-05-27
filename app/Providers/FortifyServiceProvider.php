@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
-
+use Hash;
 class FortifyServiceProvider extends ServiceProvider
 {
     /**

@@ -10,7 +10,7 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+   
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -41,18 +41,12 @@
 
     @stack('modals')
     @stack('scripts')
-    @include('sweetalert::alert')
+    
     @livewireScripts
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <!-- Toaster cdns -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
-    <!-- Include PDF.js library -->
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf_viewer.js"></script> --}}
-
-<!-- Create a container for the PDF viewer -->
+   
 
 
 

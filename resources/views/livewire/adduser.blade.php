@@ -113,7 +113,7 @@
                                 style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">Edit</button>
                             <button
                                 style="background-color: #f50808; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                wire:click="delete({{ $user->id }})"
+                                wire:click="delete({{ $user->id }})" wire:confirm="Are you sure you want to delete this User?"
                                 class="text-red-600 hover:text-red-900 ml-2">Delete</button>
                         </td>
                     </tr>

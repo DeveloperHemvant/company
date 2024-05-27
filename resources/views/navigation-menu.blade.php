@@ -14,7 +14,7 @@
                     <x-nav-link href="{{ url('/home') }}" :active="request()->routeIs('dashboard')" wire:navigate class="cursor-pointer hover:text-blue-600">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @if (Auth::user()->usertype=='admin')
+                    @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'staff')
                     <x-dropdown>
                         <x-slot name="trigger">
                             <x-nav-link :active="request()->routeIs('add-university*')"  class="cursor-pointer hover:text-blue-600 ">
@@ -85,7 +85,7 @@
                             <!-- Other dropdown links for programmes -->
                         </x-slot>
                     </x-dropdown>
-                    @if (Auth::user()->usertype=='admin')
+                    @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'staff')
                     <x-dropdown>
                         <x-slot name="trigger">
                             <x-nav-link :active="request()->routeIs('add-user*')" class="cursor-pointer hover:text-blue-600">
@@ -222,7 +222,7 @@
             <x-responsive-nav-link href="{{ route('dashboard') }}" wire:navigate :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            @if (Auth::user()->usertype=='admin')
+            @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'staff')
             <x-dropdown >
                 <x-slot name="trigger" >
                     <x-nav-link :active="request()->routeIs('add-university*')" class="cursor-pointer hover:text-blue-600 ">
@@ -237,7 +237,7 @@
                 </x-slot>
             </x-dropdown>
             @endif
-            @if (Auth::user()->usertype=='admin')
+            @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'staff')
             <!-- Dropdown menu for Associate -->
             <x-dropdown>
                 <x-slot name="trigger">
@@ -293,7 +293,7 @@
                     <!-- Other dropdown links for programmes -->
                 </x-slot>
             </x-dropdown>
-            @if (Auth::user()->usertype=='admin')
+            @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'staff')
             <x-dropdown>
                 <x-slot name="trigger">
                     <x-nav-link :active="request()->routeIs('add-user*')" class="cursor-pointer hover:text-blue-600">

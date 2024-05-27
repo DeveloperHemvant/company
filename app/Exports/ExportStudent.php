@@ -92,7 +92,7 @@ class ExportStudent implements FromCollection, WithHeadings, WithMapping
             $row['email_id'],
             $row['address'],
             $row['mob_no'],
-            $row['spl'],
+            $row['specialization']['specialization_name'],
             $row['type'],
             $row['sem_year'],
             $row['previous_migration'],

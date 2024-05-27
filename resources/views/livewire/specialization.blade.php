@@ -14,15 +14,15 @@
             @endif
             <form wire:submit.prevent="save" class="mb-4">
                 <div class="mb-4">
-                    <label for="course_name" class="block text-gray-700 text-sm font-bold mb-2">Course:</label>
-                    <select wire:model="course_name" id="course_name"
+                    <label for="cousre_id" class="block text-gray-700 text-sm font-bold mb-2">Course:</label>
+                    <select wire:model="cousre_id" id="course_name"
                         class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Course</option>
                         @foreach ($courses as $programme)
                             <option value="{{ $programme->id }}">{{ $programme->course_name }}</option>
                         @endforeach
                     </select>
-                    @error('course_name')
+                    @error('cousre_id')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
 
@@ -37,8 +37,9 @@
 
                 </div>
 
-                <button type="submit" style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Add
+                <button type="submit"
+                    style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+                    class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Add
                     Specialization</button>
             </form>
 
@@ -71,8 +72,9 @@
                                 <button wire:click="edit({{ $proggramme->id }})"
                                     style="background-color: #0fe419; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                     class="text-indigo-600 hover:text-indigo-900">Edit</button>
-                                <button style="background-color: #ff0000; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                wire:click="delete({{ $proggramme->id }})"
+                                <button
+                                    style="background-color: #ff0000; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+                                    wire:click="confirmDelete('{{ $proggramme->id }}')" wire:loading.attr="disabled"
                                     class="text-red-600 hover:text-red-900 ml-2">Delete</button>
                             </td>
                         </tr>
@@ -86,9 +88,8 @@
                                         <div>
 
                                             <label for="name">Specialization Name:</label>
-                                            <x-input name="specialization_name" type="text"
-                                                id="specialization_name" class="custom-class"
-                                                wire:model="specialization_name" required />
+                                            <x-input name="specialization_name" type="text" id="specialization_name"
+                                                class="custom-class" wire:model="specialization_name" required />
 
                                             <div>
                                                 @error('specialization_name')
@@ -103,8 +104,7 @@
                                                 class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                                 <option value="">Select Course</option>
                                                 @foreach ($courses as $course)
-                                                    <option value="{{ $course->id }}"
-                                                       >
+                                                    <option value="{{ $course->id }}">
                                                         {{ $course->course_name }}</option>
                                                 @endforeach
 
@@ -128,3 +128,32 @@
         @endif
 
     </div>
+    <script>
+       window.addEventListener('delete', function () {
+  
+      Swal.fire({
+          title: 'Are you sure?',
+          text: 'You won\'t be able to revert this!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, cancel!',
+          reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+              Livewire.dispatch('goOn-Delete')
+          }
+      });
+
+
+//   Livewire.on('postDeleted', function (data) {
+//       Swal.fire({
+//           title: 'Success!',
+//           text: data.message,
+//           icon: 'success'
+//       });
+//   });
+});
+
+    </script>
+ 

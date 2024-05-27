@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\WithPagination;
 use App\Mail\Associate;
 use Mail;
-
+use Livewire\Attributes\On;
 class AssociateDetails extends Component
 {
     use WithPagination;
@@ -49,9 +49,39 @@ class AssociateDetails extends Component
         $this->showAddForm = false;
         $this->showEditForm = true;
     }
-    public function delete($id)
+    public $postIdToDelete;
+    public function confirmDelete($postId)
     {
-        $associate = User::find($id)->delete();
+        $this->postIdToDelete = $postId;
+        // dd($this->postIdToDelete);
+
+        $this->dispatch('delete');
+    }
+    #[On('goOn-Delete')]
+    public function delete()
+    {
+        
+        $associate =  User::with('students')->findOrFail($this->postIdToDelete);
+        // dd($associate->students->count());
+
+        if ($associate->students->count()) {
+
+        $this->dispatch('alert', [
+            'type' => 'warning',
+            'title' => 'Warning',
+            'position' => 'center',
+            'text' => 'Please delete all the related data regarding this Associate first.'
+        ]);
+    } else {
+        $associate->delete();
+
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'title' => 'Success',
+            'position' => 'center',
+            'text' => 'Associate deleted successfully.'
+        ]);
+    }
     }
     public function update()
     {

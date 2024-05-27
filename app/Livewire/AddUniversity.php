@@ -5,7 +5,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use App\Models\University;
-
+use Livewire\Attributes\On;
 
 
 class AddUniversity extends Component
@@ -95,10 +95,19 @@ class AddUniversity extends Component
     // {
     //     return 'custom-pagination-links-view';
     // }
-    public function delete($id)
+    public $postIdToDelete;
+    public function confirmDelete($postId)
+    {
+        $this->postIdToDelete = $postId;
+        // dd($this->postIdToDelete);
+
+        $this->dispatch('delete');
+    }
+    #[On('goOn-Delete')]
+    public function delete()
     {
 
-        $university = University::with('courses','students','admissionSessions')->find($id);
+        $university = University::with('courses','students','admissionSessions')->find($this->postIdToDelete);
         // dd($university->courses->count());
 
     if ($university->courses->count() > 0 || 

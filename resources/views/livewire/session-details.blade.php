@@ -77,7 +77,7 @@
                                 class="text-indigo-600 hover:text-indigo-900">Edit</button>
                             <button
                                 style="background-color: rgb(250, 5, 5); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                wire:click="delete({{ $sessions->id }})"
+                                wire:click="confirmDelete({{ $sessions->id }})"  wire:loading.attr="disabled"
                                 class="text-red-600 hover:text-red-900 ml-2">Delete</button>
                         </td>
                     </tr>
@@ -135,3 +135,31 @@
     
 
 </div>
+<script>
+    window.addEventListener('delete', function () {
+
+   Swal.fire({
+       title: 'Are you sure?',
+       text: 'You won\'t be able to revert this!',
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonText: 'Yes, delete it!',
+       cancelButtonText: 'No, cancel!',
+       reverseButtons: true
+   }).then((result) => {
+     if (result.isConfirmed) {
+           Livewire.dispatch('goOn-Delete')
+       }
+   });
+
+
+//   Livewire.on('postDeleted', function (data) {
+//       Swal.fire({
+//           title: 'Success!',
+//           text: data.message,
+//           icon: 'success'
+//       });
+//   });
+});
+
+ </script>

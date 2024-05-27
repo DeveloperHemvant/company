@@ -15,6 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule; 
 use Illuminate\Validation\ValidationException;
+
 class AddStudent extends Component
 {
     public $selectedUniversity;
@@ -53,10 +54,46 @@ class AddStudent extends Component
    
     use WithFileUploads;
 
+
+    protected function rules()
+    {
+        return [
+            'selectedUniversity' => 'required',
+            'session_name' => 'required',
+            'selectedCourse' => 'required',
+            'selectedspecialization' => 'required',
+            'admission_type' => 'required',
+            'fname' => 'required',
+            'father_name' => 'required',
+            'mother_name' => 'required',
+            'dob' => 'required|date',
+            'email' => 'required|email',
+            'mob' => 'required|digits:10',
+            'address' => 'required',
+            'pmigration' => 'required',
+            'fee' => 'required|numeric',
+            'exam_status' => 'required',
+            'prj_status' => 'required',
+            'visit_date' => 'required|date',
+            'pass_back' => 'required',
+            'aadhar_no' => [
+                'required',
+                Rule::unique('students')->where(function ($query) {
+                    return $query->where('aadhar_no', $this->aadhar_no)
+                                 ->where('session_id', $this->session_name)
+                                 ->where('course_id', $this->selectedCourse)
+                                 ->whereNull('deleted_at');
+                }),
+            ],
+            'source' => 'required',
+            'semester' => 'required',
+            'documents.*' => 'file|mimes:jpeg,jpg,png|max:10240',
+            'selectedassociate' => Rule::requiredIf($this->source === 'ASSOCIATE'),
+        ];
+    }
     public function addstudent()
     {
         try {
-            
             $validatedData = $this->validate([
                
                 'selectedUniversity' => 'required',
@@ -84,15 +121,14 @@ class AddStudent extends Component
                         return $query->where('aadhar_no', $this->aadhar_no)
                                      ->where('session_id', $this->session_name)
                                      ->where('course_id', $this->selectedCourse);
-                    }),
+                    })
                 ],
                 'source' => 'required',
-                'selectedassociate' => 'required',
+                'selectedassociate' => Rule::requiredIf($this->source === 'ASSOCIATE'),
                 'semester' => 'required',
                 'documents.*' => 'file|mimes:jpeg,jpg|max:10240',
             ]);
-            // dd($validatedData);
-    
+            
             $lastId = Students::latest('id')->value('id');
             $newId = $lastId + 1;
     
@@ -210,7 +246,7 @@ class AddStudent extends Component
     public function updatedSelectedCourse($selectedCourse)
     {
         if (!is_null($selectedCourse)) {
-            $this->specialization = specializations::where('course_id', $selectedCourse)->get();
+            $this->specialization = specializations::where('cousre_id', $selectedCourse)->get();
         }
     }
 

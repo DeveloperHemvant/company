@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Associate extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'associate_name',
     ];
+
+    
 }
