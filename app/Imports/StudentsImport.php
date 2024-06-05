@@ -28,6 +28,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
 
     public function model(array $row)
 {
+        dd($row);
     // Fetch all university names from the database
     $databaseUniversity = University::pluck('university_name')->toArray();
     
@@ -38,7 +39,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
             'required',
             Rule::unique('students')->where(function ($query) use ($row) {
                 return $query->where('aadhar_no', $row['aadhar_no'])
-                             ->where('session', $row['session_name'])
+                             ->where('session_id', $row['session_name'])
                              ->where('course_id', $row['course_name']);
             }),
         ],
@@ -68,7 +69,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
 
     // Fetch IDs and other relevant data
     $university = University::where('university_name', $row['university_name'])->value('id');
-    $course = Cousre::where('course_name', $row['course_name'])->value('id');
+    $course = Cousre::where('id', $row['course_name'])->value('id');
     $session = admission_session::where('name', $row['session_name'])->value('id');
     $specialization = specializations::where('course_id', $course)
                                     ->where('specialization_name', $row['specialization'])

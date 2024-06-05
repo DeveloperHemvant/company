@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Livewire;
-
+use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Students;
 use App\Models\User;
@@ -10,7 +10,7 @@ use App\Models\admission_session;
 use App\Models\Cousre;
 use App\Models\specializations;
 use App\Models\University;
-use App\Models\Associate;
+use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule; 
@@ -44,6 +44,7 @@ class AddStudent extends Component
     public $pass_back;
     public $board;
     public $source;
+    public $refname;
     public $associate;
     public $selectedassociate;
     public $adhaar;
@@ -51,51 +52,61 @@ class AddStudent extends Component
     public $selectedspecialization;
     public $documents;
     public $aadhar_no;
-   
+    public $files = [];
     use WithFileUploads;
 
-
-    protected function rules()
+    public function addFile()
     {
-        return [
-            'selectedUniversity' => 'required',
-            'session_name' => 'required',
-            'selectedCourse' => 'required',
-            'selectedspecialization' => 'required',
-            'admission_type' => 'required',
-            'fname' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'dob' => 'required|date',
-            'email' => 'required|email',
-            'mob' => 'required|digits:10',
-            'address' => 'required',
-            'pmigration' => 'required',
-            'fee' => 'required|numeric',
-            'exam_status' => 'required',
-            'prj_status' => 'required',
-            'visit_date' => 'required|date',
-            'pass_back' => 'required',
-            'aadhar_no' => [
-                'required',
-                Rule::unique('students')->where(function ($query) {
-                    return $query->where('aadhar_no', $this->aadhar_no)
-                                 ->where('session_id', $this->session_name)
-                                 ->where('course_id', $this->selectedCourse)
-                                 ->whereNull('deleted_at');
-                }),
-            ],
-            'source' => 'required',
-            'semester' => 'required',
-            'documents.*' => 'file|mimes:jpeg,jpg,png|max:10240',
-            'selectedassociate' => Rule::requiredIf($this->source === 'ASSOCIATE'),
-        ];
+        $this->files[] = ['file' => null];
     }
+
+    public function removeFile($index)
+    {
+        unset($this->files[$index]);
+        $this->files = array_values($this->files); // reindex array
+    }
+
+    // protected function rules()
+    // {
+    //     return [
+    //         'selectedUniversity' => 'required',
+    //         'session_name' => 'required',
+    //         'selectedCourse' => 'required',
+    //         'selectedspecialization' => 'required',
+    //         'admission_type' => 'required',
+    //         'fname' => 'required',
+    //         'father_name' => 'required',
+    //         'mother_name' => 'required',
+    //         'dob' => 'required|date',
+    //         'email' => 'required|email',
+    //         'mob' => 'required|digits:10',
+    //         'address' => 'required',
+    //         'pmigration' => 'required',
+    //         'fee' => 'required|numeric',
+    //         'exam_status' => 'required',
+    //         'prj_status' => 'required',
+    //         'visit_date' => 'required|date',
+    //         'pass_back' => 'required',
+    //         'aadhar_no' => [
+    //             'required',
+    //             Rule::unique('students')->where(function ($query) {
+    //                 return $query->where('aadhar_no', $this->aadhar_no)
+    //                              ->where('session_id', $this->session_name)
+    //                              ->where('course_id', $this->selectedCourse)
+    //                              ->whereNull('deleted_at');
+    //             }),
+    //         ],
+    //         'source' => 'required',
+    //         'semester' => 'required',
+    //         'documents.*' => 'file|mimes:jpeg,jpg,png|max:10240',
+    //         'selectedassociate' => Rule::requiredIf($this->source === 'ASSOCIATE'),
+    //         'refname'=>Rule::requiredIf($this->source != 'ASSOCIATE'),
+    //     ];
+    // }
     public function addstudent()
     {
         try {
             $validatedData = $this->validate([
-               
                 'selectedUniversity' => 'required',
                 'session_name' => 'required',
                 'selectedCourse' => 'required',
@@ -108,15 +119,14 @@ class AddStudent extends Component
                 'email' => 'required',
                 'mob' => 'required',
                 'address' => 'required',
-                'pmigration' => 'required',
-                'fee' => 'required',
-                'exam_status' => 'required',
-                'prj_status' => 'required',
-                'visit_date' => 'required',
-                'pass_back' => 'required',
+                'pmigration' =>'nullable|rrequired_with:pmigration',
+                'fee' => 'nullable|rrequired_with:fee',
+                'exam_status' => 'nullable|required_with:exam_status',
+                'prj_status' =>'nullable|required_with:prj_status',
+                'visit_date' => 'nullable|required_with:visit_date',
+                'pass_back' =>'nullable|rrequired_with:pass_back',
                 'aadhar_no' => [
                     'required',
-                    // Ensure uniqueness of aadhar_no, session, and course together
                     Rule::unique('students')->where(function ($query) {
                         return $query->where('aadhar_no', $this->aadhar_no)
                                      ->where('session_id', $this->session_name)
@@ -125,21 +135,36 @@ class AddStudent extends Component
                 ],
                 'source' => 'required',
                 'selectedassociate' => Rule::requiredIf($this->source === 'ASSOCIATE'),
+                'refname'=>Rule::requiredIf($this->source != 'ASSOCIATE'),
                 'semester' => 'required',
-                'documents.*' => 'file|mimes:jpeg,jpg|max:10240',
+                'files.*.file' => 'required_with:files.*.file|file|mimes:jpeg,png,jpg|max:10240',
             ]);
-            
             $lastId = Students::latest('id')->value('id');
             $newId = $lastId + 1;
-    
-            // Create a new instance of the Students model
             $student = new Students;
-    
-            // Set the attributes
             $student->id = $newId;
             $student->university_id = $validatedData['selectedUniversity'];
-            $student->user_id = $validatedData['selectedassociate'];
-            $student->associate = User::where(['id'=>$validatedData['selectedassociate']])->pluck('name')->first();
+            if ($this->source === 'ASSOCIATE') {
+                $student->user_id = $validatedData['selectedassociate'];
+                $student->associate = User::where(['id' => $validatedData['selectedassociate']])->pluck('name')->first();
+            } else {
+                $faker = FakerFactory::create();
+                $newuser = User::factory()->create([
+                    'name' => $this->refname,
+                    'email' => $faker->unique()->safeEmail,
+                    'city' => $faker->city,
+                    'mobile' => $faker->phoneNumber,
+                    'password' => Hash::make('password'), 
+                    'address' => $faker->address,
+                    'pincode' => $faker->postcode,
+                    'state' => $faker->state,
+                    'pname' => $faker->name,
+                    'smobile' => $faker->phoneNumber,
+                    'landmobile' => $faker->phoneNumber,
+                ]);
+                $student->user_id=$newuser->id;
+                $student->associate =User::where(['id' => $newuser->id])->pluck('name')->first();
+            }
             $student->source = $validatedData['source'];
             $student->name = $validatedData['fname'];
             $student->father_name = $validatedData['father_name'];
@@ -160,28 +185,22 @@ class AddStudent extends Component
             $student->uni_visit_date = $validatedData['visit_date'];
             $student->pass_back = $validatedData['pass_back'];
             $student->sem_year = $validatedData['semester'];
-            // dd($student);
-            if ($this->documents != null) {
-                $documents = [];
-                foreach ($this->documents as $file) {
-                    $path = $file->store('documents');
+
+           
+            $documents = [];
+            foreach ($this->files as $file) {
+                if (isset($file['file'])) {
+                    $path = $file['file']->store('documents');
                     $documents[] = storage_path('app/' . $path); // Full path for the image
                 }
-    
-                // Load the view and pass the image paths
-                $pdf = PDF::loadView('documentpdf', compact('documents'));
-    
-                // Generate a unique name for the PDF file
-                $pdfFileName = uniqid() . '.pdf';
-    
-                // Save the PDF to the public storage and get its path
-                $pdfPath = 'documentspdf/' . $pdfFileName;
-                Storage::disk('public')->put($pdfPath, $pdf->output());
-    
-                // Save the public path to the student record
-                $student->documents = $pdfPath;
             }
-    
+
+            $pdf = PDF::loadView('documentpdf', compact('documents'));
+            $pdfFileName = uniqid() . '.pdf';
+            $pdfPath = 'documentspdf/' . $pdfFileName;
+            Storage::disk('public')->put($pdfPath, $pdf->output());
+            $student->documents = $pdfPath;
+
             $student->save();
             $this->resetForm();
             return redirect()->route('all-student');
@@ -231,7 +250,7 @@ class AddStudent extends Component
         $this->sessions = admission_session::all();
         $this->universities = University::all();
         $this->associate = User::where('usertype', 'associate')->get();
-
+        $this->files[] = ['file' => null];
     }
     /* method to for dropdown */
     public function updatedSelectedUniversity($selectedUniversity)

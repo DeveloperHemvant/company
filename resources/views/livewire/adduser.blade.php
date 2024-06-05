@@ -15,7 +15,8 @@
                 autocomplete="off">
                 
                 <div class="mb-4">
-                    <label for="name" class="block text-gray-700 font-bold mb-2">User Name</label>
+                    <label for="name" class="block text-gray-700 font-bold mb-2">User Name<span
+                        class="text-red-500">*</span></label>
                     <input type="text" id="name" wire:model="name" autocomplete="off"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Enter associate name">
@@ -24,7 +25,8 @@
                     @enderror
                 </div>
                 <div class="mb-4">
-                    <label for="mobile" class="block text-gray-700 font-bold mb-2">User Mobile</label>
+                    <label for="mobile" class="block text-gray-700 font-bold mb-2">User Mobile<span
+                        class="text-red-500">*</span></label>
                     <input type="tel" id="mobile" wire:model="mobile" autocomplete="off"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Enter Mobile Number">
@@ -34,7 +36,8 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="email" class="block text-gray-700 font-bold mb-2">User Email</label>
+                    <label for="email" class="block text-gray-700 font-bold mb-2">User Email<span
+                        class="text-red-500">*</span></label>
                     <input type="email" id="email" wire:model="email" autocomplete="off"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Enter associate email">
@@ -43,7 +46,8 @@
                     @enderror
                 </div>
                 <div class="mb-4">
-                    <label for="password" class="block text-gray-700 font-bold mb-2">User Password</label>
+                    <label for="password" class="block text-gray-700 font-bold mb-2">User Password<span
+                        class="text-red-500">*</span></label>
                     <input type="password" id="password" wire:model="password" autocomplete="off"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Enter associate password">
@@ -53,7 +57,8 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="address" class="block text-gray-700 font-bold mb-2">User Address</label>
+                    <label for="address" class="block text-gray-700 font-bold mb-2">User Address<span
+                        class="text-red-500">*</span></label>
                     <textarea wire:model="address"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Address"></textarea>
@@ -125,8 +130,9 @@
                                 <form wire:submit.prevent="update"
                                     class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg" autocomplete="off">
                                     <div class="mb-4">
-                                        <label for="name" class="block text-gray-700 font-bold mb-2">Associate
-                                            Name</label>
+                                        <label for="name" class="block text-gray-700 font-bold mb-2">User
+                                            Name<span
+                                            class="text-red-500">*</span></label>
                                         <input type="text" id="name" wire:model="name" autocomplete="off"
                                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                             placeholder="Enter associate name">
@@ -146,8 +152,9 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <label for="email" class="block text-gray-700 font-bold mb-2">Associate
-                                            Email</label>
+                                        <label for="email" class="block text-gray-700 font-bold mb-2">User
+                                            Email<span
+                                            class="text-red-500">*</span></label>
                                         <input type="email" id="email" wire:model="email" autocomplete="off"
                                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                             placeholder="Enter associate email">
@@ -157,8 +164,9 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <label for="address" class="block text-gray-700 font-bold mb-2">Associate
-                                            Address</label>
+                                        <label for="address" class="block text-gray-700 font-bold mb-2">User
+                                            Address<span
+                                            class="text-red-500">*</span></label>
                                         <textarea wire:model="address"
                                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                             placeholder="Address"></textarea>

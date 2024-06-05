@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\University;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use App\Models\Cousre;
@@ -14,8 +15,11 @@ class Specialization extends Component
     use WithPagination;
     public $showAddForm = false;
     public $showEditForm = false;
-    public $courses;
-    public $cousre_id;
+    public $cousre;
+    public $university;
+    public $selectedUniversity;
+    public $course_id;
+    
     public $specialization_name;
     public $u_specialization_name;
     public $special_data;
@@ -52,7 +56,7 @@ class Specialization extends Component
     }
     public function mount()
     {
-        $this->courses = Cousre::all();
+        $this->university = University::all();
         $this->refreshData();
     }
     public function toggleAddForm()
@@ -62,21 +66,35 @@ class Specialization extends Component
         $this->cousre_id = '';
         $this->showEditForm = false;
     }
+    public function updatedSelectedUniversity($selectedUniversity)
+    {
+       
+        if (!is_null($selectedUniversity)) {
+            $this->cousre = Cousre::where('university_id', $selectedUniversity)->get();
+            $this->course_id = '';
+        }
+    }
     public function save()
     {
+        // dd($this->course_id);
         $validatedData = $this->validate([
             'specialization_name' => [
                 'required',
                 Rule::unique('specializations')->where(function ($query) {
-                    return $query->where('cousre_id', $this->cousre_id);
+                    return $query->where('university_id', $this->selecteduniversity)
+                                 ->where('cousre_id', $this->course_id); 
                 })
             ],
-            'cousre_id' => 'required'
+            'course_id' => 'required',
+            'selecteduniversity'=>'required'
         ]);
         $data = new specializations();
         $data->specialization_name = $this->specialization_name;
-        $data->cousre_id = $this->cousre_id;
-        $data->save();       
+        $data->cousre_id = $this->course_id;
+        $data->university_id = $this->selectedUniversity;
+        $data->save();
+        $this->selectedUniversity = '';
+        $this->course_id = '';     
         $this->refreshData();
         $this->toggleAddForm();
     }
@@ -86,9 +104,13 @@ class Specialization extends Component
     {
         $this->showEditForm = true;
         $specialization = specializations::find($id);
+        // dd($specialization);
         $this->s_id = $id;
         $this->specialization_name = $specialization->specialization_name;
-        $this->course_name = $specialization->course_id;
+        $this->course_id = $specialization->cousre_id;
+        // dd($this->course_id);
+        $this->cousre = Cousre::where('university_id', $specialization->university_id)->get();
+        $this->selectedUniversity = $specialization->university_id;
 
     }
     public function update(): void
@@ -97,17 +119,26 @@ class Specialization extends Component
             'specialization_name' => [
                 'required',
                 Rule::unique('specializations', 'specialization_name')->where(function ($query) {
-                    return $query->where('cousre_id', $this->course_name);
+                    return $query->where('university_id', $this->selectedUniversity)
+                    ->where('cousre_id', $this->course_id); 
                 })->ignore($this->s_id),
             ],
-            'course_name' => 'required'
+            'course_id' => 'required',
+            'selectedUniversity'=>'required'
+            
         ]);
-
+        // dd($validatedData);
         $specialization = specializations::find($this->s_id);
-        $specialization->update([
-            'specialization_name' => $this->specialization_name,
-            'course_id' => $this->course_name
-        ]);
+        // $specialization->update([
+        //     'specialization_name' => $this->specialization_name,
+        //     'cousre_id' => $this->course_id,
+        //     'university_id' => $this->selectedUniversity
+        // ]);
+        // dd($specialization->cousre_id);
+        $specialization->specialization_name = $validatedData['specialization_name'];
+        $specialization->cousre_id = $validatedData['course_id'];
+        $specialization->university_id = $validatedData['selectedUniversity'];
+        $specialization->save();
 
         $this->refreshData();
         $this->showEditForm = false;

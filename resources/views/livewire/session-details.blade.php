@@ -11,7 +11,8 @@
         <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg">
             <div class="mb-4">
                 <label class="block text-gray-700 font-bold mb-2" for="course">
-                    University
+                    University<span
+                    class="text-red-500">*</span>
                 </label>
                 <select wire:model="university_id" id="university" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <option value="">Select University</option>
@@ -25,14 +26,16 @@
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="sessions" class="block text-gray-700 font-bold mb-2">Starting Month:</label>
+                <label for="sessions" class="block text-gray-700 font-bold mb-2">Starting Month:<span
+                    class="text-red-500">*</span></label>
                 <input type="month" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="startmonth" wire:model.live="startmonth" id="startmonth">
                 @error('sessions_id')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="university" class="block text-gray-700 font-bold mb-2">Ending Month:</label>
+                <label for="university" class="block text-gray-700 font-bold mb-2">Ending Month:<span
+                    class="text-red-500">*</span></label>
                 <input type="month" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="endmonth" wire:model="endmonth" id="endmonth" min="{{$startmonth}}">
                 @error('sessions_id')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -90,7 +93,8 @@
                                 <form wire:submit.prevent="update" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg">
                                     <div class="mb-4">
                                         <label class="block text-gray-700 font-bold mb-2" for="course">
-                                            University
+                                            University<span
+                                            class="text-red-500">*</span>
                                         </label>
                                         <select wire:model="university_id" id="university" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                             <option value="">Select University</option>
@@ -104,14 +108,16 @@
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="sessions" class="block text-gray-700 font-bold mb-2">Starting Month:</label>
+                                        <label for="sessions" class="block text-gray-700 font-bold mb-2">Starting Month:<span
+                                            class="text-red-500">*</span></label>
                                         <input type="month" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="startmonth" wire:model.live="startmonth" id="startmonth">
                                         @error('sessions_id')
                                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="university" class="block text-gray-700 font-bold mb-2">Ending Month:</label>
+                                        <label for="university" class="block text-gray-700 font-bold mb-2">Ending Month:<span
+                                            class="text-red-500">*</span></label>
                                         <input type="month" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="endmonth" wire:model="endmonth" id="endmonth" min="{{$startmonth}}">
                                         @error('sessions_id')
                                             <p class="text-red-500 text-xs italic">{{ $message }}</p>

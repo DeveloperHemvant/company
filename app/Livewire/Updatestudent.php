@@ -50,6 +50,18 @@ class Updatestudent extends Component
     public $visit_date;
     public $pass_back;
     public $documents;
+    public $files = [];
+
+    public function addFile()
+    {
+        $this->files[] = ['file' => null];
+    }
+
+    public function removeFile($index)
+    {
+        unset($this->files[$index]);
+        $this->files = array_values($this->files); // reindex array
+    }
     public function mount($id)
     {
         $this->id = $id;
@@ -86,6 +98,7 @@ class Updatestudent extends Component
         $this->sessions = admission_session::where('university_id', $this->studentdata->university_id)->get();
         // $this->usession_name = admission_session::where('id', $this->studentdata->session_id)->get()->value('name');
         $this->associate = User::where('usertype', 'associate')->get();
+        $this->files[] = ['file' => null];
 
         // dd($this->associate);
     }
@@ -117,13 +130,13 @@ class Updatestudent extends Component
             ],
             'mob' => 'required|numeric|digits:10',
             'address' => 'required|string',
-            'pmigration' => 'required|date',
-            'fee' => 'required|numeric',
-            'exam_status' => 'required|string',
-            'prj_status' => 'required|string',
-            'visit_date' => 'required|date',
-            'pass_back' => 'required|string',
-            'documents.*' => 'file|mimes:jpeg,png,jpg,gif|max:1024',
+            'pmigration' => 'nullable|required_if:pmigration,null|date',
+            'fee' => 'nullable|required_if:fee,null|numeric',
+            'exam_status' => 'nullable|required_if:exam_status,null|string',
+            'prj_status' =>'nullable|required_if:prj_status,null|string',
+            'visit_date' =>'nullable|required_if:visit_date,null|date', 
+            'pass_back' =>'nullable|required_if:pass_back,null|string', 
+            'files.*.file' => 'file|mimes:jpeg,png,jpg|max:10240',
         ]);
         // dd($validatedData);
         $student = Students::findOrFail($this->id);
@@ -151,35 +164,37 @@ class Updatestudent extends Component
         $student->uni_visit_date = $validatedData['visit_date'];
         $student->pass_back = $validatedData['pass_back'];
         $student->sem_year = $validatedData['usemester'];
-        if ($this->documents != null) {
+        $hello = $this->files;
+        // dd($hello[0]['file']);
+        if ($hello[0]['file'] !== null && count($this->files) > 0) {
             if ($student->documents != null) {
                 $existingPdfPath = storage_path('app/public/' . $student->documents);
-
+                // dd($existingPdfPath);
                 if (file_exists($existingPdfPath)) {
                     // Initialize FPDI
                     $pdf = new Fpdi();
                     $pageCount = $pdf->setSourceFile($existingPdfPath);
-
+        
                     // Import all pages of the existing PDF
                     for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                         $templateId = $pdf->importPage($pageNo);
                         $pdf->AddPage();
                         $pdf->useTemplate($templateId);
                     }
-
+        
                     // Add new images
-                    foreach ($this->documents as $file) {
-                        $imagePath = $file->store('documentspdf');
+                    foreach ($this->files as $file) {
+                        $imagePath = $file['file']->store('documentspdf');
                         $imageFullPath = storage_path('app/' . $imagePath);
-
+        
                         $pdf->AddPage();
                         $pdf->Image($imageFullPath, 10, 10, 190, 0);
                     }
-
+        
                     // Save the updated PDF
                     $updatedPdfPath = 'documentspdf/' . uniqid() . '.pdf';
                     $pdf->Output(storage_path('app/public/' . $updatedPdfPath), 'F');
-
+        
                     // Update the student record with the new PDF path
                     $student->documents = $updatedPdfPath;
                 } else {

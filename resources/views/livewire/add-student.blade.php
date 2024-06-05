@@ -10,10 +10,10 @@
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    University
+                    University<span class="text-red-500">*</span>
                 </label>
                 <select wire:model.live="selectedUniversity" id="selectedUniversity" class="form-select">
-                    <option value="">Choose University</option>
+                    <option value="">Choose University<span class="text-red-500">*</span></option>
                     @foreach ($universities as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->university_name }}</option>
                     @endforeach
@@ -24,10 +24,10 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="session">
-                    Session
+                    Session<span class="text-red-500">*</span>
                 </label>
                 <select wire:model="session_name" id="session" class="form-select">
-                    <option value="">Choose Session</option>
+                    <option value="">Choose Session<span class="text-red-500">*</span></option>
                     @foreach ($sessions as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->name }}</option>
                     @endforeach
@@ -38,16 +38,16 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
-                    Course Name
+                    Course Name<span class="text-red-500">*</span>
                 </label>
                 <select id="selectedCourse" class="form-select" wire:model.live="selectedCourse">
-                    <option value="">Choose Course</option>
+                    <option value="">Choose Course<span class="text-red-500">*</span></option>
                     @if ($selectedUniversity != null)
-                    @foreach ($cousre as $data)
-                    <option value="{{ $data->id }}">{{ $data->course_name }}</option>
-                @endforeach
+                        @foreach ($cousre as $data)
+                            <option value="{{ $data->id }}">{{ $data->course_name }}</option>
+                        @endforeach
                     @endif
-                    
+
                 </select>
                 @error('selectedCourse')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -55,10 +55,10 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="programme">
-                    Specialization Name
+                    Specialization Name<span class="text-red-500">*</span>
                 </label>
                 <select wire:model="selectedspecialization" id="programme" class="form-select">
-                    <option value="">Choose Specialization</option>
+                    <option value="">Choose Specialization<span class="text-red-500">*</span></option>
                     @if ($selectedCourse != null)
                         @foreach ($specialization as $data)
                             <option value="{{ $data->id }}">{{ $data->specialization_name }}</option>
@@ -71,7 +71,7 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
-                    Admission Type
+                    Admission Type<span class="text-red-500">*</span>
                 </label>
                 <select wire:model="admission_type" id="course" class="form-select">
                     <option value="">Admission Type</option>
@@ -87,15 +87,15 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="semester">
-                    Semester/Year
+                    Semester/Year<span class="text-red-500">*</span>
                 </label>
                 <select wire:model="semester" id="semester" class="form-select">
                     <option value=""> Select Semester </option>
                     @for ($i = 1; $i < 9; $i++)
-                    <option value="{{ $i }} Semester"> {{ $i }} Semester </option>
-                @endfor
-                    
-                    
+                        <option value="{{ $i }} Semester"> {{ $i }} Semester </option>
+                    @endfor
+
+
 
                 </select>
                 @error('semester')
@@ -104,7 +104,7 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
-                    Source
+                    Source<span class="text-red-500">*</span>
                 </label>
                 <select wire:model.live="source" id="source" class="form-select">
                     <option value="">Select Source</option>
@@ -119,26 +119,38 @@
                 @enderror
             </div>
             @if ($source == 'ASSOCIATE')
-                <div class="    px-3 mb-6">
+                <div class="px-3 mb-6">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
-                        Associate
+                        Associate<span class="text-red-500">*</span>
                     </label>
                     <select wire:model="selectedassociate" id="associate" class="form-select">
                         <option value="">Select Associate</option>
                         @foreach ($associate as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        @endforeach>
-
+                        @endforeach
                     </select>
-                    @error('associate')
+                    @error('selectedassociate')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
+            @elseif ($source == 'DIRECT' || $source == 'SOCIAL MEDIA' || $source == 'REFERENCE')
+                <div class="px-3 mb-6">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                        Name<span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="refname" id="refname" wire:model="refname">
+                    <div>
+                        @error('refname')
+                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
             @endif
+
 
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Full Name
+                    Full Name<span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="fname" id="fname" wire:model="fname">
                 <div>
@@ -150,7 +162,7 @@
 
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Father's Name
+                    Father's Name<span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="father_name" id="father_name" wire:model="father_name">
                 <div>
@@ -161,7 +173,7 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Mother's Name
+                    Mother's Name<span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="mother_name" id="mother_name" wire:model="mother_name">
                 <div>
@@ -174,7 +186,7 @@
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Date of Birth
+                    Date of Birth<span class="text-red-500">*</span>
                 </label>
                 <input type="date" name="dob" id="dob" wire:model="dob">
                 <div>
@@ -185,7 +197,7 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Email
+                    Email<span class="text-red-500">*</span>
                 </label>
                 <input type="email" name="email" id="email" wire:model="email">
                 <div>
@@ -196,7 +208,7 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="adhaar">
-                    Adhaar Card Number
+                    Adhaar Card Number<span class="text-red-500">*</span>
                 </label>
                 <input type="tel" name="adhaar" id="adhaar" wire:model="aadhar_no">
                 <div>
@@ -207,7 +219,7 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Mobile Number
+                    Mobile Number<span class="text-red-500">*</span>
                 </label>
                 <input type="tel" name="mob" id="mob" wire:model="mob">
                 <div>
@@ -218,7 +230,7 @@
             </div>
             <div class="    px-3 mb-6">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    Address
+                    Address<span class="text-red-500">*</span>
                 </label>
                 <textarea wire:model="address"></textarea>
                 <div>
@@ -295,22 +307,31 @@
                     @enderror
                 </div>
             </div>
-            <div class="    px-3 mb-6">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                    10 and 12 Marksheets
-                </label>
-                <input type="file" wire:model="documents" multiple>
-                <div>
-                    @if ($documents)
-                        @foreach ($documents as $item)
-                            <img id="previewImage" src="{{ $item->temporaryUrl() }}" alt="Documents">
-                        @endforeach
-
+            @foreach ($files as $index => $file)
+                <div class="px-3 mb-6 flex items-center">
+                    <label for="file_{{ $index }}"
+                        class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2">
+                        Documents
+                    </label>
+                    <input type="file" id="file_{{ $index }}" wire:model="files.{{ $index }}.file"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    @if (count($files) > 1)
+                        <button type="button" wire:click.prevent="removeFile({{ $index }})"
+                            class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Remove
+                        </button>
                     @endif
-                    @error('documents')
+                    @error('files.' . $index . '.file')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
+            @endforeach
+
+            <div class="px-3 mb-6">
+                <button type="button" wire:click.prevent="addFile"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Add File
+                </button>
             </div>
 
         </div>

@@ -26,10 +26,14 @@ class AssociateDetails extends Component
         $this->mobile = '';
         $this->address = '';
         $this->password = '';
+        $this->pname = '';
+        $this->smobile = '';
     
     }
 
     public $name;
+    public $pname;
+    public $smobile;
     public $email;
     public $mobile;
     public $address;
@@ -37,6 +41,10 @@ class AssociateDetails extends Component
     public $updatename = '';
     public $showEditForm = false;
     public $id;
+    public $landmobile;
+    public $city;
+    public $state;
+    public $pincode;
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -46,6 +54,12 @@ class AssociateDetails extends Component
         $this->email = $user->email;
         $this->mobile = $user->mobile;
         $this->address = $user->address;
+        $this->city = $user->city;
+        $this->pincode = $user->pincode;
+        $this->state = $user->state;
+        $this->smobile = $user->smobile;
+        $this->landmobile = $user->landmobile;
+            $this->pname = $user->pname;
         $this->showAddForm = false;
         $this->showEditForm = true;
     }
@@ -53,8 +67,6 @@ class AssociateDetails extends Component
     public function confirmDelete($postId)
     {
         $this->postIdToDelete = $postId;
-        // dd($this->postIdToDelete);
-
         $this->dispatch('delete');
     }
     #[On('goOn-Delete')]
@@ -85,47 +97,71 @@ class AssociateDetails extends Component
     }
     public function update()
     {
+        // Find the user by ID
         $user = User::find($this->id);
-        $student = Students::where('user_id',$this->id)->get();
-        // dd($student);
+    
+        // Find the associated student (if any)
+        $student = Students::where('user_id', $this->id)->first();
+    
+        // Define validation rules
         $rules = [
             'name' => 'required|min:3',
             'email' => 'required|email',
             'mobile' => 'required|digits:10',
             'address' => 'required',
-            
+            'city' => 'required',
+            'pincode' => 'required',
+            'state' => 'required',
+            'pname' => 'required',
         ];
-        
-    if ($user && $this->email !== $user->email) {
-        $rules['email'] .= '|unique:users,email';
-    }
-    $validatedData = $this->validate($rules, [
-        'name.required' => 'The associate name is required.',
-        'name.min' => 'The associate name must be at least 3 characters.',
-        'email.required' => 'The associate email is required.',
-        'email.email' => 'The associate email must be a valid email address.',
-        'email.unique' => 'The associate email has already been taken.',
-        'mobile.required' => 'The Mobile Number is required.',
-        'address.required' => 'The Address is required.',
-        
-    ]);
-        // dd($validatedData);
-        if ($student) {
-            Students::where('user_id', $this->id)->update(['associate' => $validatedData['name']]);
+    
+        // If the user exists and the email is being changed, add unique validation
+        if ($user && $this->email !== $user->email) {
+            $rules['email'] .= '|unique:users,email';
         }
-    if ($user) {
-        $user->update([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'mobile'=>$validatedData['mobile'],
-            'address'=>$validatedData['address'],
+    
+        // Validate the request data
+        $validatedData = $this->validate($rules, [
+            'name.required' => 'The associate name is required.',
+            'name.min' => 'The associate name must be at least 3 characters.',
+            'email.required' => 'The associate email is required.',
+            'email.email' => 'The associate email must be a valid email address.',
+            'email.unique' => 'The associate email has already been taken.',
+            'mobile.required' => 'The Mobile Number is required.',
+            'address.required' => 'The Address is required.',
+            'city.required' => 'The associate city is required.',
+            'pincode.required' => 'The associate pincode is required.',
+            'state.required' => 'The associate state is required.',
+            'pname.required' => 'The associate pname is required.',
         ]);
-        session()->flash('status', 'Associate updated successfully');
-    } else {
-        session()->flash('status', 'Failed to update associate');
-    }
+    
+        // Update the associated student record, if exists
+        if ($student) {
+            $student->update(['associate' => $validatedData['name']]);
+        }
+    
+        // Update the user record
+        if ($user) {
+            $user->name = $validatedData['name'];
+            $user->email = $validatedData['email'];
+            $user->city = $validatedData['city'];
+            $user->mobile = $validatedData['mobile'];
+            $user->address = $validatedData['address'];
+            $user->pincode = $validatedData['pincode'];
+            $user->state = $validatedData['state'];
+            $user->pname = $validatedData['pname'];
+            $user->smobile =$this->smobile;
+            $user->landmobile = $this->landmobile;
+            $user->save();
+            session()->flash('status', 'Associate updated successfully');
+        } else {
+            session()->flash('status', 'Failed to update associate');
+        }
+    
+        // Hide the edit form
         $this->showEditForm = false;
     }
+    
     public function save()
     {
         $validatedData = $this->validate([
@@ -142,34 +178,47 @@ class AssociateDetails extends Component
                 'regex:/[0-9]/',      
                 'regex:/[@$!%*?&#]/' 
             ],
+            'city'=>'required',
+            'pincode'=>'required',
+            'state'=>'required',
+            'pname'=>'required',
         ], [
             'name.required' => 'The associate name is required.',
             'name.min' => 'The associate name must be at least 3 characters.',
             'name.unique' => 'The associate name has already been taken.',
             'email.required' => 'The associate email is required.',
+            'city.required' => 'The associate city is required.',
+            'pincode.required' => 'The associate pincode is required.',
+            'state.required' => 'The associate state is required.',
+            'pname.required' => 'The associate pname is required.',
             'email.email' => 'The associate email must be a valid email address.',
             'email.unique' => 'The associate email has already been taken.',
             'mobile.required' => 'The Mobile Number is required.',
             'address.required' => 'The Address is required.',
             'password.required' => 'The password is required.',
             'password.regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.',
-        ]);    
-        if (User::create($validatedData)) {
+        ]);
+        $user = new User;
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->city = $validatedData['city'];
+        $user->mobile = $validatedData['mobile'];
+        $user->password = $validatedData['password'];
+        $user->address = $validatedData['address'];
+        $user->pincode = $validatedData['pincode'];
+        $user->state = $validatedData['state'];
+        $user->pname = $validatedData['pname'];
+        $user->smobile =$this->smobile;
+        $user->landmobile = $this->landmobile;
+        if ($user->save()) {
             session()->flash('status', 'Associate created suucessfully');
             Mail::to($validatedData['email'])->send(new Associate($validatedData));
         } else {
             session()->flash('status', 'Associate Not created');
         }
-        $this->name = '';
-        $this->email = '';
-        $this->mobile = '';
-        $this->address = '';
-        $this->password = '';
-    
         $this->resetForm();
         $this->showAddForm = false;
     }
-
     private function resetForm()
     {
         $this->name = '';
@@ -177,10 +226,16 @@ class AssociateDetails extends Component
         $this->mobile = '';
         $this->address = '';
         $this->password = '';
+        $this->city = '';
+        $this->pincode = '';
+        $this->state = '';
+        $this->pname = '';
+        $this->smobile ='';
+        $this->landmobile = '';
     }
     public function render()
     {
-        $data = User::where('usertype', '<>', 'admin')->paginate(10);
+        $data = User::where('usertype', '=', 'associate')->paginate(10);
         return view('livewire.associate-details', ['data' => $data]);
     }
 }

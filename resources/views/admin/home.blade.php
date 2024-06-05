@@ -3,8 +3,11 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             @if (Auth::user()->usertype == "admin")
             {{ __('Admin Dashboard') }}
-            @endif
+            @elseif (Auth::user()->usertype == "staff")
             {{ __('Staff Dashboard') }}
+            @else
+            {{ __('User Dashboard') }}
+            @endif
         </h2>
     </x-slot>
 

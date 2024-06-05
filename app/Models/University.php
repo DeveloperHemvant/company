@@ -32,5 +32,9 @@ class University extends Model
     {
         return $this->hasMany(admission_session::class,'university_id','id');
     }
+    public function specializations()
+    {
+        return $this->hasMany(specializations::class);
+    }
     
 }

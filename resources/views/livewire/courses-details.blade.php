@@ -13,7 +13,8 @@
         @endif
         <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg" autocomplete="off">
             <div class="mb-4">
-                <label for="course" class="block text-gray-700 font-bold mb-2">University:</label>
+                <label for="course" class="block text-gray-700 font-bold mb-2">University:<span
+                    class="text-red-500">*</span></label>
                 <select wire:model="university_id" id="university" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <option value="">Select University</option>
                     @foreach ($universities as $item)
@@ -25,7 +26,8 @@
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="course_type" class="block text-gray-700 font-bold mb-2">Course Type:</label>
+                <label for="course_type" class="block text-gray-700 font-bold mb-2">Course Type:<span
+                    class="text-red-500">*</span></label>
                 <select wire:model="course_type" id="course_type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <option value="">Select Course Type</option>
                     <option value="UG">UG</option>
@@ -37,14 +39,16 @@
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="course_name" class="block text-gray-700 font-bold mb-2">Course Name:</label>
+                <label for="course_name" class="block text-gray-700 font-bold mb-2">Course Name:<span
+                    class="text-red-500">*</span></label>
                 <input type="text" id="course_name" wire:model="course_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 @error('course_name')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="duration" class="block text-gray-700 font-bold mb-2">Duration:</label>
+                <label for="duration" class="block text-gray-700 font-bold mb-2">Duration:<span
+                    class="text-red-500">*</span></label>
                 <select wire:model="duration" id="duration" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <option value="">Select Course Duration</option>
                     <option value="1 Semester">1 Semester</option>
@@ -116,7 +120,8 @@
                             <td colspan="2">
                                 <form wire:submit.prevent="update" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg" autocomplete="off">
                                     <div class="mb-4">
-                                        <label for="course" class="block text-gray-700 font-bold mb-2">University:</label>
+                                        <label for="course" class="block text-gray-700 font-bold mb-2">University:<span
+                                            class="text-red-500">*</span></label>
                                         <select wire:model="university_id" id="university" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                             <option value="">Select University</option>
                                             @foreach ($universities as $item)
@@ -128,7 +133,8 @@
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="course_type" class="block text-gray-700 font-bold mb-2">Course Type:</label>
+                                        <label for="course_type" class="block text-gray-700 font-bold mb-2">Course Type:<span
+                                            class="text-red-500">*</span></label>
                                         <select wire:model="course_type" id="course_type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                             <option value="">Select Course Type</option>
                                             <option value="UG">UG</option>
@@ -140,14 +146,16 @@
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="course_name" class="block text-gray-700 font-bold mb-2">Course Name:</label>
+                                        <label for="course_name" class="block text-gray-700 font-bold mb-2">Course Name:<span
+                                            class="text-red-500">*</span></label>
                                         <input type="text" id="course_name" wire:model="course_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                         @error('course_name')
                                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="duration" class="block text-gray-700 font-bold mb-2">Duration:</label>
+                                        <label for="duration" class="block text-gray-700 font-bold mb-2">Duration:<span
+                                            class="text-red-500">*</span></label>
                                         <select wire:model="duration" id="duration" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                             <option value="">Select Course Duration</option>
                                             <option value="1 Semester">1 Semester</option>

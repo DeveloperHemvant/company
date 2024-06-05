@@ -22,4 +22,8 @@ class specializations extends Model
     {
         return $this->hasMany(Students::class,'specialization_id');
     }
+    public function university()
+    {
+        return $this->belongsTo(University::class);
+    }
 }

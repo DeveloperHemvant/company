@@ -416,8 +416,8 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -697,6 +697,7 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'App\\Imports\\StudentsImport' => __DIR__ . '/../..' . '/app/Imports/StudentsImport.php',
         'App\\Livewire\\AddStudent' => __DIR__ . '/../..' . '/app/Livewire/AddStudent.php',
         'App\\Livewire\\AddUniversity' => __DIR__ . '/../..' . '/app/Livewire/AddUniversity.php',
+        'App\\Livewire\\Adduser' => __DIR__ . '/../..' . '/app/Livewire/Adduser.php',
         'App\\Livewire\\AllUniversity' => __DIR__ . '/../..' . '/app/Livewire/AllUniversity.php',
         'App\\Livewire\\Allstudents' => __DIR__ . '/../..' . '/app/Livewire/Allstudents.php',
         'App\\Livewire\\AssociateDetails' => __DIR__ . '/../..' . '/app/Livewire/AssociateDetails.php',
@@ -707,6 +708,7 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'App\\Livewire\\SessionDetails' => __DIR__ . '/../..' . '/app/Livewire/SessionDetails.php',
         'App\\Livewire\\Specialization' => __DIR__ . '/../..' . '/app/Livewire/Specialization.php',
         'App\\Livewire\\Updatestudent' => __DIR__ . '/../..' . '/app/Livewire/Updatestudent.php',
+        'App\\Mail\\Associate' => __DIR__ . '/../..' . '/app/Mail/Associate.php',
         'App\\Models\\Associate' => __DIR__ . '/../..' . '/app/Models/Associate.php',
         'App\\Models\\Cousre' => __DIR__ . '/../..' . '/app/Models/Cousre.php',
         'App\\Models\\Programme' => __DIR__ . '/../..' . '/app/Models/Programme.php',
@@ -718,6 +720,7 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\FortifyServiceProvider' => __DIR__ . '/../..' . '/app/Providers/FortifyServiceProvider.php',
         'App\\Providers\\JetstreamServiceProvider' => __DIR__ . '/../..' . '/app/Providers/JetstreamServiceProvider.php',
+        'App\\Rules\\UniqueAadharNoSessionCourse' => __DIR__ . '/../..' . '/app/Rules/UniqueAadharNoSessionCourse.php',
         'App\\View\\Components\\AppLayout' => __DIR__ . '/../..' . '/app/View/Components/AppLayout.php',
         'App\\View\\Components\\GuestLayout' => __DIR__ . '/../..' . '/app/View/Components/GuestLayout.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',

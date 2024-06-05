@@ -13,7 +13,8 @@
         <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg"
             autocomplete="off">
             <div class="mb-4">
-                <label for="name" class="block text-gray-700 font-bold mb-2">University Name:</label>
+                <label for="name" class="block text-gray-700 font-bold mb-2">University Name:<span
+                    class="text-red-500">*</span></label>
                 <input type="text" id="university_name" wire:model="university_name"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 @error('university_name')
@@ -21,7 +22,8 @@
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="description" class="block text-gray-700 font-bold mb-2">University Code:</label>
+                <label for="description" class="block text-gray-700 font-bold mb-2">University Code:<span
+                    class="text-red-500">*</span></label>
                 <input type="text"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="university_code" wire:model="university_code">
@@ -83,8 +85,8 @@
                         <tr>
 
                             <td colspan="2">
-                                <!-- Edit Associate Form -->
-                                <form wire:submit.prevent="save"
+                                <!-- Edit University Form -->
+                                <form wire:submit.prevent="update"
                                     class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg" autocomplete="off">
                                     <div class="mb-4">
                                         <label for="name" class="block text-gray-700 font-bold mb-2">University

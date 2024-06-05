@@ -14,21 +14,41 @@
             @endif
             <form wire:submit.prevent="save" class="mb-4">
                 <div class="mb-4">
-                    <label for="cousre_id" class="block text-gray-700 text-sm font-bold mb-2">Course:</label>
-                    <select wire:model="cousre_id" id="course_name"
+                    <label for="cousre_id" class="block text-gray-700 text-sm font-bold mb-2">University:<span
+                        class="text-red-500">*</span></label>
+                    <select wire:model.live="selecteduniversity" id="university_name"
                         class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Course</option>
-                        @foreach ($courses as $programme)
-                            <option value="{{ $programme->id }}">{{ $programme->course_name }}</option>
+                        @foreach ($university as $programme)
+                            <option value="{{ $programme->id }}">{{ $programme->university_name }}</option>
                         @endforeach
                     </select>
-                    @error('cousre_id')
-                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @error('selecteduniversity')
+                        <p class="text-red-500 text-xs italic">University is required</p>
                     @enderror
 
                 </div>
                 <div class="mb-4">
-                    <label for="sessions" class="block text-gray-700 text-sm font-bold mb-2">Specialization:</label>
+                    <label for="cousre_id" class="block text-gray-700 text-sm font-bold mb-2">Courses:<span
+                        class="text-red-500">*</span></label>
+                    <select wire:model="course_id" id="university_name"
+                        class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">Select Course</option>
+                        @if ($selecteduniversity != null)
+                    @foreach ($cousre as $data)
+                    <option value="{{ $data->id }}">{{ $data->course_name }}</option>
+                @endforeach
+                    @endif
+                        
+                    </select>
+                    @error('course_id')
+                        <p class="text-red-500 text-xs italic">Course is required</p>
+                    @enderror
+
+                </div>
+                <div class="mb-4">
+                    <label for="sessions" class="block text-gray-700 text-sm font-bold mb-2">Specialization:<span
+                        class="text-red-500">*</span></label>
                     <x-input name="specialization_name" type="text" id="specialization_name" class="custom-class"
                         wire:model="specialization_name" required />
                     @error('specialization_name')
@@ -85,33 +105,48 @@
                                 <td colspan="2">
                                     <p>Edit Specialization Details</p>
                                     <form wire:submit.prevent="update" class="mb-4">
-                                        <div>
-
-                                            <label for="name">Specialization Name:</label>
-                                            <x-input name="specialization_name" type="text" id="specialization_name"
-                                                class="custom-class" wire:model="specialization_name" required />
-
-                                            <div>
-                                                @error('specialization_name')
-                                                    {{ $message }}
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label for="course_name">Course Name:</label>
-
-                                            <select wire:model="course_name" id="course_name"
+                                        <div class="mb-4">
+                                            <label for="cousre_id" class="block text-gray-700 text-sm font-bold mb-2">University:<span
+                                                class="text-red-500">*</span></label>
+                                            <select wire:model.live="selectedUniversity" id="university_name"
                                                 class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                                 <option value="">Select Course</option>
-                                                @foreach ($courses as $course)
-                                                    <option value="{{ $course->id }}">
-                                                        {{ $course->course_name }}</option>
+                                                @foreach ($university as $programme)
+                                                    <option value="{{ $programme->id }}">{{ $programme->university_name }}</option>
                                                 @endforeach
-
                                             </select>
-                                            @error('sessions_id')
+                                            @error('university_id')
                                                 <p class="text-red-500 text-xs italic">{{ $message }}</p>
                                             @enderror
+                        
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="cousre_id" class="block text-gray-700 text-sm font-bold mb-2">Courses:<span
+                                                class="text-red-500">*</span></label>
+                                            <select wire:model="course_id" id="university_name"
+                                                class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                                <option value="">Select Course</option>
+                                                {{-- @if ($selectedUniversity != null) --}}
+                                            @foreach ($cousre as $data)
+                                            <option value="{{ $data->id }}">{{ $data->course_name }}</option>
+                                        @endforeach
+                                            {{-- @endif --}}
+                                                
+                                            </select>
+                                            @error('course_id')
+                                                <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                                            @enderror
+                        
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="sessions" class="block text-gray-700 text-sm font-bold mb-2">Specialization:<span
+                                                class="text-red-500">*</span></label>
+                                            <x-input name="specialization_name" type="text" id="specialization_name" class="custom-class"
+                                                wire:model="specialization_name" required />
+                                            @error('specialization_name')
+                                                <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                                            @enderror
+                        
                                         </div>
                                         <button type="submit"
                                             style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">Update

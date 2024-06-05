@@ -6,6 +6,7 @@ use Livewire\Attributes\Validate;
 use Livewire\Component;
 use App\Models\University;
 use Livewire\Attributes\On;
+use Illuminate\Validation\Rule;
 
 
 class AddUniversity extends Component
@@ -61,31 +62,57 @@ class AddUniversity extends Component
         $this->showEditForm = true;
     }
     public function update()
-    {
-        $id = $this->id;
-        $validatedData = $this->validate([
-            'university_name' => 'required|min:3|unique:universities,university_name,' . $this->id,
-            'university_code' => 'required|min:3|unique:universities,university_code,' . $this->id,
-        ], [
-            'university_name.required' => 'The university name is required.',
-            'university_name.min' => 'The university name must be at least 3 characters.',
-            'university_name.unique' => 'The university name has already been taken.',
-            'university_code.required' => 'The university code is required.',
-            'university_code.min' => 'The university code must be at least 3 characters.',
-            'university_code.unique' => 'The university code has already been taken.',
-        ]);
-        // dd($validatedData);
-        $university = University::findOrFail($id);
+{
+    $id = $this->id;
+        // dd($id);
+    $university = University::findOrFail($id);
 
-    // // Update the university attributes
+    // Check if the university name and code are the same as the current values
+    $nameChanged = $university->university_name !== $this->university_name;
+    $codeChanged = $university->university_code !== $this->university_code;
+
+    // Prepare the validation rules
+    $validationRules = [];
+    $validationMessages = [];
+
+    if ($nameChanged) {
+        $validationRules['university_name'] = [
+            'required',
+            'min:3',
+            Rule::unique('universities', 'university_name')->ignore($id)
+        ];
+        $validationMessages['university_name.required'] = 'The university name is required.';
+        $validationMessages['university_name.min'] = 'The university name must be at least 3 characters.';
+        $validationMessages['university_name.unique'] = 'The university name has already been taken.';
+    }
+
+    if ($codeChanged) {
+        $validationRules['university_code'] = [
+            'required',
+            'min:3',
+            Rule::unique('universities', 'university_code')->ignore($id)
+        ];
+        $validationMessages['university_code.required'] = 'The university code is required.';
+        $validationMessages['university_code.min'] = 'The university code must be at least 3 characters.';
+        $validationMessages['university_code.unique'] = 'The university code has already been taken.';
+    }
+
+    // Validate only if there are validation rules
+    if (!empty($validationRules)) {
+        $validatedData = $this->validate($validationRules, $validationMessages);
+    }
+
+    // Update the university attributes
     $university->update([
         'university_name' => $this->university_name,
-        'university_code' =>  $this->university_code,
+        'university_code' => $this->university_code,
     ]);
+
     $this->showEditForm = false;
-        $this->resetForm();
-        
-    }
+    $this->resetForm();
+}
+
+
     public function resetForm()
     {
         $this->university_name = '';
