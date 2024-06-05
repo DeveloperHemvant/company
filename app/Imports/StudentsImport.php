@@ -28,7 +28,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
 
     public function model(array $row)
 {
-        dd($row);
+        // dd($row);
     // Fetch all university names from the database
     $databaseUniversity = University::pluck('university_name')->toArray();
     
@@ -69,9 +69,11 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
 
     // Fetch IDs and other relevant data
     $university = University::where('university_name', $row['university_name'])->value('id');
-    $course = Cousre::where('id', $row['course_name'])->value('id');
+    $course = Cousre::where('course_name', $row['course_name'])->value('id');
+        //dd($course);
     $session = admission_session::where('name', $row['session_name'])->value('id');
-    $specialization = specializations::where('course_id', $course)
+        // dd($session);
+    $specialization = specializations::where('cousre_id', $course)
                                     ->where('specialization_name', $row['specialization'])
                                     ->value('id');
 
@@ -105,7 +107,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
     // Generate new student ID
     $lastId = Students::latest('id')->value('id');
     $newId = $lastId + 1;
-
+        // dd($row);
     // Increment success count
     $this->successCount++;
 
@@ -113,6 +115,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
     return new Students([
         'id' => $newId,
         'university_id' => $university,
+        'session_id' => $session,
         'associate' => $row['associate_name'],
         'source' => $row['source'],
         'sr_no' => $row['sr_no'],
@@ -127,10 +130,10 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
         'address' => $row['address'],
         'mob_no' => $row['mobile_no'],
         'course_id' => $course,
-        'spl' => $row['specialization'],
+        'specialization_id' => $row['specialization'],
         'type' => $row['admission_type'],
         'sem_year' => $row['semesteryear'],
-        'session' => $session,
+        
         'previous_migration' => $row['previous_migration'],
         'fee' => $row['fee'],
         'exam_status' => $row['exam_status'],

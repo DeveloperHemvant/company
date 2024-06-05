@@ -29,7 +29,7 @@ class Students extends Model
                 'spl',
                 'type',
                 'sem_year',
-                'session',
+                'session_id',
                 'previous_migration',
                 'fee',
                 'exam_status',

@@ -9,12 +9,14 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class ExportStudent implements FromCollection, WithHeadings, WithMapping
 {
+    
     protected $data;
     private $counter = 1;
 
     public function __construct(array $data)
     {
         $this->data = $data;
+        
     }
 
     public function collection()

@@ -135,12 +135,12 @@ class Updatestudent extends Component
             ],
             'mob' => 'required|numeric|digits:10',
             'address' => 'required|string',
-            'pmigration' => 'nullable|rrequired_with:pmigration|date',
-            'fee' => 'nullable|rrequired_with:fee|numeric',
-            'exam_status' => 'nullable|rrequired_with:exam_status|string',
-            'prj_status' =>'nullable|rrequired_with:prj_status|string',
-            'visit_date' =>'nullable|rrequired_with:visit_date|date', 
-            'pass_back' =>'nullable|rrequired_with:pass_back|string', 
+            'pmigration' => 'nullable|required_with:pmigration|date',
+            'fee' => 'nullable|required_with:fee|numeric',
+            'exam_status' => 'nullable|required_with:exam_status|string',
+            'prj_status' =>'nullable|required_with:prj_status|string',
+            'visit_date' =>'nullable|required_with:visit_date|date', 
+            'pass_back' =>'nullable|required_with:pass_back|string', 
         ]);
         // dd($validatedData);
         $student = Students::findOrFail($this->id);

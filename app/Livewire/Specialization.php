@@ -18,6 +18,7 @@ class Specialization extends Component
     public $cousre;
     public $university;
     public $selectedUniversity;
+    public $selecteduniversity;
     public $course_id;
     
     public $specialization_name;
@@ -91,10 +92,9 @@ class Specialization extends Component
         $data = new specializations();
         $data->specialization_name = $this->specialization_name;
         $data->cousre_id = $this->course_id;
-        $data->university_id = $this->selectedUniversity;
+        $data->university_id = $this->selecteduniversity;
         $data->save();
-        $this->selectedUniversity = '';
-        $this->course_id = '';     
+    
         $this->refreshData();
         $this->toggleAddForm();
     }
@@ -103,6 +103,8 @@ class Specialization extends Component
     public function edit($id): void
     {
         $this->showEditForm = true;
+        $this->showAddForm = false;
+
         $specialization = specializations::find($id);
         // dd($specialization);
         $this->s_id = $id;
