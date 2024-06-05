@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 27, 2024 at 06:26 PM
+-- Generation Time: Jun 05, 2024 at 03:23 PM
 -- Server version: 8.0.36-0ubuntu0.22.04.1
 -- PHP Version: 8.1.2-1ubuntu2.17
 
@@ -82,8 +82,8 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('356a192b7913b04c54574d18c28d46e6395428ab', 'i:1;', 1716796166),
-('356a192b7913b04c54574d18c28d46e6395428ab:timer', 'i:1716796166;', 1716796166),
+('356a192b7913b04c54574d18c28d46e6395428ab', 'i:2;', 1717574875),
+('356a192b7913b04c54574d18c28d46e6395428ab:timer', 'i:1717574875;', 1717574875),
 ('509a8d0bf4ae0a9f97cc43dbdbb624ba', 'i:1;', 1716349038),
 ('509a8d0bf4ae0a9f97cc43dbdbb624ba:timer', 'i:1716349038;', 1716349038),
 ('b5a0d52329a0c82038e180aa7fe9ad52', 'i:1;', 1716447231),
@@ -219,7 +219,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (23, '2024_05_20_043048_add_course_duration_to_cousres_table', 15),
 (24, '2024_05_20_071714_add_mobile_address_column_table', 16),
 (25, '2024_05_20_074802_add_university_id_column_table', 17),
-(26, '2024_05_23_124120_add_user_id_to_students_table', 18);
+(26, '2024_05_23_124120_add_user_id_to_students_table', 18),
+(27, '2024_06_04_103803_add_columns_to_users_table', 19),
+(28, '2024_06_04_120342_add_university_id_to_specializations_table', 20);
 
 -- --------------------------------------------------------
 
@@ -296,7 +298,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('yN9vpxrYkOp6RHFjESL5Pv1lbqtoMFBUriq2ZteB', 1, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiZ1dtRG5HckRjREpzZ0hIN09BOVhnUU96aVJaQmI3ZXZXbnhWcEsyNiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMzOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYWxsLXN0dWRlbnQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6MjE6InBhc3N3b3JkX2hhc2hfc2FuY3R1bSI7czo2MDoiJDJ5JDEyJEtxREo0NzdEVmM5akNJUkhlTVc4MS5aSnpQc09HRDJYTDFvMDIvcmkzOUdQak5Zc010SkNPIjt9', 1716811774);
+('rSFfJvB1Tsmv2gXazUgvqwhy1f5Kb7CBKIGMPTE1', 1, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiRlJ6cmVQbkNlbUJRaThCRTZOWkNFWFZ6Q2FWVkFsWnRFUWFaUDA3OCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hbGwtc3R1ZGVudCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MzoidXJsIjthOjA6e31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6MjE6InBhc3N3b3JkX2hhc2hfc2FuY3R1bSI7czo2MDoiJDJ5JDEyJEtxREo0NzdEVmM5akNJUkhlTVc4MS5aSnpQc09HRDJYTDFvMDIvcmkzOUdQak5Zc010SkNPIjt9', 1717581065);
 
 -- --------------------------------------------------------
 
@@ -309,17 +311,19 @@ CREATE TABLE `specializations` (
   `specialization_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `cousre_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `university_id` bigint UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `specializations`
 --
 
-INSERT INTO `specializations` (`id`, `specialization_name`, `cousre_id`, `created_at`, `updated_at`) VALUES
-(13, 'Hindi', 19, '2024-05-20 01:11:33', '2024-05-20 01:11:33'),
-(14, 'Hindi', 20, '2024-05-27 02:09:09', '2024-05-27 02:09:09'),
-(15, 'English', 21, '2024-05-27 02:17:31', '2024-05-27 02:17:31');
+INSERT INTO `specializations` (`id`, `specialization_name`, `cousre_id`, `created_at`, `updated_at`, `university_id`) VALUES
+(13, 'Hindi', 19, '2024-05-20 01:11:33', '2024-05-20 01:11:33', NULL),
+(14, 'Hindi', 20, '2024-05-27 02:09:09', '2024-05-27 02:09:09', NULL),
+(15, 'English', 21, '2024-05-27 02:17:31', '2024-05-27 02:17:31', NULL),
+(17, 'testi', 21, '2024-06-04 07:09:53', '2024-06-04 23:17:15', 9);
 
 -- --------------------------------------------------------
 
@@ -349,12 +353,12 @@ CREATE TABLE `students` (
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sem_year` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `session_id` bigint UNSIGNED NOT NULL,
-  `previous_migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exam_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `project_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `uni_visit_date` date NOT NULL,
-  `pass_back` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `previous_migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `exam_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `project_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `uni_visit_date` date DEFAULT NULL,
+  `pass_back` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `marksheet_1st_sem` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `marksheet_2nd_sem` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `marksheet_3rd_sem` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -378,6 +382,11 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `university_id`, `source`, `associate`, `user_id`, `sr_no`, `uni_reg_no`, `password`, `name`, `father_name`, `mother_name`, `dob`, `aadhar_no`, `email_id`, `address`, `mob_no`, `course_id`, `specialization_id`, `type`, `sem_year`, `session_id`, `previous_migration`, `fee`, `exam_status`, `project_status`, `uni_visit_date`, `pass_back`, `marksheet_1st_sem`, `marksheet_2nd_sem`, `marksheet_3rd_sem`, `marksheet_4th_sem`, `marksheet_5th_sem`, `marksheet_6th_sem`, `marksheet_7th_sem`, `marksheet_8th_sem`, `provisional_diploma_degree`, `additional_docs`, `additional_remarks`, `nc`, `created_at`, `updated_at`, `documents`, `deleted_at`) VALUES
+(6, 9, 'ASSOCIATE', 'Hemvant', 2, NULL, NULL, NULL, 'sfsdfdsaf', 'sadfsdfsf', 'sdfsdfsdf', '2024-05-27', '123321222111', 'sadfsafsdfs@yopmail.com', 'xyz\nxyz', '1234554321', 21, 15, 'FRESH', '8 Semester', 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-06-05 02:37:03', '2024-06-05 04:02:47', 'documentspdf/66601ca6f28d0.pdf', NULL),
+(4, 9, 'DIRECT', NULL, NULL, NULL, NULL, NULL, 'sdafsdaf', 'sdfasdf', 'sdfsdafdsaf', '2024-06-06', '1234122345678', 'fsdfsd@yopmail.com', 'sdfasdfasdfsdf', '1234123412', 21, 15, 'FRESH', '2 Semester', 17, '2024-01', '345435', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-06-05 02:12:54', '2024-06-05 02:12:54', 'documentspdf/666016fdc4c63.pdf', NULL),
+(3, 9, 'ASSOCIATE', 'Hemvant', 2, NULL, NULL, NULL, 'xyz', 'sdfsadf', 'testing1', '2024-05-30', '123454321234', 'goodsdf@yopmail.com', 'dsfgdsfgdfg', '8278309129', 21, 15, 'RE REG', '2 Semester', 17, '2024-01', '70000', 'pass', 'done', '2024-06-04', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-06-05 00:26:01', '2024-06-05 01:32:39', 'documentspdf/66600d8f4d38d.pdf', NULL),
+(2, 9, 'ASSOCIATE', 'Hemvant', 2, NULL, NULL, NULL, 'xyz', 'sdfsadf', 'hello', '2024-06-05', '123454321578', 'corporate@yopmail.com', 'xyz\nxyz', '1234567890', 21, 15, 'RE REG', '1 Semester', 17, '2024-01', '70000', 'pass', 'done', '2024-06-04', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-06-05 00:21:06', '2024-06-05 00:21:06', 'documentspdf/665ffcc98eafa.pdf', NULL),
+(5, 9, 'DIRECT', 'source', NULL, NULL, NULL, NULL, 'sadfsadf', 'sdfsafsd', 'fsdfsdf', '2024-06-04', '753654125896', 'sfdhasddfs@yopmail.com', 'sdfsfds', '8523697412', 21, 15, 'FRESH', '1 Semester', 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-06-05 02:21:23', '2024-06-05 02:21:23', 'documentspdf/666018fb31e3c.pdf', NULL),
 (1, 9, 'ASSOCIATE', 'Hemvant', 2, NULL, '123456123456', 'hello', 'xyz', 'sdfsadf', 'hello', '2024-04-30', '931762514190', 'corporate@yopmail.com', 'xyz\nxyz', '8278309129', 21, 15, 'FRESH', '1 Semester', 17, '2024-01', '70000', 'pass', 'done', '2024-04-30', 'done', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-27 02:19:13', '2024-05-27 02:31:54', 'documentspdf/66543af9887c2.pdf', NULL);
 
 -- --------------------------------------------------------
@@ -400,7 +409,7 @@ CREATE TABLE `universities` (
 --
 
 INSERT INTO `universities` (`id`, `university_name`, `university_code`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(8, 'SVSU', 'SVSU', '2024-05-07 00:55:37', '2024-05-26 22:17:19', NULL),
+(8, 'SVSU', 'SVSU', '2024-05-07 00:55:37', '2024-06-04 04:36:59', NULL),
 (9, 'KU', 'KU', '2024-05-07 00:56:14', '2024-05-26 22:17:25', NULL),
 (10, 'SGVU', 'SGVU', '2024-05-07 00:56:25', '2024-05-07 00:56:25', NULL),
 (11, 'CVRU-BIHAR', 'CVRU-BIHAR', '2024-05-07 00:56:34', '2024-05-07 00:56:34', NULL),
@@ -425,12 +434,18 @@ INSERT INTO `universities` (`id`, `university_name`, `university_code`, `created
 CREATE TABLE `users` (
   `id` bigint UNSIGNED NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `usertype` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'Associate',
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `mobile` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `landmobile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `smobile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pincode` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `state` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `two_factor_secret` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `two_factor_recovery_codes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `two_factor_confirmed_at` timestamp NULL DEFAULT NULL,
@@ -446,18 +461,23 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `usertype`, `email_verified_at`, `password`, `mobile`, `address`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `current_team_id`, `profile_photo_path`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Admin', 'admin@webguruz.in', 'admin', NULL, '$2y$12$KqDJ477DVc9jCIRHeMW81.ZJzPsOGD2XL1o02/ri39GPjNYsMtJCO', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-01 22:49:22', '2024-05-01 22:49:22', NULL),
-(2, 'Hemvant', 'hemvant@webguruz.in', 'Associate', NULL, '$2y$12$AtbAVtSvg9GdzGaA9kiEq.g7K2HlHLCetdw5S4fnaVk5QCgjbN0z6', '1234123234', 'dsfgdgdfs', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-01 22:50:16', '2024-05-24 04:23:57', NULL),
-(4, 'Testing', 'testing@webguruz.in', 'Associate', NULL, '$2y$12$nWFY3kIg/DEqwg/ea7ZDPu5TQdpGnGFIANg04hF39xrDFYsHHzwDW', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-17 07:03:14', '2024-05-17 07:03:14', NULL),
-(9, 'Final Testing  testing', 'associate@webguruz.in', 'Associate', NULL, '$2y$12$R3QLNZ6S6jrcljggebiQXebsS7Ycnd58sIFdylzU1QYu8QbasqzOu', '7878787878', 'asdfsfd', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-23 03:51:39', '2024-05-24 04:31:00', NULL),
-(22, 'asdfsafsadfs', 'admintest@webguruz.in', 'staff', NULL, '$2y$12$elHO3twzqFqwc/a2l86OhOPF20z5KdHd97IsCCylxCmNmTVRbbjOm', '1234124234', 'xyz\nxyz', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-24 05:16:56', '2024-05-24 05:16:56', NULL),
-(23, 'asdfsafsadfsdfgdg', 'helloji@gmail.com', 'Associate', NULL, '$2y$12$whQVWkYFf7NloJJagW6ykeA9tD5VE7D3Z5dBlzx92ZTHovqyqcS8K', '1234567890', 'asdfsafdsadfsa', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-24 05:30:19', '2024-05-24 05:30:19', NULL),
-(26, 'gurpreet helllo', 'hello@gmail.com', 'staff', NULL, '$2y$12$1tizaUSrhwgkyV2FCLIW8.CWVHF9TyXxKKg.zZYdKSAu0QvXQXTSq', '1234567890', 'asdfsfsdf', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-24 05:39:14', '2024-05-24 05:39:30', '2024-05-24 05:39:30'),
-(27, 'Gurpreet', 'simran@webguruz.in', 'staff', NULL, '$2y$12$g6snhOJLUQxv/HXxdS2gpeRf1IFWTJ69W9zgTd7XA10vRKFjbtUYu', '1234554321', 'asdfsadfasdfdasf', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-24 07:24:31', '2024-05-26 22:28:31', '2024-05-26 22:28:31'),
-(28, 'admintesttestsdfsdf', 'admintesttest@webguruz.in', 'staff', NULL, '$2y$12$CjEJzmJvVEH/EyTAAWMHiOJEDfh1OlreR5r0rU004lYlgqNe.m1Py', '1234567890', 'dsfgdsfgd', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-27 02:27:23', '2024-05-27 02:27:34', NULL),
-(29, 'hello', 'hellohello@gmail.com', 'staff', NULL, '$2y$12$WxHhvtAVw91Pt0eveQM4lepzrGYhwS2nBsVzwSGecjWh6lSENwtCC', '1234554321', 'sdfsadfsdf', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-27 02:29:16', '2024-05-27 02:29:16', NULL),
-(30, 'dsfg', 'good@gmail.com', 'staff', NULL, '$2y$12$N6x3/IDsqaXgDrVpZKmzfukgjji2mewnvUvMKbes9L57f0wjLIorG', '2423234234', 'tgdgfsfgs', NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-27 02:30:45', '2024-05-27 02:31:03', NULL);
+INSERT INTO `users` (`id`, `name`, `pname`, `email`, `usertype`, `email_verified_at`, `password`, `mobile`, `landmobile`, `smobile`, `address`, `city`, `pincode`, `state`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `current_team_id`, `profile_photo_path`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Admin', NULL, 'admin@webguruz.in', 'admin', NULL, '$2y$12$KqDJ477DVc9jCIRHeMW81.ZJzPsOGD2XL1o02/ri39GPjNYsMtJCO', '', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-01 22:49:22', '2024-05-01 22:49:22', NULL),
+(2, 'Hemvant', NULL, 'hemvant@webguruz.in', 'Associate', NULL, '$2y$12$AtbAVtSvg9GdzGaA9kiEq.g7K2HlHLCetdw5S4fnaVk5QCgjbN0z6', '1234123234', NULL, NULL, 'dsfgdgdfs', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-01 22:50:16', '2024-05-24 04:23:57', NULL),
+(4, 'Testing', NULL, 'testing@webguruz.in', 'Associate', NULL, '$2y$12$nWFY3kIg/DEqwg/ea7ZDPu5TQdpGnGFIANg04hF39xrDFYsHHzwDW', '', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-17 07:03:14', '2024-05-17 07:03:14', NULL),
+(9, 'Final Testing  testing', NULL, 'associate@webguruz.in', 'Associate', NULL, '$2y$12$R3QLNZ6S6jrcljggebiQXebsS7Ycnd58sIFdylzU1QYu8QbasqzOu', '7878787878', NULL, NULL, 'asdfsfd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-23 03:51:39', '2024-05-24 04:31:00', NULL),
+(22, 'asdfsafsadfs', NULL, 'admintest@webguruz.in', 'staff', NULL, '$2y$12$elHO3twzqFqwc/a2l86OhOPF20z5KdHd97IsCCylxCmNmTVRbbjOm', '1234124234', NULL, NULL, 'xyz\nxyz', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-24 05:16:56', '2024-05-24 05:16:56', NULL),
+(23, 'asdfsafsadfsdfgdg', NULL, 'helloji@gmail.com', 'Associate', NULL, '$2y$12$whQVWkYFf7NloJJagW6ykeA9tD5VE7D3Z5dBlzx92ZTHovqyqcS8K', '1234567890', NULL, NULL, 'asdfsafdsadfsa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-24 05:30:19', '2024-05-24 05:30:19', NULL),
+(26, 'gurpreet helllo', NULL, 'hello@gmail.com', 'staff', NULL, '$2y$12$1tizaUSrhwgkyV2FCLIW8.CWVHF9TyXxKKg.zZYdKSAu0QvXQXTSq', '1234567890', NULL, NULL, 'asdfsfsdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-24 05:39:14', '2024-05-24 05:39:30', '2024-05-24 05:39:30'),
+(27, 'Gurpreet', NULL, 'simran@webguruz.in', 'staff', NULL, '$2y$12$g6snhOJLUQxv/HXxdS2gpeRf1IFWTJ69W9zgTd7XA10vRKFjbtUYu', '1234554321', NULL, NULL, 'asdfsadfasdfdasf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-24 07:24:31', '2024-05-26 22:28:31', '2024-05-26 22:28:31'),
+(28, 'admintesttestsdfsdf', NULL, 'admintesttest@webguruz.in', 'staff', NULL, '$2y$12$CjEJzmJvVEH/EyTAAWMHiOJEDfh1OlreR5r0rU004lYlgqNe.m1Py', '1234567890', NULL, NULL, 'dsfgdsfgd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-27 02:27:23', '2024-05-27 02:27:34', NULL),
+(29, 'hello', NULL, 'hellohello@gmail.com', 'staff', NULL, '$2y$12$WxHhvtAVw91Pt0eveQM4lepzrGYhwS2nBsVzwSGecjWh6lSENwtCC', '1234554321', NULL, NULL, 'sdfsadfsdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-27 02:29:16', '2024-05-27 02:29:16', NULL),
+(30, 'dsfg', NULL, 'good@gmail.com', 'staff', NULL, '$2y$12$N6x3/IDsqaXgDrVpZKmzfukgjji2mewnvUvMKbes9L57f0wjLIorG', '2423234234', NULL, NULL, 'tgdgfsfgs', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-27 02:30:45', '2024-05-27 02:31:03', NULL),
+(31, 'sfsfs', 'asdfsdf', 'hello@yopmail.com', 'Associate', NULL, '$2y$12$cTzbK4NjHUk52o8AqgVCZem1imcK09gaOKbcXE.d2VaOVS7jSRN9a', '2342345345', '34523', 'sdfsdf', 'safsadfsdf', 'dfgdg', '1', 'dsfgd', NULL, NULL, NULL, NULL, NULL, NULL, '2024-06-04 05:14:45', '2024-06-04 06:20:57', NULL),
+(32, 'testing', 'sadfsdafsd', 'guru@yopmail.com', 'Associate', NULL, '$2y$12$QQP6OpQJIDRsfisPKhK.K.1lAjW7qIQ58A.oGX5Bo/5NTg73zw3Ee', '1234567890', '1234567890', '1234567890', 'asfsadf', 'safsdf', '123', 'sdafsadf', NULL, NULL, NULL, NULL, NULL, NULL, '2024-06-04 05:45:47', '2024-06-04 06:30:29', '2024-06-04 06:30:29'),
+(33, 'refname', 'Trycia Murazik', 'trace.upton@example.net', 'Associate', '2024-06-05 02:37:02', '$2y$12$teGPMnsPvlvyKKTZa1gLMOEVpk03m2qEaQb0S0UpoPKQMHxEoyUTy', '+1-254-616-1382', '838-343-5222', '1-680-950-9755', '940 Rosemary Circles\nWest Cayla, NC 51480-0744', 'Port Jordynshire', '44891', 'Hawaii', NULL, NULL, NULL, '295wKBMJq6', NULL, NULL, '2024-06-05 02:37:02', '2024-06-05 02:37:02', NULL),
+(34, 'refname', 'Guiseppe Beatty', 'sporer.scot@example.com', 'Associate', '2024-06-05 03:55:32', '$2y$12$67gn/KZCwpUQCnvzLkUPjeexoEe4uh/cunHvJAQknPBFlYZ1NhNSi', '906-559-3240', '+1 (806) 298-3795', '(805) 702-1891', '83026 Homenick Shores Apt. 527\nPort Mikelfurt, MS 07915-5180', 'East Beaulah', '21733', 'Idaho', NULL, NULL, NULL, 'oXTp9CD0b9', NULL, NULL, '2024-06-05 03:55:32', '2024-06-05 03:55:32', NULL),
+(35, 'refnamefhfg', 'Camron Rogahn', 'waelchi.noel@example.org', 'Associate', '2024-06-05 04:01:46', '$2y$12$KEIa.Gq4MiEFGTXBl9lnAOu8m2S6KBWF/2nzbHagk4HjJ0zLTfC2O', '930-282-3898', '+17579311937', '1-714-288-7781', '532 Karli Hollow\nBradtkebury, RI 33447', 'Presleyshire', '16042-8753', 'Indiana', NULL, NULL, NULL, 'cJov03RR1Z', NULL, NULL, '2024-06-05 04:01:46', '2024-06-05 04:01:46', NULL);
 
 --
 -- Indexes for dumped tables
@@ -554,7 +574,8 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `specializations`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `specializations_course_id_foreign` (`cousre_id`);
+  ADD KEY `specializations_course_id_foreign` (`cousre_id`),
+  ADD KEY `specializations_university_id_foreign` (`university_id`);
 
 --
 -- Indexes for table `students`
@@ -620,7 +641,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -638,7 +659,7 @@ ALTER TABLE `programmes`
 -- AUTO_INCREMENT for table `specializations`
 --
 ALTER TABLE `specializations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `universities`
@@ -650,7 +671,7 @@ ALTER TABLE `universities`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Constraints for dumped tables
@@ -672,7 +693,8 @@ ALTER TABLE `cousres`
 -- Constraints for table `specializations`
 --
 ALTER TABLE `specializations`
-  ADD CONSTRAINT `specializations_course_id_foreign` FOREIGN KEY (`cousre_id`) REFERENCES `cousres` (`id`);
+  ADD CONSTRAINT `specializations_course_id_foreign` FOREIGN KEY (`cousre_id`) REFERENCES `cousres` (`id`),
+  ADD CONSTRAINT `specializations_university_id_foreign` FOREIGN KEY (`university_id`) REFERENCES `universities` (`id`);
 
 --
 -- Constraints for table `students`
