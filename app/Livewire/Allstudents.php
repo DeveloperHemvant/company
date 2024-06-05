@@ -12,6 +12,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentsImport;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Exports\SampleStudentsExport;
 
 
 class Allstudents extends Component
@@ -97,6 +99,11 @@ class Allstudents extends Component
         $data = Students::with('university', 'course', 'session', 'specialization')->get()->toArray();
         // dd($data);
         return Excel::download(new ExportStudent($data), 'students.xlsx');
+    }
+    public function downloadSample()
+    {
+        return Excel::download(new SampleStudentsExport, 'sample.xlsx');
+
     }
     //Import the data//
     public function importexceldata()

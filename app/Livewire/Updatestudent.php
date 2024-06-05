@@ -12,6 +12,9 @@ use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader;
+use Faker\Factory as FakerFactory;
+use Illuminate\Support\Facades\Hash;
+
 
 class Updatestudent extends Component
 {
@@ -50,6 +53,8 @@ class Updatestudent extends Component
     public $visit_date;
     public $pass_back;
     public $documents;
+    public $refname;
+
     public $files = [];
 
     public function addFile()
@@ -73,7 +78,7 @@ class Updatestudent extends Component
         // dd($this->usession_name);
         $this->specialization = specializations::where('cousre_id', $this->uselectedCourse)->get();
         $this->uselectedspecialization = $this->studentdata->specialization_id;
-        
+        $this->refname = $this->studentdata->associate;
         $this->uadmission_type = $this->studentdata->type;
         // dd($this->uadmission_type);
         $this->usemester = $this->studentdata->sem_year;
@@ -130,21 +135,47 @@ class Updatestudent extends Component
             ],
             'mob' => 'required|numeric|digits:10',
             'address' => 'required|string',
-            'pmigration' => 'nullable|required_if:pmigration,null|date',
-            'fee' => 'nullable|required_if:fee,null|numeric',
-            'exam_status' => 'nullable|required_if:exam_status,null|string',
-            'prj_status' =>'nullable|required_if:prj_status,null|string',
-            'visit_date' =>'nullable|required_if:visit_date,null|date', 
-            'pass_back' =>'nullable|required_if:pass_back,null|string', 
-            'files.*.file' => 'file|mimes:jpeg,png,jpg|max:10240',
+            'pmigration' => 'nullable|rrequired_with:pmigration|date',
+            'fee' => 'nullable|rrequired_with:fee|numeric',
+            'exam_status' => 'nullable|rrequired_with:exam_status|string',
+            'prj_status' =>'nullable|rrequired_with:prj_status|string',
+            'visit_date' =>'nullable|rrequired_with:visit_date|date', 
+            'pass_back' =>'nullable|rrequired_with:pass_back|string', 
         ]);
         // dd($validatedData);
         $student = Students::findOrFail($this->id);
         $student->university_id = $validatedData['uuniversity'];
-        // $student->associate = $validatedData['uassociate'];
+        
         $student->user_id = $validatedData['uassociate'];
-        $student->associate = User::where(['id'=>$validatedData['uassociate']])->pluck('name')->first();
-        $student->source = $validatedData['usource'];
+        
+        if ($this->usource === 'ASSOCIATE') {
+            $student->associate = User::where(['id'=>$validatedData['uassociate']])->pluck('name')->first();
+            $student->source = $validatedData['usource'];
+        } else {
+            $data =User::where(['name' => $this->refname])->first();
+            if ($data) {
+                $student->associate = $this->refname;
+                $student->user_id = $data->id;
+            }else{
+                $faker = FakerFactory::create();
+                $newuser = User::factory()->create([
+                    'name' => $this->refname,
+                    'email' => $faker->unique()->safeEmail,
+                    'city' => $faker->city,
+                    'mobile' => $faker->phoneNumber,
+                    'password' => Hash::make('password'), 
+                    'address' => $faker->address,
+                    'pincode' => $faker->postcode,
+                    'state' => $faker->state,
+                    'pname' => $faker->name,
+                    'smobile' => $faker->phoneNumber,
+                    'landmobile' => $faker->phoneNumber,
+                ]);
+                $student->user_id=$newuser->id;
+                $student->associate =User::where(['id' => $newuser->id])->pluck('name')->first();
+            }
+            
+        }
         $student->name = $validatedData['fname'];
         $student->father_name = $validatedData['father_name'];
         $student->mother_name = $validatedData['mother_name'];

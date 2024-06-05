@@ -59,50 +59,11 @@ class AddStudent extends Component
     {
         $this->files[] = ['file' => null];
     }
-
     public function removeFile($index)
     {
         unset($this->files[$index]);
-        $this->files = array_values($this->files); // reindex array
+        $this->files = array_values($this->files); 
     }
-
-    // protected function rules()
-    // {
-    //     return [
-    //         'selectedUniversity' => 'required',
-    //         'session_name' => 'required',
-    //         'selectedCourse' => 'required',
-    //         'selectedspecialization' => 'required',
-    //         'admission_type' => 'required',
-    //         'fname' => 'required',
-    //         'father_name' => 'required',
-    //         'mother_name' => 'required',
-    //         'dob' => 'required|date',
-    //         'email' => 'required|email',
-    //         'mob' => 'required|digits:10',
-    //         'address' => 'required',
-    //         'pmigration' => 'required',
-    //         'fee' => 'required|numeric',
-    //         'exam_status' => 'required',
-    //         'prj_status' => 'required',
-    //         'visit_date' => 'required|date',
-    //         'pass_back' => 'required',
-    //         'aadhar_no' => [
-    //             'required',
-    //             Rule::unique('students')->where(function ($query) {
-    //                 return $query->where('aadhar_no', $this->aadhar_no)
-    //                              ->where('session_id', $this->session_name)
-    //                              ->where('course_id', $this->selectedCourse)
-    //                              ->whereNull('deleted_at');
-    //             }),
-    //         ],
-    //         'source' => 'required',
-    //         'semester' => 'required',
-    //         'documents.*' => 'file|mimes:jpeg,jpg,png|max:10240',
-    //         'selectedassociate' => Rule::requiredIf($this->source === 'ASSOCIATE'),
-    //         'refname'=>Rule::requiredIf($this->source != 'ASSOCIATE'),
-    //     ];
-    // }
     public function addstudent()
     {
         try {

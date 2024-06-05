@@ -106,7 +106,7 @@
                 @enderror
             </div>
             @if ($usource == 'ASSOCIATE')
-                <div class="    px-3 mb-6">
+                <div class="px-3 mb-6">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="course">
                         Associate<span class="text-red-500">*</span>
                     </label>
@@ -114,15 +114,24 @@
                         <option value="">Select Associate</option>
                         @foreach ($associate as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        @endforeach>
-
+                        @endforeach
                     </select>
-                    @error('associate')
+                    @error('uassociate')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
-                @else
-                @php $uassociate = null; @endphp <!-- Set $uassociate to null when $usource is not 'ASSOCIATE' -->
+            @elseif ($usource == 'DIRECT' || $usource == 'SOCIAL MEDIA' || $usource == 'REFERENCE')
+                <div class="px-3 mb-6">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                        Name<span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="refname" id="refname" wire:model="refname">
+                    <div>
+                        @error('refname')
+                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
             @endif
 
             <div class="    px-3 mb-6">

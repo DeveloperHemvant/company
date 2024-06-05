@@ -9,6 +9,9 @@
                 <x-button class="bg-pink-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out" wire:click='import' >
                     {{ __('Import Student') }}
                 </x-button>
+                <x-button class="bg-pink-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out" wire:click='downloadSample' >
+                    {{ __('Download File') }}
+                </x-button>
             @if(session('success') || session('error'))
     <div class="alert alert-{{ session('success') ? 'success' : 'danger' }}">
         {{ session('success') ? session('success') : session('error') }}
