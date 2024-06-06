@@ -58,7 +58,7 @@ class SessionDetails extends Component
                 }),
             ],
         ], [
-            'name.required' => 'The session  is required.',
+            'name.required' => 'The session name  is required.',
             'name.unique' => 'The session  already exists.',
         ]);
         $admission_session = new admission_session;
@@ -67,7 +67,7 @@ class SessionDetails extends Component
         $admission_session->endmonth = $this->endmonth;
         $admission_session->university_id = $this->university_id;
         $admission_session->save();
-
+        session()->flash('status', 'Session created successfully');
         $this->resetdata();
         $this->refreshData();
         $this->showAddForm = false;
@@ -110,6 +110,7 @@ class SessionDetails extends Component
         $admission_session->endmonth = $this->endmonth;
         $admission_session->university_id = $this->university_id;
         $admission_session->save();
+        session()->flash('status', 'Session Updated successfully');
         $this->resetdata();
         $this->showEditForm = false;
         $this->refreshData();
@@ -153,7 +154,6 @@ class SessionDetails extends Component
             ]);
             $this->refreshData();
         }
-        
         $this->refreshData();
     }
     public function refreshData(): void
@@ -162,16 +162,7 @@ class SessionDetails extends Component
     }
     public function render()
     {
-        // DB::enableQueryLog();
-
-        // Fetch the paginated session data
         $sessionData = admission_session::with('university')->paginate(10);
-    
-        // Retrieve the executed SQL queries
-        // $queries = DB::getQueryLog();
-        // dd($queries); // Check the generated SQL queries
-    
-        // Pass the session data to the view
         return view('livewire.session-details', [
             'sessionData' => $sessionData,
         ]);

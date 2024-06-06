@@ -139,7 +139,7 @@ if(isset($this->usertype)) {
         $user->password = $validatedData['password'];
         $user->usertype = "staff";
         if ($user->save()) {
-            session()->flash('status', 'User created suucessfully');
+            session()->flash('status', 'User created successfully');
             Mail::to($validatedData['email'])->send(new Associate($validatedData));
         } else {
             session()->flash('status', 'User Not created');

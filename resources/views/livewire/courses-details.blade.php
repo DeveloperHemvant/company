@@ -4,21 +4,27 @@
         class="bg-blue-500 hover:bg-blue-700  font-bold py-2 px-4 rounded mb-4">
         {{ $showAddForm ? 'Cancel' : 'Add Course' }}
     </button>
-
+    @if (session()->has('status'))
+        <div class="alert {{ session('status') ? 'text-green-500' : 'text-red-500' }}">
+            {{ session('status') }}
+        </div>
+    @endif
     @if ($showAddForm)
         @if (session()->has('status'))
             <div class="alert {{ session('status') ? 'alert-success' : 'alert-danger' }}">
                 {{ session('status') }}
             </div>
         @endif
-        <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg" autocomplete="off">
+        <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg"
+            autocomplete="off">
             <div class="mb-4">
                 <label for="course" class="block text-gray-700 font-bold mb-2">University:<span
-                    class="text-red-500">*</span></label>
-                <select wire:model="university_id" id="university" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        class="text-red-500">*</span></label>
+                <select wire:model="university_id" id="university"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <option value="">Select University</option>
                     @foreach ($universities as $item)
-                        <option value="{{$item->id}}">{{ $item->university_name }}</option>
+                        <option value="{{ $item->id }}">{{ $item->university_name }}</option>
                     @endforeach
                 </select>
                 @error('university_id')
@@ -27,8 +33,9 @@
             </div>
             <div class="mb-4">
                 <label for="course_type" class="block text-gray-700 font-bold mb-2">Course Type:<span
-                    class="text-red-500">*</span></label>
-                <select wire:model="course_type" id="course_type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        class="text-red-500">*</span></label>
+                <select wire:model="course_type" id="course_type"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <option value="">Select Course Type</option>
                     <option value="UG">UG</option>
                     <option value="PG">PG</option>
@@ -40,16 +47,18 @@
             </div>
             <div class="mb-4">
                 <label for="course_name" class="block text-gray-700 font-bold mb-2">Course Name:<span
-                    class="text-red-500">*</span></label>
-                <input type="text" id="course_name" wire:model="course_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        class="text-red-500">*</span></label>
+                <input type="text" id="course_name" wire:model="course_name"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 @error('course_name')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
             <div class="mb-4">
                 <label for="duration" class="block text-gray-700 font-bold mb-2">Duration:<span
-                    class="text-red-500">*</span></label>
-                <select wire:model="duration" id="duration" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        class="text-red-500">*</span></label>
+                <select wire:model="duration" id="duration"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <option value="">Select Course Duration</option>
                     <option value="1 Semester">1 Semester</option>
                     <option value="2 Semester">2 Semester</option>
@@ -65,12 +74,13 @@
                 @enderror
             </div>
             <div class="flex items-center justify-between">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Add Course
                 </button>
             </div>
         </form>
-        
+
 
     @endif
 
@@ -83,10 +93,11 @@
                     <th scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course
                         Name</th>
-                        <th scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">University
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        University
                         Name</th>
-                        <th scope="col"
+                    <th scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course
                         Type</th>
 
@@ -100,7 +111,7 @@
                 @foreach ($courses as $data)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $data->course_name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{  $data->university->university_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $data->university->university_name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $data->course_type }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <button
@@ -110,7 +121,7 @@
                                 class="text-indigo-600 hover:text-indigo-900">Edit</button>
                             <button
                                 style="background-color: rgb(255, 9, 9); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                wire:click="confirmDelete({{ $data->id }})"  wire:loading.attr="disabled"
+                                wire:click="confirmDelete({{ $data->id }})" wire:loading.attr="disabled"
                                 style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">Delete</button>
                         </td>
                     </tr>
@@ -118,14 +129,18 @@
                     @if ($showEditForm && $data->id === $c_id)
                         <tr>
                             <td colspan="2">
-                                <form wire:submit.prevent="update" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg" autocomplete="off">
+                                <form wire:submit.prevent="update"
+                                    class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg" autocomplete="off">
                                     <div class="mb-4">
-                                        <label for="course" class="block text-gray-700 font-bold mb-2">University:<span
-                                            class="text-red-500">*</span></label>
-                                        <select wire:model="university_id" id="university" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        <label for="course"
+                                            class="block text-gray-700 font-bold mb-2">University:<span
+                                                class="text-red-500">*</span></label>
+                                        <select wire:model="university_id" id="university"
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                             <option value="">Select University</option>
                                             @foreach ($universities as $item)
-                                                <option value="{{$item->id}}">{{ $item->university_name }}</option>
+                                                <option value="{{ $item->id }}">{{ $item->university_name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         @error('university_id')
@@ -133,9 +148,10 @@
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="course_type" class="block text-gray-700 font-bold mb-2">Course Type:<span
-                                            class="text-red-500">*</span></label>
-                                        <select wire:model="course_type" id="course_type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        <label for="course_type" class="block text-gray-700 font-bold mb-2">Course
+                                            Type:<span class="text-red-500">*</span></label>
+                                        <select wire:model="course_type" id="course_type"
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                             <option value="">Select Course Type</option>
                                             <option value="UG">UG</option>
                                             <option value="PG">PG</option>
@@ -146,17 +162,20 @@
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="course_name" class="block text-gray-700 font-bold mb-2">Course Name:<span
-                                            class="text-red-500">*</span></label>
-                                        <input type="text" id="course_name" wire:model="course_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        <label for="course_name" class="block text-gray-700 font-bold mb-2">Course
+                                            Name:<span class="text-red-500">*</span></label>
+                                        <input type="text" id="course_name" wire:model="course_name"
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                         @error('course_name')
                                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="duration" class="block text-gray-700 font-bold mb-2">Duration:<span
-                                            class="text-red-500">*</span></label>
-                                        <select wire:model="duration" id="duration" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        <label for="duration"
+                                            class="block text-gray-700 font-bold mb-2">Duration:<span
+                                                class="text-red-500">*</span></label>
+                                        <select wire:model="duration" id="duration"
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                             <option value="">Select Course Duration</option>
                                             <option value="1 Semester">1 Semester</option>
                                             <option value="2 Semester">2 Semester</option>
@@ -172,49 +191,49 @@
                                         @enderror
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                            Add Course
+                                        <button type="submit"
+                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                            Update Course
                                         </button>
                                     </div>
                                 </form>
-                                
+
 
                             </td>
                         </tr>
                     @endif
                 @endforeach
             </tbody>
-            
+
         </table>
-        {{ $courses->links()}}
+        {{ $courses->links() }}
     @endif
 
 </div>
 <script>
-    window.addEventListener('delete', function () {
+    window.addEventListener('delete', function() {
 
-   Swal.fire({
-       title: 'Are you sure?',
-       text: 'You won\'t be able to revert this!',
-       icon: 'warning',
-       showCancelButton: true,
-       confirmButtonText: 'Yes, delete it!',
-       cancelButtonText: 'No, cancel!',
-       reverseButtons: true
-   }).then((result) => {
-     if (result.isConfirmed) {
-           Livewire.dispatch('goOn-Delete')
-       }
-   });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('goOn-Delete')
+            }
+        });
 
 
-//   Livewire.on('postDeleted', function (data) {
-//       Swal.fire({
-//           title: 'Success!',
-//           text: data.message,
-//           icon: 'success'
-//       });
-//   });
-});
-
- </script>
+        //   Livewire.on('postDeleted', function (data) {
+        //       Swal.fire({
+        //           title: 'Success!',
+        //           text: data.message,
+        //           icon: 'success'
+        //       });
+        //   });
+    });
+</script>

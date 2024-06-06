@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Livewire;
-
 use App\Models\Students;
 use App\Models\User;
 use Livewire\Component;
@@ -14,11 +12,10 @@ use Livewire\Attributes\On;
 class AssociateDetails extends Component
 {
     use WithPagination;
-
     public $showAddForm = false;
     public function toggleAddForm()
     {
-        $name = '';
+        $this->name = '';
         $this->showAddForm = !$this->showAddForm;
         $this->showEditForm = false;
         $this->name = '';
@@ -28,9 +25,7 @@ class AssociateDetails extends Component
         $this->password = '';
         $this->pname = '';
         $this->smobile = '';
-    
     }
-
     public $name;
     public $pname;
     public $smobile;
@@ -49,7 +44,6 @@ class AssociateDetails extends Component
     {
         $user = User::findOrFail($id);
         $this->id = $id;
-        // dd($user);
         $this->name = $user->name;
         $this->email = $user->email;
         $this->mobile = $user->mobile;
@@ -72,12 +66,8 @@ class AssociateDetails extends Component
     #[On('goOn-Delete')]
     public function delete()
     {
-        
         $associate =  User::with('students')->findOrFail($this->postIdToDelete);
-        // dd($associate->students->count());
-
         if ($associate->students->count()) {
-
         $this->dispatch('alert', [
             'type' => 'warning',
             'title' => 'Warning',
@@ -97,13 +87,8 @@ class AssociateDetails extends Component
     }
     public function update()
     {
-        // Find the user by ID
         $user = User::find($this->id);
-    
-        // Find the associated student (if any)
         $student = Students::where('user_id', $this->id)->first();
-    
-        // Define validation rules
         $rules = [
             'name' => 'required|min:3',
             'email' => 'required|email',
@@ -114,13 +99,9 @@ class AssociateDetails extends Component
             'state' => 'required',
             'pname' => 'required',
         ];
-    
-        // If the user exists and the email is being changed, add unique validation
         if ($user && $this->email !== $user->email) {
             $rules['email'] .= '|unique:users,email';
         }
-    
-        // Validate the request data
         $validatedData = $this->validate($rules, [
             'name.required' => 'The associate name is required.',
             'name.min' => 'The associate name must be at least 3 characters.',
@@ -134,13 +115,9 @@ class AssociateDetails extends Component
             'state.required' => 'The associate state is required.',
             'pname.required' => 'The associate pname is required.',
         ]);
-    
-        // Update the associated student record, if exists
         if ($student) {
             $student->update(['associate' => $validatedData['name']]);
         }
-    
-        // Update the user record
         if ($user) {
             $user->name = $validatedData['name'];
             $user->email = $validatedData['email'];
@@ -157,17 +134,18 @@ class AssociateDetails extends Component
         } else {
             session()->flash('status', 'Failed to update associate');
         }
-    
-        // Hide the edit form
         $this->showEditForm = false;
     }
-    
     public function save()
     {
         $validatedData = $this->validate([
-            'name' => 'required',
+            'name' => [
+                'required',
+                'string',
+                'regex:/^[a-zA-Z\s]+$/'
+            ],
             'email' => 'required|email|unique:users,email',
-            'mobile'=>'required|digits:10',
+             'mobile' => 'required|digits:10',
             'address'=>'required',
             'password' => [
                 'required',
@@ -179,9 +157,9 @@ class AssociateDetails extends Component
                 'regex:/[@$!%*?&#]/' 
             ],
             'city'=>'required',
-            'pincode'=>'required',
+            'pincode'=>'required|digits:6',
             'state'=>'required',
-            'pname'=>'required',
+            'pname'=>'required|string',
         ], [
             'name.required' => 'The associate name is required.',
             'name.min' => 'The associate name must be at least 3 characters.',
@@ -211,7 +189,7 @@ class AssociateDetails extends Component
         $user->smobile =$this->smobile;
         $user->landmobile = $this->landmobile;
         if ($user->save()) {
-            session()->flash('status', 'Associate created suucessfully');
+            session()->flash('status', 'Associate created successfully');
             Mail::to($validatedData['email'])->send(new Associate($validatedData));
         } else {
             session()->flash('status', 'Associate Not created');

@@ -48,20 +48,18 @@ class CoursesDetails extends Component
             'course_type.required' => 'The Course Type is required.',
             'duration.required' => 'The Duration name is required.',
         ]);
-        
-        // dd($validateData);
         $data = new Cousre;
         $data->course_name = $validateData['course_name'];
         $data->university_id = $validateData['university_id'];
         $data->course_type = $validateData['course_type'];
         $data->duration = $validateData['duration'];
         $data->save();
+        session()->flash('status', 'Course created successfully');
         $this->course_name = '';
         $this->university_id = '';
         $this->course_type = '';
         $this->duration = '';
         $this->toggleAddForm();
-
     }
     public $postIdToDelete;
     public function confirmDelete($postId)
@@ -142,8 +140,7 @@ class CoursesDetails extends Component
             $old_course->course_type = $validatedData['course_type'];
             $old_course->duration = $validatedData['duration'];
             $old_course->save();
-        
-            // Clear input fields and hide the edit form
+            session()->flash('status', 'Course Updated successfully');
             $this->reset(['course_name', 'university_id', 'course_type', 'duration', 'showEditForm']);
         }
     

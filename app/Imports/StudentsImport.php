@@ -3,7 +3,7 @@
 namespace App\Imports;
 
 use App\Models\admission_session;
-use App\Models\Associate;
+use App\Models\User;
 use App\Models\Cousre;
 use App\Models\specializations;
 use App\Models\Students;
@@ -76,7 +76,9 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
     $specialization = specializations::where('cousre_id', $course)
                                     ->where('specialization_name', $row['specialization'])
                                     ->value('id');
-
+     $user_id = User::where('name', $row['associate_name'])->where('usertype', 'associate')->value('id');
+                    
+        // dd($row['associate_name']);
     // Handle the case where university ID is not found
     if (!$university) {
         // Add appropriate handling if university ID is not found
@@ -117,6 +119,7 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
         'university_id' => $university,
         'session_id' => $session,
         'associate' => $row['associate_name'],
+        'user_id'=>$user_id,
         'source' => $row['source'],
         'sr_no' => $row['sr_no'],
         'uni_reg_no' => $row['university_registration_no'],
@@ -130,10 +133,9 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
         'address' => $row['address'],
         'mob_no' => $row['mobile_no'],
         'course_id' => $course,
-        'specialization_id' => $row['specialization'],
+        'specialization_id' => $specialization,
         'type' => $row['admission_type'],
         'sem_year' => $row['semesteryear'],
-        
         'previous_migration' => $row['previous_migration'],
         'fee' => $row['fee'],
         'exam_status' => $row['exam_status'],
@@ -152,7 +154,6 @@ class StudentsImport implements ToModel, WithValidation,  WithHeadingRow
         'additional_docs' => $row['additional_docs'],
         'additional_remarks' => $row['additional_remarks'],
         'nc' => $row['nc'],
-        'user_id'=>Auth::user()->id,
         'created_at' => $row['created_at'],
         'updated_at' => $row['updated_at'],
     ]);

@@ -5,7 +5,7 @@
         {{ $showAddForm ? 'Cancel' : 'Add Associate' }}
     </button>
     @if (session()->has('status'))
-        <div class="alert {{ session('status') ? 'alert-success' : 'alert-danger' }}">
+        <div class="alert {{ session('status') ? 'text-green-500' : 'text-red-500' }}">
             {{ session('status') }}
         </div>
     @endif

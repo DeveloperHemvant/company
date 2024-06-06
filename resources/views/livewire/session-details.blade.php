@@ -3,7 +3,11 @@
         style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">
         {{ $showAddForm ? 'Cancel' : 'Add Session' }}
     </button>
-
+    @if (session()->has('status'))
+    <div class="alert {{ session('status') ? 'text-green-500' : 'text-red-500' }}">
+        {{ session('status') }}
+    </div>
+@endif
     @if ($showAddForm)
                 @error('name')
                 <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -29,7 +33,7 @@
                 <label for="sessions" class="block text-gray-700 font-bold mb-2">Starting Month:<span
                     class="text-red-500">*</span></label>
                 <input type="month" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="startmonth" wire:model.live="startmonth" id="startmonth">
-                @error('sessions_id')
+                @error('startmonth')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
@@ -37,9 +41,7 @@
                 <label for="university" class="block text-gray-700 font-bold mb-2">Ending Month:<span
                     class="text-red-500">*</span></label>
                 <input type="month" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="endmonth" wire:model="endmonth" id="endmonth" min="{{$startmonth}}">
-                @error('sessions_id')
-                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                @enderror
+               
                 @error('endmonth')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
@@ -128,7 +130,7 @@
                                     </div>
                                     <button type="submit"
                                         style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                        class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Add Session</button>
+                                        class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Update Session</button>
                                 </form>
 
                             </td>

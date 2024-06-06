@@ -93,8 +93,10 @@ class Specialization extends Component
         $data->specialization_name = $this->specialization_name;
         $data->cousre_id = $this->course_id;
         $data->university_id = $this->selecteduniversity;
-        $data->save();
-    
+       
+        if ($data->save()) {
+            session()->flash('status', 'Specialization created successfully');
+        }
         $this->refreshData();
         $this->toggleAddForm();
     }
@@ -140,8 +142,9 @@ class Specialization extends Component
         $specialization->specialization_name = $validatedData['specialization_name'];
         $specialization->cousre_id = $validatedData['course_id'];
         $specialization->university_id = $validatedData['selectedUniversity'];
-        $specialization->save();
-
+        if ($specialization->save()) {
+            session()->flash('status', 'Specialization Updated successfully');
+        }
         $this->refreshData();
         $this->showEditForm = false;
     }

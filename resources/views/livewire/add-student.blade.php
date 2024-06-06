@@ -1,10 +1,10 @@
 <div class="container mx-auto px-4 py-8">
     <!-- Add this code to your Blade file where you want to display the error message -->
-    @if (session()->has('error'))
+    {{-- @if (session()->has('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
         </div>
-    @endif
+    @endif --}}
 
     <form wire:submit.prevent="addstudent">
         <div class="flex flex-wrap -mx-3 mb-6">
@@ -13,12 +13,12 @@
                     University<span class="text-red-500">*</span>
                 </label>
                 <select wire:model.live="selectedUniversity" id="selectedUniversity" class="form-select">
-                    <option value="">Choose University<span class="text-red-500">*</span></option>
+                    <option value="">Choose University</option>
                     @foreach ($universities as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->university_name }}</option>
                     @endforeach
                 </select>
-                @error('university')
+                @error('selectedUniversity')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>
@@ -27,7 +27,7 @@
                     Session<span class="text-red-500">*</span>
                 </label>
                 <select wire:model="session_name" id="session" class="form-select">
-                    <option value="">Choose Session<span class="text-red-500">*</span></option>
+                    <option value="">Choose Session</option>
                     @foreach ($sessions as $mb)
                         <option value="{{ $mb->id }}">{{ $mb->name }}</option>
                     @endforeach
@@ -41,7 +41,7 @@
                     Course Name<span class="text-red-500">*</span>
                 </label>
                 <select id="selectedCourse" class="form-select" wire:model.live="selectedCourse">
-                    <option value="">Choose Course<span class="text-red-500">*</span></option>
+                    <option value="">Choose Course</option>
                     @if ($selectedUniversity != null)
                         @foreach ($cousre as $data)
                             <option value="{{ $data->id }}">{{ $data->course_name }}</option>
@@ -58,7 +58,7 @@
                     Specialization Name<span class="text-red-500">*</span>
                 </label>
                 <select wire:model="selectedspecialization" id="programme" class="form-select">
-                    <option value="">Choose Specialization<span class="text-red-500">*</span></option>
+                    <option value="">Choose Specialization</option>
                     @if ($selectedCourse != null)
                         @foreach ($specialization as $data)
                             <option value="{{ $data->id }}">{{ $data->specialization_name }}</option>
@@ -74,7 +74,7 @@
                     Admission Type<span class="text-red-500">*</span>
                 </label>
                 <select wire:model="admission_type" id="course" class="form-select">
-                    <option value="">Admission Type</option>
+                    <option value="">Select Admission Type</option>
                     <option value="FRESH">FRESH</option>
                     <option value="RE REG">RE REG</option>
                     <option value="LATERAL">LATERAL</option>
@@ -94,9 +94,6 @@
                     @for ($i = 1; $i < 9; $i++)
                         <option value="{{ $i }} Semester"> {{ $i }} Semester </option>
                     @endfor
-
-
-
                 </select>
                 @error('semester')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -110,9 +107,6 @@
                     <option value="">Select Source</option>
                     <option value="ASSOCIATE">ASSOCIATE</option>
                     <option value="DIRECT">DIRECT</option>
-                    <option value="SOCIAL MEDIA">SOCIAL MEDIA</option>
-                    <option value="REFERENCE">REFERENCE</option>
-
                 </select>
                 @error('source')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -132,18 +126,6 @@
                     @error('selectedassociate')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
-                </div>
-            @elseif ($source == 'DIRECT' || $source == 'SOCIAL MEDIA' || $source == 'REFERENCE')
-                <div class="px-3 mb-6">
-                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
-                        Name<span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" name="refname" id="refname" wire:model="refname">
-                    <div>
-                        @error('refname')
-                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                        @enderror
-                    </div>
                 </div>
             @endif
 
@@ -311,7 +293,7 @@
                 <div class="px-3 mb-6 flex items-center">
                     <label for="file_{{ $index }}"
                         class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2">
-                        Documents
+                        Documents<span class="text-red-500">*</span>
                     </label>
                     <input type="file" id="file_{{ $index }}" wire:model="files.{{ $index }}.file"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">

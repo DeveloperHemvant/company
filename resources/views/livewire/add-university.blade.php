@@ -5,7 +5,7 @@
         {{ $showAddForm ? 'Cancel' : 'Add University' }}
     </button>
     @if (session()->has('status'))
-        <div class="alert {{ session('status') ? 'alert-success' : 'alert-danger' }}">
+        <div class="alert {{ session('status') ? 'text-green-500' : 'text-red-500' }}">
             {{ session('status') }}
         </div>
     @endif
@@ -18,7 +18,7 @@
                 <input type="text" id="university_name" wire:model="university_name"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 @error('university_name')
-                    {{ $message }}
+                <div class="text-red-500">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-4">
@@ -29,7 +29,7 @@
                     id="university_code" wire:model="university_code">
 
                 @error('university_code')
-                    {{ $message }}
+                <div class="text-red-500">{{ $message }}</div>
                 @enderror
 
             </div>
@@ -94,7 +94,7 @@
                                         <input type="text" id="university_name" wire:model="university_name"
                                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                         @error('university_name')
-                                            {{ $message }}
+                                        <div class="text-red-500">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="mb-4">
@@ -105,7 +105,7 @@
                                             id="university_code" wire:model="university_code">
 
                                         @error('university_code')
-                                            {{ $message }}
+                                        <div class="text-red-500">{{ $message }}</div>
                                         @enderror
 
                                     </div>
