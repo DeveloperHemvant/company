@@ -101,9 +101,8 @@ class AddStudent extends Component
             ],
             'source' => 'required',
             'selectedassociate' => Rule::requiredIf($this->source === 'ASSOCIATE'),
-
             'semester' => 'required',
-            // 'files.*.file' => 'required_with:files.*.file|file|mimes:jpeg,png,jpg|max:10240',
+            'files.*.file' => 'nullable|file|mimes:jpeg,png,jpg|max:10240',
         ], [
             'selectedUniversity.required' => 'The university selection is required.',
             'session_name.required' => 'The session name is required.',
@@ -192,19 +191,23 @@ class AddStudent extends Component
         $student->sem_year = $validatedData['semester'];
 
 
-        $documents = [];
-        foreach ($this->files as $file) {
-            if (isset($file['file'])) {
-                $path = $file['file']->store('documents');
-                $documents[] = storage_path('app/' . $path); // Full path for the image
+        if ($this->files) {
+            $documents = [];
+            foreach ($this->files as $file) {
+                if (isset($file['file'])) {
+                    $path = $file['file']->store('documents');
+                    $documents[] = storage_path('app/' . $path); // Full path for the image
+                }
+            }
+    
+            if (!empty($documents)) {
+                $pdf = Pdf::loadView('documentpdf', compact('documents'));
+                $pdfFileName = uniqid() . '.pdf';
+                $pdfPath = 'documentspdf/' . $pdfFileName;
+                Storage::disk('public')->put($pdfPath, $pdf->output());
+                $student->documents = $pdfPath;
             }
         }
-
-        $pdf = PDF::loadView('documentpdf', compact('documents'));
-        $pdfFileName = uniqid() . '.pdf';
-        $pdfPath = 'documentspdf/' . $pdfFileName;
-        Storage::disk('public')->put($pdfPath, $pdf->output());
-        $student->documents = $pdfPath;
 
         $student->save();
         $this->resetForm();

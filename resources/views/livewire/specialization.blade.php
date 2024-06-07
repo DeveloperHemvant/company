@@ -112,10 +112,8 @@
                                     @endif
                             </td>
                         </tr>
-
                         @if ($showEditForm && $proggramme->id === $s_id)
                             <tr>
-
                                 <td colspan="2">
                                     <p>Edit Specialization Details</p>
                                     <form wire:submit.prevent="update" class="mb-4">

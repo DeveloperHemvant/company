@@ -13,7 +13,6 @@
         @if ($showAddForm)
             <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg"
                 autocomplete="off">
-                
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 font-bold mb-2">User Name<span
                         class="text-red-500">*</span></label>
@@ -34,7 +33,6 @@
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700 font-bold mb-2">User Email<span
                         class="text-red-500">*</span></label>
@@ -55,7 +53,6 @@
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-
                 <div class="mb-4">
                     <label for="address" class="block text-gray-700 font-bold mb-2">User Address<span
                         class="text-red-500">*</span></label>
@@ -78,7 +75,6 @@
                     </button>
                 </div>
             </form>
-
             <div wire:loading wire:target="save"
                 class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
                 <div class="text-lg font-semibold text-gray-700">
@@ -87,7 +83,6 @@
             </div>
         @endif
     </div>
-
     <style>
         [wire\:loading] .form-blur {
             filter: blur(4px);
@@ -95,8 +90,6 @@
             user-select: none;
         }
     </style>
-
-
     @if ($data->count())
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -218,14 +211,5 @@
                 Livewire.dispatch('goOn-Delete')
             }
         });
-
-
-        //   Livewire.on('postDeleted', function (data) {
-        //       Swal.fire({
-        //           title: 'Success!',
-        //           text: data.message,
-        //           icon: 'success'
-        //       });
-        //   });
     });
 </script>
