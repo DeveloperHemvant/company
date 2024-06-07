@@ -18,7 +18,7 @@ class AdminController extends Controller
     public function index()
     {
         $universityCount = University::count();
-        $associateCount = Associate::count();
+        $associateCount = User::where('usertype', 'associate')->count();
         $studentCount = Students::count();
         $courses = Cousre::count();
         $data = [
