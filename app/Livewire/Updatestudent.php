@@ -14,6 +14,9 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader;
 use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 
 class Updatestudent extends Component
@@ -108,165 +111,137 @@ class Updatestudent extends Component
         // dd($this->associate);
     }
     public function updatestudent()
-    {
-        $validatedData = $this->validate([
-            'uuniversity' => 'required',
-            'usession_name' => 'required',
-            'uselectedCourse' => 'required',
-            'uselectedspecialization' => 'required',
-            'uadmission_type' => 'required',
-            'usemester' => 'required',
-            'usource' => 'required',
-            'uassociate' => 'required_if:usource,ASSOCIATE',
-            'fname' => 'required|string|max:255',
-            'father_name' => 'required|string|max:255',
-            'mother_name' => 'required|string|max:255',
-            'dob' => 'required|date',
-            'email' => 'required|email',
-            'aadhar_no' => [
-                'required',
-                'numeric',
-                'digits:12',
-                Rule::unique('students')->where(function ($query) {
-                    return $query->where('aadhar_no', $this->aadhar_no)
-                        ->where('session_id', $this->usession_name)
-                        ->where('course_id', $this->uselectedCourse);
-                })->ignore($this->id),
-            ],
-            'mob' => 'required|numeric|digits:10',
-            'address' => 'required|string',
-            'pmigration' => 'nullable|required_with:pmigration|date',
-            'fee' => 'nullable|required_with:fee|numeric',
-            'exam_status' => 'nullable|required_with:exam_status|string',
-            'prj_status' =>'nullable|required_with:prj_status|string',
-            'visit_date' =>'nullable|required_with:visit_date|date', 
-            'pass_back' =>'nullable|required_with:pass_back|string', 
-        ]);
-        // dd($validatedData);
-        $student = Students::findOrFail($this->id);
-        $student->university_id = $validatedData['uuniversity'];
-        
-        $student->user_id = $validatedData['uassociate'];
-        
-        if ($this->usource === 'ASSOCIATE') {
-            $student->associate = User::where(['id'=>$validatedData['uassociate']])->pluck('name')->first();
-            $student->source = $validatedData['usource'];
-        } else{
-            $student->source = $validatedData['usource'];
-            $student->associate = '';
-        }
-        // else {
-        //     $data =User::where(['name' => $this->refname])->first();
-        //     if ($data) {
-        //         $student->associate = $this->refname;
-        //         $student->user_id = $data->id;
-        //     }
-            // else{
-            //     $faker = FakerFactory::create();
-            //     $newuser = User::factory()->create([
-            //         'name' => $this->refname,
-            //         'email' => $faker->unique()->safeEmail,
-            //         'city' => $faker->city,
-            //         'mobile' => $faker->phoneNumber,
-            //         'password' => Hash::make('password'), 
-            //         'address' => $faker->address,
-            //         'pincode' => $faker->postcode,
-            //         'state' => $faker->state,
-            //         'pname' => $faker->name,
-            //         'smobile' => $faker->phoneNumber,
-            //         'landmobile' => $faker->phoneNumber,
-            //     ]);
-            //     $student->user_id=$newuser->id;
-            //     $student->associate =User::where(['id' => $newuser->id])->pluck('name')->first();
-            // }
-            
-        // }
-        $student->name = $validatedData['fname'];
-        $student->father_name = $validatedData['father_name'];
-        $student->mother_name = $validatedData['mother_name'];
-        $student->dob = $validatedData['dob'];
-        $student->aadhar_no = $validatedData['aadhar_no'];
-        $student->email_id = $validatedData['email'];
-        $student->address = $validatedData['address'];
-        $student->mob_no = $validatedData['mob'];
-        $student->course_id = $validatedData['uselectedCourse'];
-        $student->specialization_id = $validatedData['uselectedspecialization'];
-        $student->type = $validatedData['uadmission_type'];
-        $student->session_id = $validatedData['usession_name'];
-        $student->previous_migration = $validatedData['pmigration'];
-        $student->fee = $validatedData['fee'];
-        $student->exam_status = $validatedData['exam_status'];
-        $student->project_status = $validatedData['prj_status'];
-        $student->uni_visit_date = $validatedData['visit_date'];
-        $student->pass_back = $validatedData['pass_back'];
-        $student->sem_year = $validatedData['usemester'];
-        $hello = $this->files;
-        // dd($hello[0]['file']);
-        if ($hello[0]['file'] !== null && count($this->files) > 0) {
-            if ($student->documents != null) {
-                $existingPdfPath = storage_path('app/public/' . $student->documents);
-                // dd($existingPdfPath);
-                if (file_exists($existingPdfPath)) {
-                    // Initialize FPDI
-                    $pdf = new Fpdi();
-                    $pageCount = $pdf->setSourceFile($existingPdfPath);
-        
-                    // Import all pages of the existing PDF
-                    for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-                        $templateId = $pdf->importPage($pageNo);
-                        $pdf->AddPage();
-                        $pdf->useTemplate($templateId);
-                    }
-        
-                    // Add new images
-                    foreach ($this->files as $file) {
+{
+    $validatedData = $this->validate([
+        'uuniversity' => 'required',
+        'usession_name' => 'required',
+        'uselectedCourse' => 'required',
+        'uselectedspecialization' => 'required',
+        'uadmission_type' => 'required',
+        'usemester' => 'required',
+        'usource' => 'required',
+        'uassociate' => 'required_if:usource,ASSOCIATE',
+        'fname' => 'required|string|max:255',
+        'father_name' => 'required|string|max:255',
+        'mother_name' => 'required|string|max:255',
+        'dob' => 'required|date',
+        'email' => 'required|email',
+        'aadhar_no' => [
+            'required',
+            'numeric',
+            'digits:12',
+            Rule::unique('students')->where(function ($query) {
+                return $query->where('aadhar_no', $this->aadhar_no)
+                    ->where('session_id', $this->usession_name)
+                    ->where('course_id', $this->uselectedCourse);
+            })->ignore($this->id),
+        ],
+        'mob' => 'required|numeric|digits:10',
+        'address' => 'required|string',
+        'pmigration' => 'nullable|required_with:pmigration|date',
+        'fee' => 'nullable|required_with:fee|numeric',
+        'exam_status' => 'nullable|required_with:exam_status|string',
+        'prj_status' =>'nullable|required_with:prj_status|string',
+        'visit_date' =>'nullable|required_with:visit_date|date', 
+        'pass_back' =>'nullable|required_with:pass_back|string', 
+    ]);
+
+    $student = Students::findOrFail($this->id);
+    $student->university_id = $validatedData['uuniversity'];
+    $student->user_id = $validatedData['uassociate'];
+    
+    if ($this->usource === 'ASSOCIATE') {
+        $student->associate = User::where(['id' => $validatedData['uassociate']])->pluck('name')->first();
+        $student->source = $validatedData['usource'];
+    } else {
+        $student->source = $validatedData['usource'];
+        $student->associate = '';
+    }
+
+    $student->name = $validatedData['fname'];
+    $student->father_name = $validatedData['father_name'];
+    $student->mother_name = $validatedData['mother_name'];
+    $student->dob = $validatedData['dob'];
+    $student->aadhar_no = $validatedData['aadhar_no'];
+    $student->email_id = $validatedData['email'];
+    $student->address = $validatedData['address'];
+    $student->mob_no = $validatedData['mob'];
+    $student->course_id = $validatedData['uselectedCourse'];
+    $student->specialization_id = $validatedData['uselectedspecialization'];
+    $student->type = $validatedData['uadmission_type'];
+    $student->session_id = $validatedData['usession_name'];
+    $student->previous_migration = $validatedData['pmigration'];
+    $student->fee = $validatedData['fee'];
+    $student->exam_status = $validatedData['exam_status'];
+    $student->project_status = $validatedData['prj_status'];
+    $student->uni_visit_date = $validatedData['visit_date'];
+    $student->pass_back = $validatedData['pass_back'];
+    $student->sem_year = $validatedData['usemester'];
+
+    if (is_array($this->files) && isset($this->files[0]['file']) && !empty($this->files)) {
+        if ($student->documents != null) {
+            $existingPdfPath = storage_path('app/public/' . $student->documents);
+            if (file_exists($existingPdfPath)) {
+                // Initialize FPDI
+                $pdf = new Fpdi();
+                $pageCount = $pdf->setSourceFile($existingPdfPath);
+
+                // Import all pages of the existing PDF
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $templateId = $pdf->importPage($pageNo);
+                    $pdf->AddPage();
+                    $pdf->useTemplate($templateId);
+                }
+
+                // Add new images
+                foreach ($this->files as $file) {
+                    if (isset($file['file'])) {
                         $imagePath = $file['file']->store('documentspdf');
                         $imageFullPath = storage_path('app/' . $imagePath);
-        
+
                         $pdf->AddPage();
                         $pdf->Image($imageFullPath, 10, 10, 190, 0);
                     }
-        
-                    // Save the updated PDF
-                    $updatedPdfPath = 'documentspdf/' . uniqid() . '.pdf';
-                    $pdf->Output(storage_path('app/public/' . $updatedPdfPath), 'F');
-        
-                    // Update the student record with the new PDF path
-                    $student->documents = $updatedPdfPath;
-                } else {
-                    // Existing PDF path is invalid, create new PDF
-                    $this->createNewPdf($this->documents, $student);
                 }
+
+                // Save the updated PDF
+                $updatedPdfPath = 'documentspdf/' . uniqid() . '.pdf';
+                $pdf->Output(storage_path('app/public/' . $updatedPdfPath), 'F');
+
+                // Update the student record with the new PDF path
+                $student->documents = $updatedPdfPath;
             } else {
-                // No existing PDF, create new PDF
-                $this->createNewPdf($this->documents, $student);
+                // Existing PDF path is invalid, create new PDF
+                $this->createNewPdf($this->files, $student);
             }
+        } else {
+            // No existing PDF, create new PDF
+            $this->createNewPdf($this->files, $student);
         }
-        $student->save();
-        return redirect()->route('all-student');
     }
-    function createNewPdf($documents, $student)
-    {
-        // Initialize a new PDF document
-        $pdf = new Fpdi();
 
-        // Add new images to the PDF
-        foreach ($documents as $file) {
-            $imagePath = $file->store('documentspdf');
-            $imageFullPath = storage_path('app/' . $imagePath);
+    $student->save();
+    return redirect()->route('all-student');
+}
 
-            $pdf->AddPage();
-            $pdf->Image($imageFullPath, 10, 10, 190, 0);
+protected function createNewPdf($files, $student)
+{
+    $documents = [];
+    foreach ($files as $file) {
+        if (isset($file['file'])) {
+            $path = $file['file']->store('documents');
+            $documents[] = storage_path('app/' . $path);
         }
-
-        // Save the new PDF
-        $newPdfPath = 'documentspdf/' . uniqid() . '.pdf';
-        $pdf->Output(storage_path('app/public/' . $newPdfPath), 'F');
-
-        // Update the student record with the new PDF path
-        $student->documents = $newPdfPath;
-        $student->save();
     }
+
+    if (!empty($documents)) {
+        $pdf = Pdf::loadView('documentpdf', compact('documents'));
+        $pdfFileName = uniqid() . '.pdf';
+        $pdfPath = 'documentspdf/' . $pdfFileName;
+        Storage::disk('public')->put($pdfPath, $pdf->output());
+        $student->documents = $pdfPath;
+    }
+}
     public function updatedUuniversity($uuniversity)
     {
 
