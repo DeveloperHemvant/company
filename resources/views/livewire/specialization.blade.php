@@ -16,7 +16,7 @@
                     {{ session('status') }}
                 </div>
             @endif
-            <form wire:submit.prevent="save" class="mb-4 px-5">
+            <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg">
                 <div class="mb-4">
                     <label for="cousre_id" class="block text-gray-700 text-sm font-bold mb-2">University:<span
                             class="text-red-500">*</span></label>
@@ -76,11 +76,17 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SR No.</th>
+                    <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">University Name
                         </th>
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Course Name</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specialization Name
+                        </th>
+                        
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Actions</th>
@@ -89,16 +95,21 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach ($special_data as $proggramme)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $proggramme->specialization_name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }} </td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $proggramme->university->university_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $proggramme->cousre->course_name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $proggramme->specialization_name }}</td>
+                            
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button wire:click="edit({{ $proggramme->id }})"
                                     style="background-color: #0fe419; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                     class="text-indigo-600 hover:text-indigo-900">Edit</button>
+                                    @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
                                 <button
                                     style="background-color: #ff0000; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                     wire:click="confirmDelete('{{ $proggramme->id }}')" wire:loading.attr="disabled"
                                     class="text-red-600 hover:text-red-900 ml-2">Delete</button>
+                                    @endif
                             </td>
                         </tr>
 

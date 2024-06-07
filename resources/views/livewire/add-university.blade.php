@@ -1,9 +1,12 @@
 <div>
+    @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
     <button
-        style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-        wire:click="toggleAddForm" class="bg-blue-500 hover:bg-blue-700  font-bold py-2 px-4 rounded mb-4">
-        {{ $showAddForm ? 'Cancel' : 'Add University' }}
-    </button>
+    style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+    wire:click="toggleAddForm" class="bg-blue-500 hover:bg-blue-700  font-bold py-2 px-4 rounded mb-4">
+    {{ $showAddForm ? 'Cancel' : 'Add University' }}
+</button>
+    @endif
+    
     @if (session()->has('status'))
         <div class="alert {{ session('status') ? 'text-green-500' : 'text-red-500' }}">
             {{ session('status') }}
@@ -75,10 +78,12 @@
                                 class="text-indigo-600 hover:text-indigo-900">
                                 Edit
                             </button>
+                            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
                             <button
                                 style="background-color: #ee0202; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                 wire:click="confirmDelete({{ $university->id }})"  wire:loading.attr="disabled"
                                 class="text-red-600 hover:text-red-900 ml-2">Delete</button>
+                                @endif
                         </td>
                     </tr>
                     @if ($showEditForm && $id === $university->id)

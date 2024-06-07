@@ -32,6 +32,7 @@ class SessionDetails extends Component
     {
         $this->showAddForm = !$this->showAddForm;
         $this->showEditForm = false;
+        $this->university_id = '';
         $this->resetdata();
     }
     public function save()
@@ -161,8 +162,13 @@ class SessionDetails extends Component
         //$this->paginationData = admission_session::with('university')->paginate(1);
     }
     public function render()
-    {
-        $sessionData = admission_session::with('university')->paginate(10);
+    {   $sessionData = admission_session::with('university')
+        ->join('universities', 'admission_sessions.university_id', '=', 'universities.id')
+        ->orderBy('universities.university_name')
+        ->select('admission_sessions.*') // Ensure you select only the columns from admission_sessions to avoid conflicts
+        ->paginate(10);
+    
+        // $sessionData = admission_session::with('university')->paginate(10);
         return view('livewire.session-details', [
             'sessionData' => $sessionData,
         ]);

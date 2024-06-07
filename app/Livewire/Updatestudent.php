@@ -153,6 +153,7 @@ class Updatestudent extends Component
             $student->source = $validatedData['usource'];
         } else{
             $student->source = $validatedData['usource'];
+            $student->associate = '';
         }
         // else {
         //     $data =User::where(['name' => $this->refname])->first();

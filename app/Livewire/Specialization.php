@@ -150,7 +150,13 @@ class Specialization extends Component
     }
     public function refreshData(): void
     {
-        $this->special_data = specializations::with('cousre')->get();
+        $this->special_data = specializations::with(['cousre', 'university'])
+    ->join('universities', 'specializations.university_id', '=', 'universities.id')
+    ->join('cousres', 'specializations.cousre_id', '=', 'cousres.id')
+    ->orderBy('universities.university_name')
+    ->select('specializations.*') 
+    ->get();
+
     }
 
     public function render()

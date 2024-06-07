@@ -66,7 +66,11 @@
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-
+                <div class="mb-4">
+                    <label for="is_admin" class="block text-gray-700 font-bold mb-2">Create as Admin</label>
+                    <input type="checkbox" id="is_admin" wire:model="is_admin"
+                           class="shadow appearance-none border rounded w-6 h-6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
                 <div class="flex items-center justify-between">
                     <button type="submit"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -102,6 +106,10 @@
                     <th scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email
                     </th>
+                    
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role
+                    </th>
                     <th scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
                     </th>
@@ -112,13 +120,14 @@
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $user->name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $user->email }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $user->role }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <button wire:click="edit({{ $user->id }})"
                                 class="text-indigo-600 hover:text-indigo-900"
                                 style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">Edit</button>
                             <button
                                 style="background-color: #f50808; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                wire:click="delete({{ $user->id }})" wire:confirm="Are you sure you want to delete this User?"
+                                wire:click="confirmDelete('{{ $user->id  }}')" 
                                 class="text-red-600 hover:text-red-900 ml-2">Delete</button>
                         </td>
                     </tr>
@@ -193,3 +202,30 @@
         <p>No Staff User  found.</p>
     @endif
 </div>
+<script>
+    window.addEventListener('delete', function() {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('goOn-Delete')
+            }
+        });
+
+
+        //   Livewire.on('postDeleted', function (data) {
+        //       Swal.fire({
+        //           title: 'Success!',
+        //           text: data.message,
+        //           icon: 'success'
+        //       });
+        //   });
+    });
+</script>

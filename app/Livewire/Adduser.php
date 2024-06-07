@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\WithPagination;
 use App\Mail\Associate;
 use Mail;
+use Livewire\Attributes\On;
 
 class Adduser extends Component
 {
@@ -38,6 +39,7 @@ class Adduser extends Component
     public $showEditForm = false;
     public $id;
     public $usertype;
+    public $is_admin;
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -50,9 +52,10 @@ class Adduser extends Component
         $this->showAddForm = false;
         $this->showEditForm = true;
     }
-    public function delete($id)
+    #[On('goOn-Delete')]
+    public function delete()
     {
-        $associate = User::find($id)->delete();
+        $associate = User::find($this->postIdToDelete)->delete();
     }
     public function update()
     {
@@ -97,6 +100,14 @@ class Adduser extends Component
     }
         $this->showEditForm = false;
     }
+    public $postIdToDelete;
+    public function confirmDelete($postId)
+    {
+        $this->postIdToDelete = $postId;
+        // dd($this->postIdToDelete);
+
+        $this->dispatch('delete');
+    }
     public function save()
     {
         $validatedData = $this->validate([
@@ -126,11 +137,13 @@ class Adduser extends Component
             'password.regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.',
         ]);
         $this->usertype = 'staff';
+        // dd($this->is_admin);
 
 // If the usertype is provided in the form, override the default value
 if(isset($this->usertype)) {
     $validatedData['usertype'] = $this->usertype;
 }
+
         $user = new User;
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
@@ -138,6 +151,11 @@ if(isset($this->usertype)) {
         $user->address = $validatedData['address'];
         $user->password = $validatedData['password'];
         $user->usertype = "staff";
+        if($this->is_admin) {
+            $user->role = "admin";
+        }else{
+            $user->role = 'user';
+        }
         if ($user->save()) {
             session()->flash('status', 'User created successfully');
             Mail::to($validatedData['email'])->send(new Associate($validatedData));

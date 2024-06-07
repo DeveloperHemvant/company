@@ -9,7 +9,7 @@
                 <x-button class="bg-pink-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out" wire:click='import' >
                     {{ __('Import Student') }}
                 </x-button>
-                <x-button class="bg-pink-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out" wire:click='downloadSample' >
+                <x-button class="bg-orange-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out" wire:click='downloadSample' >
                     {{ __('Download File') }}
                 </x-button>
             @if(session('success') || session('error'))
@@ -122,7 +122,9 @@
                                     <td class="px-4 py-3 flex items-center space-x-2">
                                         <a href="{{ route('update-student', ['id' => $studentData->id]) }}" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Update</a>
                                         <x-button wire:click="universitypassword({{ $studentData->id }})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">{{ __('Enter University Details') }}</x-button>
+                                        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
                                         <x-button  wire:click="confirmDelete({{ $studentData->id }})"  wire:loading.attr="disabled" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">{{ __('Delete') }}</x-button>
+                                        @endif
                                     </td>
                                 </tr>
                                 @if ($showRegistrationForm && $studentData->id === $c_id)

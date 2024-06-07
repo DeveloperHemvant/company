@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class specializations extends Model
 {
+    use SoftDeletes;
     use HasFactory;
     protected $fillable = [
         'specialization_name',
