@@ -151,31 +151,35 @@ class Updatestudent extends Component
         if ($this->usource === 'ASSOCIATE') {
             $student->associate = User::where(['id'=>$validatedData['uassociate']])->pluck('name')->first();
             $student->source = $validatedData['usource'];
-        } else {
-            $data =User::where(['name' => $this->refname])->first();
-            if ($data) {
-                $student->associate = $this->refname;
-                $student->user_id = $data->id;
-            }else{
-                $faker = FakerFactory::create();
-                $newuser = User::factory()->create([
-                    'name' => $this->refname,
-                    'email' => $faker->unique()->safeEmail,
-                    'city' => $faker->city,
-                    'mobile' => $faker->phoneNumber,
-                    'password' => Hash::make('password'), 
-                    'address' => $faker->address,
-                    'pincode' => $faker->postcode,
-                    'state' => $faker->state,
-                    'pname' => $faker->name,
-                    'smobile' => $faker->phoneNumber,
-                    'landmobile' => $faker->phoneNumber,
-                ]);
-                $student->user_id=$newuser->id;
-                $student->associate =User::where(['id' => $newuser->id])->pluck('name')->first();
-            }
-            
+        } else{
+            $student->source = $validatedData['usource'];
         }
+        // else {
+        //     $data =User::where(['name' => $this->refname])->first();
+        //     if ($data) {
+        //         $student->associate = $this->refname;
+        //         $student->user_id = $data->id;
+        //     }
+            // else{
+            //     $faker = FakerFactory::create();
+            //     $newuser = User::factory()->create([
+            //         'name' => $this->refname,
+            //         'email' => $faker->unique()->safeEmail,
+            //         'city' => $faker->city,
+            //         'mobile' => $faker->phoneNumber,
+            //         'password' => Hash::make('password'), 
+            //         'address' => $faker->address,
+            //         'pincode' => $faker->postcode,
+            //         'state' => $faker->state,
+            //         'pname' => $faker->name,
+            //         'smobile' => $faker->phoneNumber,
+            //         'landmobile' => $faker->phoneNumber,
+            //     ]);
+            //     $student->user_id=$newuser->id;
+            //     $student->associate =User::where(['id' => $newuser->id])->pluck('name')->first();
+            // }
+            
+        // }
         $student->name = $validatedData['fname'];
         $student->father_name = $validatedData['father_name'];
         $student->mother_name = $validatedData['mother_name'];

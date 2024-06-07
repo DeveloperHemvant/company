@@ -97,8 +97,8 @@
                     <option value="">Select Source</option>
                     <option value="ASSOCIATE">ASSOCIATE</option>
                     <option value="DIRECT">DIRECT</option>
-                    <option value="SOCIAL MEDIA">SOCIAL MEDIA</option>
-                    <option value="REFERENCE">REFERENCE</option>
+                    {{-- <option value="SOCIAL MEDIA">SOCIAL MEDIA</option>
+                    <option value="REFERENCE">REFERENCE</option> --}}
 
                 </select>
                 @error('source')
@@ -120,7 +120,7 @@
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
-            @elseif ($usource == 'DIRECT' || $usource == 'SOCIAL MEDIA' || $usource == 'REFERENCE')
+            {{-- @elseif ($usource == 'DIRECT' || $usource == 'SOCIAL MEDIA' || $usource == 'REFERENCE')
                 <div class="px-3 mb-6">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
                         Name<span class="text-red-500">*</span>
@@ -131,7 +131,7 @@
                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
+                </div> --}}
             @endif
 
             <div class="    px-3 mb-6">
