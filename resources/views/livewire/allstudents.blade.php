@@ -1,4 +1,5 @@
 <div>
+   
     <div class="m-15">
                 <x-button class="bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out" href="{{ route('add-student') }}" wire:navigate>
                     {{ __('Add Student') }}
@@ -12,6 +13,7 @@
                 <x-button class="bg-orange-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out" wire:click='downloadSample' >
                     {{ __('Download File') }}
                 </x-button>
+                
             @if(session('success') || session('error'))
     <div class="alert alert-{{ session('success') ? 'success' : 'danger' }}">
         {{ session('success') ? session('success') : session('error') }}
@@ -120,11 +122,18 @@
                                         @endif
                                     </td>
                                     <td class="px-4 py-3 flex items-center space-x-2">
-                                        <a href="{{ route('update-student', ['id' => $studentData->id]) }}" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Update</a>
-                                        <x-button wire:click="universitypassword({{ $studentData->id }})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">{{ __('Enter University Details') }}</x-button>
+                                        <a href="{{ route('update-student', ['id' => $studentData->id]) }}" title="Update the student" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <x-button wire:click="universitypassword({{ $studentData->id }})" title="Enter the university details" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"><i class="fa-solid fa-building-columns"></i></x-button>
                                         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
-                                        <x-button  wire:click="confirmDelete({{ $studentData->id }})"  wire:loading.attr="disabled" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">{{ __('Delete') }}</x-button>
+                                        
+                                        <button
+                                        style="background-color: #f50808; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+                                        wire:click="confirmDelete({{ $studentData->id }})"  wire:loading.attr="disabled" title="Delete the student"
+                                        class="text-red-600 hover:text-red-900 ml-2"><i class="fa-solid fa-trash"></i></button>
                                         @endif
+                                        <button wire:click="usemester({{ $studentData->id }})" title="Update the semester" type="button" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 @if ($showRegistrationForm && $studentData->id === $c_id)
@@ -180,6 +189,7 @@
             </div>
         </div>
     </section>
+     @include('livewire.student-modal')
 </div>
 <script>
     window.addEventListener('delete', function () {
