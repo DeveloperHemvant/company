@@ -118,12 +118,14 @@
                                 style="background-color: rgb(26, 149, 219); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                 wire:click="edit({{ $data->id }})"
                                 style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                class="text-indigo-600 hover:text-indigo-900">Edit</button>
+                                class="text-indigo-600 hover:text-indigo-900"><i
+                                class="fa-solid fa-pen-to-square"></i></button>
                                 @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
                             <button
                                 style="background-color: rgb(255, 9, 9); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                 wire:click="confirmDelete({{ $data->id }})" wire:loading.attr="disabled"
-                                style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">Delete</button>
+                                style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"><i
+                                class="fa-solid fa-trash"></i></button>
                                 @endif
                             </td>
                     </tr>

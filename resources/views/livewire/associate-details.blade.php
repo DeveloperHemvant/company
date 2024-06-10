@@ -172,12 +172,14 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             <button wire:click="edit({{ $user->id }})"
                                 class="text-indigo-600 hover:text-indigo-900"
-                                style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">Edit</button>
+                                style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"><i
+                                class="fa-solid fa-pen-to-square"></i></button>
                                 @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
                                 <button
                                 style="background-color: #f50808; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                 wire:click="confirmDelete({{ $user->id }})" wire:loading.attr="disabled"
-                                class="text-red-600 hover:text-red-900 ml-2">Delete</button>
+                                class="text-red-600 hover:text-red-900 ml-2"><i
+                                class="fa-solid fa-trash"></i></button>
                                 @endif
                         </td>
                     </tr>

@@ -76,13 +76,15 @@
                             <button wire:click="edit({{ $university->id }})"
                                 style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                 class="text-indigo-600 hover:text-indigo-900">
-                                Edit
+                                <i
+                                class="fa-solid fa-pen-to-square"></i>
                             </button>
                             @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
                             <button
                                 style="background-color: #ee0202; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                 wire:click="confirmDelete({{ $university->id }})"  wire:loading.attr="disabled"
-                                class="text-red-600 hover:text-red-900 ml-2">Delete</button>
+                                class="text-red-600 hover:text-red-900 ml-2"><i
+                                class="fa-solid fa-trash"></i></button>
                                 @endif
                         </td>
                     </tr>

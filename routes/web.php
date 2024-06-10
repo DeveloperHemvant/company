@@ -18,7 +18,7 @@ Route::get('/admin/login/', [AdminController::class, 'admincreate'])
     ->name('login.admin');
 Route::post('/admin/login', [AdminController::class, 'adminstore']);
 Route::get('/create/staff', [AdminController::class, 'staffcreate'])->name('login.staff');
-    Route::post('/staff/login', [AdminController::class, 'staffstore']);
+Route::post('/staff/login', [AdminController::class, 'staffstore']);
 
 Route::middleware([
     'auth:sanctum',

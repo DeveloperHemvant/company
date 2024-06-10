@@ -88,12 +88,14 @@
                         <button
                             style="background-color: rgb(26, 149, 219); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                             wire:click="edit({{ $sessions->id }})"
-                            class="text-indigo-600 hover:text-indigo-900">Edit</button>
+                            class="text-indigo-600 hover:text-indigo-900"><i
+                            class="fa-solid fa-pen-to-square"></i></button>
                             @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
                         <button
                             style="background-color: rgb(250, 5, 5); color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                             wire:click="confirmDelete({{ $sessions->id }})" wire:loading.attr="disabled"
-                            class="text-red-600 hover:text-red-900 ml-2">Delete</button>
+                            class="text-red-600 hover:text-red-900 ml-2"><i
+                            class="fa-solid fa-trash"></i></button>
                             @endif
                     </td>
                 </tr>

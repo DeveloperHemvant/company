@@ -23,7 +23,7 @@ class Allstudents extends Component
 
     use WithFileUploads;
     public $showDropdown = false;
-   
+
     public $errorMessage;
     public $perPage = 10;
     public $importForm = false;
@@ -155,7 +155,8 @@ class Allstudents extends Component
     {
         $this->resetPage(); // Reset the pagination page to 1 when changing perPage
     }
-    public function toggleForm(){
+    public function toggleForm()
+    {
 
     }
     public function usemester($id)
@@ -198,54 +199,54 @@ class Allstudents extends Component
             'semester.required' => 'The semester is required.',
         ]);
         if ($validatedData['session_name'] == $student->session_id || $validatedData['semester'] == $student->sem_year) {
-         if ($validatedData['session_name'] == $student->session_id) {
-            $this->dispatch('exists',['message' => 'This student is already registered in this Session .']);
-         }
-         if ($validatedData['semester'] == $student->sem_year || $validatedData['semester'] < $student->sem_year ) {
-            $this->dispatch('exists',['message' => 'Semester must be greater then previos semester.']);
-         }
-         
-        }else{
+            if ($validatedData['session_name'] == $student->session_id) {
+                $this->dispatch('exists', ['message' => 'This student is already registered in this Session .']);
+            }
+            if ($validatedData['semester'] == $student->sem_year || $validatedData['semester'] < $student->sem_year) {
+                $this->dispatch('exists', ['message' => 'Semester must be greater then previos semester.']);
+            }
+
+        } else {
             $lastId = Students::latest('id')->value('id');
-        $newId = $lastId + 1;
+            $newId = $lastId + 1;
 
-        // Create a new student instance
-        $restudent = new Students();
-        
-        // Fill the new student instance with data
-        $restudent->fill([
-            'id' => $newId,
-            'university_id' => $student->university_id,
-            'user_id' => $student->user_id,
-            'associate' => $student->associate,
-            'source' => $student->source,
-            'name' => $student->name,
-            'father_name' => $student->father_name,
-            'mother_name' => $student->mother_name,
-            'dob' => $student->dob,
-            'aadhar_no' => $student->aadhar_no,
-            'email_id' => $student->email_id,
-            'address' => $student->address,
-            'mob_no' => $student->mob_no,
-            'course_id' => $student->course_id,
-            'specialization_id' => $student->specialization_id,
-            'type' => $student->type,
-            'session_id' => $validatedData['session_name'],
-            'previous_migration' => $student->previous_migration,
-            'fee' => $validatedData['fee'],
-            'exam_status' => $student->exam_status,
-            'project_status' => $student->project_status,
-            'uni_visit_date' => $student->uni_visit_date,
-            'pass_back' => $student->pass_back,
-            'sem_year' => $validatedData['semester'],
-        ]);
+            // Create a new student instance
+            $restudent = new Students();
 
-        // Save the new student record
-        $restudent->save();
-        $this->showDropdown=false;
-           
+            // Fill the new student instance with data
+            $restudent->fill([
+                'id' => $newId,
+                'university_id' => $student->university_id,
+                'user_id' => $student->user_id,
+                'associate' => $student->associate,
+                'source' => $student->source,
+                'name' => $student->name,
+                'father_name' => $student->father_name,
+                'mother_name' => $student->mother_name,
+                'dob' => $student->dob,
+                'aadhar_no' => $student->aadhar_no,
+                'email_id' => $student->email_id,
+                'address' => $student->address,
+                'mob_no' => $student->mob_no,
+                'course_id' => $student->course_id,
+                'specialization_id' => $student->specialization_id,
+                'type' => $student->type,
+                'session_id' => $validatedData['session_name'],
+                'previous_migration' => $student->previous_migration,
+                'fee' => $validatedData['fee'],
+                'exam_status' => $student->exam_status,
+                'project_status' => $student->project_status,
+                'uni_visit_date' => $student->uni_visit_date,
+                'pass_back' => $student->pass_back,
+                'sem_year' => $validatedData['semester'],
+            ]);
+
+            // Save the new student record
+            $restudent->save();
+            $this->showDropdown = false;
+
         }
-        
+
 
     }
     public function render()

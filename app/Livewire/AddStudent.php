@@ -199,7 +199,7 @@ class AddStudent extends Component
                     $documents[] = storage_path('app/' . $path); // Full path for the image
                 }
             }
-    
+
             if (!empty($documents)) {
                 $pdf = Pdf::loadView('documentpdf', compact('documents'));
                 $pdfFileName = uniqid() . '.pdf';
