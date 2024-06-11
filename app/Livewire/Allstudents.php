@@ -153,32 +153,20 @@ class Allstudents extends Component
     }
     public function updatedPerPage()
     {
-        $this->resetPage(); // Reset the pagination page to 1 when changing perPage
-    }
-    public function toggleForm()
-    {
-
+        $this->resetPage(); 
     }
     public function usemester($id)
     {
         $this->showDropdown = true;
         $student = Students::find($id);
-        // dd($student);
         $this->id = $id;
-        // Initialize an array to hold session data
-
-        // Retrieve admission sessions for the university of the student
         $admissionSessions = admission_session::where('university_id', $student->university_id)->get();
-        // dd($admissionSessions);
-        // Iterate over each admission session to retrieve its data
         foreach ($admissionSessions as $session) {
-            // Push session data to the $sessions array
             $this->sessions[] = [
                 'id' => $session->id,
                 'name' => $session->name,
             ];
         }
-
     }
     public function hide()
     {
@@ -209,11 +197,7 @@ class Allstudents extends Component
         } else {
             $lastId = Students::latest('id')->value('id');
             $newId = $lastId + 1;
-
-            // Create a new student instance
             $restudent = new Students();
-
-            // Fill the new student instance with data
             $restudent->fill([
                 'id' => $newId,
                 'university_id' => $student->university_id,
@@ -240,11 +224,8 @@ class Allstudents extends Component
                 'pass_back' => $student->pass_back,
                 'sem_year' => $validatedData['semester'],
             ]);
-
-            // Save the new student record
             $restudent->save();
             $this->showDropdown = false;
-
         }
 
 
@@ -257,9 +238,6 @@ class Allstudents extends Component
                     ->orWhere('father_name', 'like', '%' . $this->search . '%')
                     ->orWhere('email_id', 'like', '%' . $this->search . '%');
             })->where('university_id', 'like', '%' . $this->u_search . '%')->where('course_id', 'like', '%' . $this->c_search . '%')->orderBy('id', 'desc')->paginate($this->perPage);
-        // dd(($studentData));
-
         return view('livewire.allstudents', ['studentDatas' => $studentDatas]);
-
     }
 }

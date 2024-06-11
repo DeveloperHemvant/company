@@ -70,13 +70,13 @@
 <script>
     window.addEventListener('exists', function(event) {
         const message = event.detail[0].message;
-        console.log(event);
+        // console.log(event);
         Swal.fire({
             position: "top-end",
             icon: "warning",
             title: message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 3000
         });
     });
 </script>
