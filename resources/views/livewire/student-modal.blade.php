@@ -25,9 +25,12 @@
                                     class="text-red-500">*</span></label>
                             <select wire:model="session_name" id="session" class="form-select mt-1 block w-full">
                                 <option value="">Choose Session</option>
-                                @foreach ($sessions as $session)
-                                    <option value="{{ $session['id'] }}">{{ $session['name'] }}</option>
-                                @endforeach
+                                @if ($admissionSessions)
+                                @foreach ($admissionSessions as $session)
+                                <option value="{{ $session['id'] }}">{{ $session['name'] }}</option>
+                            @endforeach
+                                @endif
+                               
                             </select>
                             @error('session_name')
                                 <p class="text-red-500 text-xs italic">{{ $message }}</p>

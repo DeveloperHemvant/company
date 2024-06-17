@@ -23,7 +23,7 @@ class Allstudents extends Component
 
     use WithFileUploads;
     public $showDropdown = false;
-
+    public $admissionSessions;
     public $errorMessage;
     public $perPage = 10;
     public $importForm = false;
@@ -160,13 +160,8 @@ class Allstudents extends Component
         $this->showDropdown = true;
         $student = Students::find($id);
         $this->id = $id;
-        $admissionSessions = admission_session::where('university_id', $student->university_id)->get();
-        foreach ($admissionSessions as $session) {
-            $this->sessions[] = [
-                'id' => $session->id,
-                'name' => $session->name,
-            ];
-        }
+        $this->admissionSessions = admission_session::where('university_id', $student->university_id)->get();
+       
     }
     public function hide()
     {
