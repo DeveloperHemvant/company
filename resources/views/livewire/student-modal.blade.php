@@ -23,7 +23,7 @@
                         <div class="mb-4">
                             <label for="session" class="block text-sm font-bold text-gray-700">Session<span
                                     class="text-red-500">*</span></label>
-                            <select wire:model="session_name" id="session" class="form-select mt-1 block w-full">
+                            <select wire:model.live="uselectedSession" id="session" class="form-select mt-1 block w-full">
                                 <option value="">Choose Session</option>
                                 @if ($admissionSessions)
                                 @foreach ($admissionSessions as $session)
@@ -32,7 +32,7 @@
                                 @endif
                                
                             </select>
-                            @error('session_name')
+                            @error('uselectedSession')
                                 <p class="text-red-500 text-xs italic">{{ $message }}</p>
                             @enderror
                         </div>
@@ -46,13 +46,24 @@
                             @enderror
                         </div>
                         <div class="mb-4">
-                            <label for="semester" class="block text-sm font-bold text-gray-700">Semester/Year<span
+                            <label for="semester" class="block text-sm font-bold text-gray-700">Semester/Year <span
                                     class="text-red-500">*</span></label>
                             <select wire:model="semester" id="semester" class="form-select mt-1 block w-full">
-                                <option value="">Select Semester</option>
-                                @for ($i = 1; $i < 9; $i++)
-                                    <option value="{{ $i }} Semester"> {{ $i }} Semester </option>
-                                @endfor
+                               
+                                <option value=""> Select Semester </option>
+                                @if ($this->monthDifference >= 11)
+                                    @foreach ([2, 4, 6] as $i)
+                                        <option value="{{ $i }}"> {{ $i }} Semester </option>
+                                    @endforeach
+                                @elseif ($this->monthDifference >= 23)
+                                    @foreach ([4, 8] as $i)
+                                        <option value="{{ $i }}"> {{ $i }} Semester </option>
+                                    @endforeach
+                                @else
+                                    @for ($i = 1; $i < 9; $i++)
+                                        <option value="{{ $i }}"> {{ $i }} Semester </option>
+                                    @endfor
+                                @endif
                             </select>
                             @error('semester')
                                 <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -78,6 +89,17 @@
             position: "top-end",
             icon: "warning",
             title: message,
+            showConfirmButton: false,
+            timer: 3000
+        });
+    });
+    window.addEventListener('semesterUpdated', function() {
+       
+        // console.log(event);
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Semester updated successfully",
             showConfirmButton: false,
             timer: 3000
         });

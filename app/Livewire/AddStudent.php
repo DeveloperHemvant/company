@@ -20,11 +20,13 @@ use Carbon\Carbon;
 
 class AddStudent extends Component
 {
+    public $sem_1, $sem_2, $sem_3, $sem_4, $sem_5, $sem_6, $sem_7, $sem_8;
     public $selectedUniversity;
-    public $session_name;
+    public $selectedSession;
     public $specialization;
     public $admission_type;
     public $cousre;
+    // public $selectedSession;
     public $sessions;
     public $courses;
     public $universities;
@@ -56,6 +58,7 @@ class AddStudent extends Component
     public $documents;
     public $aadhar_no;
     public $files = [];
+    public $monthDifference;
     use WithFileUploads;
 
     public function addFile()
@@ -72,7 +75,7 @@ class AddStudent extends Component
         // try {
         $validatedData = $this->validate([
             'selectedUniversity' => 'required',
-            'session_name' => 'required',
+            'selectedSession' => 'required',
             'selectedCourse' => 'required',
             'selectedspecialization' => 'required',
             'admission_type' => 'required',
@@ -95,7 +98,7 @@ class AddStudent extends Component
                 'digits:12',
                 Rule::unique('students')->where(function ($query) {
                     return $query->where('aadhar_no', $this->aadhar_no)
-                        ->where('session_id', $this->session_name)
+                        ->where('session_id', $this->selectedSession)
                         ->where('course_id', $this->selectedCourse);
                 }),
             ],
@@ -105,7 +108,7 @@ class AddStudent extends Component
             'files.*.file' => 'nullable|file|mimes:jpeg,png,jpg|max:10240',
         ], [
             'selectedUniversity.required' => 'The university selection is required.',
-            'session_name.required' => 'The session name is required.',
+            'selectedSession.required' => 'The session name is required.',
             'selectedCourse.required' => 'The course selection is required.',
             'selectedspecialization.required' => 'The specialization selection is required.',
             'admission_type.required' => 'The admission type is required.',
@@ -142,6 +145,24 @@ class AddStudent extends Component
             'files.*.file.mimes' => 'Each file must be of type: jpeg, png, jpg.',
             'files.*.file.max' => 'Each file must not be greater than 10MB.',
         ]);
+//         $session_diff = admission_session::find($validatedData['selectedSession']);
+//         // dd($session_diff->endmonth);
+
+//         $startDate = Carbon::createFromFormat('Y-m', $session_diff->startmonth);
+// $endDate = Carbon::createFromFormat('Y-m', $session_diff->endmonth);
+
+// // Calculate the difference in months
+// $this->monthDifference = $startDate->diffInMonths($endDate);
+
+        // dd($monthDifference);
+       
+
+
+
+
+
+
+
         $lastId = Students::latest('id')->value('id');
         $newId = $lastId + 1;
         $student = new Students;
@@ -181,15 +202,26 @@ class AddStudent extends Component
         $student->course_id = $validatedData['selectedCourse'];
         $student->specialization_id = $validatedData['selectedspecialization'];
         $student->type = $validatedData['admission_type'];
-        $student->session_id = $validatedData['session_name'];
+        $student->session_id = $validatedData['selectedSession'];
         $student->previous_migration = $validatedData['pmigration'];
         $student->fee = $validatedData['fee'];
         $student->exam_status = $validatedData['exam_status'];
         $student->project_status = $validatedData['prj_status'];
         $student->uni_visit_date = $validatedData['visit_date'];
         $student->pass_back = $validatedData['pass_back'];
+        // if ($this->monthDifference >= 11) {
+        //     $validatedData['semester']=$validatedData['semester']+1;
+        //     // dd($validatedData['semester']);
+        // }
         $student->sem_year = $validatedData['semester'];
-
+        $student->marksheet_1st_sem = $this->sem_1;
+        $student->marksheet_2nd_sem = $this->sem_2;
+        $student->marksheet_3rd_sem = $this->sem_3;
+        $student->marksheet_4th_sem = $this->sem_4;
+        $student->marksheet_5th_sem = $this->sem_5;
+        $student->marksheet_6th_sem = $this->sem_6;
+        $student->marksheet_7th_sem = $this->sem_7;
+        $student->marksheet_8th_sem = $this->sem_8;
 
         if ($this->files) {
             $documents = [];
@@ -225,7 +257,7 @@ class AddStudent extends Component
     private function resetForm()
     {
         $this->university = null;
-        $this->session_name = null;
+        $this->selectedSession = null;
         $this->selectedCourse = null;
         $this->specialization = null;
         $this->admission_type = null;
@@ -255,7 +287,7 @@ class AddStudent extends Component
     public function mount()
     {
         $this->today = Carbon::today()->toDateString();
-        $this->sessions = admission_session::all();
+        // $this->sessions = admission_session::all();
         $this->universities = University::all();
         $this->associate = User::where('usertype', 'associate')->get();
         $this->files[] = ['file' => null];
@@ -272,9 +304,21 @@ class AddStudent extends Component
     }
     public function updatedSelectedCourse($selectedCourse)
     {
+        
         if (!is_null($selectedCourse)) {
             $this->specialization = specializations::where('cousre_id', $selectedCourse)->get();
         }
+    }
+    public function updatedSelectedSession($id){
+        $session_diff = admission_session::find($id);
+        // dd($session_diff->endmonth);
+
+        $startDate = Carbon::createFromFormat('Y-m', $session_diff->startmonth);
+$endDate = Carbon::createFromFormat('Y-m', $session_diff->endmonth);
+
+// Calculate the difference in months
+$this->monthDifference = $startDate->diffInMonths($endDate);
+        //dd($this->monthDifference);
     }
 
     public function render()

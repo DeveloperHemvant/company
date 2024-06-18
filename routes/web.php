@@ -2,14 +2,26 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-
-
+use App\Livewire\Frontend\About;
+///frontend Routes/////
 Route::get('/', function () {
     return view('welcome');
 });
-// Route::get('/user/login', function () {
-//     return view('user/login');
-// })->name('userlogin');
+Route::get('/career', function () {
+    return view('frontend/career');
+})->name('career');
+Route::get('/about', function () {
+    return view('frontend/about');
+})->name('about');
+Route::get('/contact', function () {
+    return view('frontend/contact');
+})->name('contact');
+
+
+
+
+
+//////////BCKEND Routes///////
 Route::get('/login/user', [AdminController::class, 'usercreate'])
     ->name('login.user');
 Route::post('/login/user', [AdminController::class, 'userstore']);

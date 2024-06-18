@@ -15,7 +15,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use App\Exports\SampleStudentsExport;
-
+use Carbon\Carbon;
 
 class Allstudents extends Component
 {
@@ -24,12 +24,14 @@ class Allstudents extends Component
     use WithFileUploads;
     public $showDropdown = false;
     public $admissionSessions;
+    public $uselectedSession;
     public $errorMessage;
     public $perPage = 10;
     public $importForm = false;
     public $search = '';
     public $u_search;
     public $studentdata;
+    public $monthDifference;
     public $university;
     public $course;
     public $c_search;
@@ -98,9 +100,11 @@ class Allstudents extends Component
     public function delete()
     {
         $student = Students::find($this->postIdToDelete);
-        $student->aadhar_no = $student->aadhar_no . '_DEL';
+        $student->aadhar_no = $student->aadhar_no . '_DEL'.$student->id;
+        // dd($student->aadhar_no);
         $student->save();
         $student->delete();
+        $this->dispatch('delete');
     }
     //export the data////
     public function export_data()
@@ -153,7 +157,7 @@ class Allstudents extends Component
     }
     public function updatedPerPage()
     {
-        $this->resetPage(); 
+        $this->resetPage();
     }
     public function usemester($id)
     {
@@ -161,7 +165,8 @@ class Allstudents extends Component
         $student = Students::find($id);
         $this->id = $id;
         $this->admissionSessions = admission_session::where('university_id', $student->university_id)->get();
-       
+        // $this->monthDifference = '';
+
     }
     public function hide()
     {
@@ -172,58 +177,92 @@ class Allstudents extends Component
         $student = Students::find($this->id);
 
         $validatedData = $this->validate([
-            'session_name' => 'required',
+            'uselectedSession' => 'required',
             'fee' => 'nullable|required|numeric',
             'semester' => 'required',
         ], [
-            'session_name.required' => 'The session name is required.',
+            'uselectedSession.required' => 'The session name is required.',
             'fee.required' => 'The fee is required .',
             'fee.numeric' => 'The fee must be a valid number.',
             'semester.required' => 'The semester is required.',
         ]);
-        if ($validatedData['session_name'] == $student->session_id || $validatedData['semester'] == $student->sem_year) {
-            if ($validatedData['session_name'] == $student->session_id) {
-                $this->dispatch('exists', ['message' => 'This student is already registered in this Session .']);
-            }
-            if ($validatedData['semester'] == $student->sem_year || $validatedData['semester'] < $student->sem_year) {
-                $this->dispatch('exists', ['message' => 'Semester must be greater then previos semester.']);
-            }
-
+        $oldsessiondata = admission_session::find($student->session_id);
+        $newsessiondata = admission_session::find($validatedData['uselectedSession']);
+        $oldEndMonth = Carbon::createFromFormat('Y-m', $oldsessiondata->endmonth);
+        $newStartMonth = Carbon::createFromFormat('Y-m', $newsessiondata->startmonth);
+        ///compare the diffrence of months/////
+        // $sessionendmonth = Carbon::createFromFormat('Y-m', $newsessiondata->endmonth);
+        // $sessionstartmonth = Carbon::createFromFormat('Y-m', $newsessiondata->startmonth);
+        // $monthDifference = $sessionstartmonth->diffInMonths($sessionendmonth);
+        // if ($monthDifference >= 11) {
+        //     $validatedData['semester']=$validatedData['semester']+1;
+        //     // dd($validatedData['semester']);
+        // }
+        if ($oldEndMonth->gt($newStartMonth)) {
+            $this->dispatch('exists', ['message' => 'Please Select the upcoming Session.']);
         } else {
-            $lastId = Students::latest('id')->value('id');
-            $newId = $lastId + 1;
-            $restudent = new Students();
-            $restudent->fill([
-                'id' => $newId,
-                'university_id' => $student->university_id,
-                'user_id' => $student->user_id,
-                'associate' => $student->associate,
-                'source' => $student->source,
-                'name' => $student->name,
-                'father_name' => $student->father_name,
-                'mother_name' => $student->mother_name,
-                'dob' => $student->dob,
-                'aadhar_no' => $student->aadhar_no,
-                'email_id' => $student->email_id,
-                'address' => $student->address,
-                'mob_no' => $student->mob_no,
-                'course_id' => $student->course_id,
-                'specialization_id' => $student->specialization_id,
-                'type' => $student->type,
-                'session_id' => $validatedData['session_name'],
-                'previous_migration' => $student->previous_migration,
-                'fee' => $validatedData['fee'],
-                'exam_status' => $student->exam_status,
-                'project_status' => $student->project_status,
-                'uni_visit_date' => $student->uni_visit_date,
-                'pass_back' => $student->pass_back,
-                'sem_year' => $validatedData['semester'],
-            ]);
-            $restudent->save();
-            $this->showDropdown = false;
+            if ($validatedData['uselectedSession'] == $student->session_id || $validatedData['semester'] == $student->sem_year) {
+                if ($validatedData['uselectedSession'] == $student->session_id) {
+                    $this->dispatch('exists', ['message' => 'This student is already registered in this Session .']);
+                }
+                if ($validatedData['semester'] == $student->sem_year || $validatedData['semester'] < $student->sem_year) {
+                    $this->dispatch('exists', ['message' => 'Semester must be greater then previos semester.']);
+                }
+
+            } else {
+                $lastId = Students::withTrashed()->latest('id')->value('id');
+                // dd($lastId);
+                $newId = $lastId + 1;
+                // dd($newId);
+                $restudent = new Students();
+                $restudent->fill([
+                    'id' => $newId,
+                    'university_id' => $student->university_id,
+                    'user_id' => $student->user_id,
+                    'associate' => $student->associate,
+                    'source' => $student->source,
+                    'name' => $student->name,
+                    'father_name' => $student->father_name,
+                    'mother_name' => $student->mother_name,
+                    'dob' => $student->dob,
+                    'aadhar_no' => $student->aadhar_no,
+                    'email_id' => $student->email_id,
+                    'address' => $student->address,
+                    'mob_no' => $student->mob_no,
+                    'course_id' => $student->course_id,
+                    'specialization_id' => $student->specialization_id,
+                    'type' => $student->type,
+                    'session_id' => $validatedData['uselectedSession'],
+                    'previous_migration' => $student->previous_migration,
+                    'fee' => $validatedData['fee'],
+                    'exam_status' => $student->exam_status,
+                    'project_status' => $student->project_status,
+                    'uni_visit_date' => $student->uni_visit_date,
+                    'pass_back' => $student->pass_back,
+                    'sem_year' => $validatedData['semester'],
+                ]);
+                $restudent->save();
+                $this->showDropdown = false;
+                $this->dispatch('semesterUpdated');
+            }
+            
         }
 
 
+
+    }
+    public function updatedUselectedSession($id)
+    {
+        $session_diff = admission_session::find($id);
+        // dd($session_diff->endmonth);
+
+        $startDate = Carbon::createFromFormat('Y-m', $session_diff->startmonth);
+        $endDate = Carbon::createFromFormat('Y-m', $session_diff->endmonth);
+        // $this->usemester = '';
+
+        // Calculate the difference in months
+        $this->monthDifference = $startDate->diffInMonths($endDate);
+        //dd($this->monthDifference);
     }
     public function render()
     {

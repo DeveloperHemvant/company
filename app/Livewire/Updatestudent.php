@@ -16,12 +16,12 @@ use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
-
-
+use Carbon\Carbon;
 
 class Updatestudent extends Component
 {
     use WithFileUploads;
+    public $sem_1, $sem_2, $sem_3, $sem_4, $sem_5, $sem_6, $sem_7, $sem_8;
     public $createNewPdf;
     public $id;
     public $studentdata;
@@ -34,7 +34,7 @@ class Updatestudent extends Component
     public $associate;
     public $selectedassociate;
     public $source = '';
-    public $usession_name;
+    public $uselectedSession;
     public $uselectedCourse;
     public $uselectedspecialization;
     public $uadmission_type;
@@ -47,6 +47,7 @@ class Updatestudent extends Component
     public $dob;
     public $email;
     public $aadhar_no;
+    public $monthDifference;
     public $mob;
     public $address;
     public $pmigration;
@@ -76,9 +77,9 @@ class Updatestudent extends Component
         $this->studentdata = Students::with('university', 'course', 'session', 'associate','specialization')->find($this->id);
         // dd($this->studentdata);
         $this->uuniversity = $this->studentdata->university_id;
-        $this->usession_name = $this->studentdata->session_id;
+        $this->uselectedSession = $this->studentdata->session_id;
         $this->uselectedCourse = $this->studentdata->course_id;
-        // dd($this->usession_name);
+        // dd($this->uselectedSession);
         $this->specialization = specializations::where('cousre_id', $this->uselectedCourse)->get();
         $this->uselectedspecialization = $this->studentdata->specialization_id;
         $this->refname = $this->studentdata->associate;
@@ -101,12 +102,28 @@ class Updatestudent extends Component
         $this->prj_status = $this->studentdata->project_status;
         $this->visit_date = $this->studentdata->uni_visit_date;
         $this->pass_back = $this->studentdata->pass_back;
+        $this->sem_1 = $this->studentdata->marksheet_1st_sem;
+    $this->sem_2 = $this->studentdata->marksheet_2nd_sem;
+    $this->sem_3 = $this->studentdata->marksheet_3rd_sem;
+    $this->sem_4 = $this->studentdata->marksheet_4th_sem;
+    $this->sem_5 = $this->studentdata->marksheet_5th_sem;
+    $this->sem_6 = $this->studentdata->marksheet_6th_sem;
+    $this->sem_7 = $this->studentdata->marksheet_7th_sem;
+    $this->sem_8 = $this->studentdata->marksheet_8th_sem;
         $this->university = University::all();
         $this->cousre = Cousre::where('university_id', $this->studentdata->university_id)->get();
         $this->sessions = admission_session::where('university_id', $this->studentdata->university_id)->get();
-        // $this->usession_name = admission_session::where('id', $this->studentdata->session_id)->get()->value('name');
+        // $this->uselectedSession = admission_session::where('id', $this->studentdata->session_id)->get()->value('name');
         $this->associate = User::where('usertype', 'associate')->get();
         $this->files[] = ['file' => null];
+        $session_diff = admission_session::find($this->studentdata->session_id);
+        // dd($session_diff->endmonth);
+
+        $startDate = Carbon::createFromFormat('Y-m', $session_diff->startmonth);
+$endDate = Carbon::createFromFormat('Y-m', $session_diff->endmonth);
+
+// Calculate the difference in months
+$this->monthDifference = $startDate->diffInMonths($endDate);
 
         // dd($this->associate);
     }
@@ -114,7 +131,7 @@ class Updatestudent extends Component
 {
     $validatedData = $this->validate([
         'uuniversity' => 'required',
-        'usession_name' => 'required',
+        'uselectedSession' => 'required',
         'uselectedCourse' => 'required',
         'uselectedspecialization' => 'required',
         'uadmission_type' => 'required',
@@ -132,7 +149,7 @@ class Updatestudent extends Component
             'digits:12',
             Rule::unique('students')->where(function ($query) {
                 return $query->where('aadhar_no', $this->aadhar_no)
-                    ->where('session_id', $this->usession_name)
+                    ->where('session_id', $this->uselectedSession)
                     ->where('course_id', $this->uselectedCourse);
             })->ignore($this->id),
         ],
@@ -157,7 +174,7 @@ class Updatestudent extends Component
         $student->source = $validatedData['usource'];
         $student->associate = '';
     }
-
+        // dd($validatedData);
     $student->name = $validatedData['fname'];
     $student->father_name = $validatedData['father_name'];
     $student->mother_name = $validatedData['mother_name'];
@@ -169,7 +186,7 @@ class Updatestudent extends Component
     $student->course_id = $validatedData['uselectedCourse'];
     $student->specialization_id = $validatedData['uselectedspecialization'];
     $student->type = $validatedData['uadmission_type'];
-    $student->session_id = $validatedData['usession_name'];
+    $student->session_id = $validatedData['uselectedSession'];
     $student->previous_migration = $validatedData['pmigration'];
     $student->fee = $validatedData['fee'];
     $student->exam_status = $validatedData['exam_status'];
@@ -177,6 +194,14 @@ class Updatestudent extends Component
     $student->uni_visit_date = $validatedData['visit_date'];
     $student->pass_back = $validatedData['pass_back'];
     $student->sem_year = $validatedData['usemester'];
+    $student->marksheet_1st_sem = $this->sem_1;
+        $student->marksheet_2nd_sem = $this->sem_2;
+        $student->marksheet_3rd_sem = $this->sem_3;
+        $student->marksheet_4th_sem = $this->sem_4;
+        $student->marksheet_5th_sem = $this->sem_5;
+        $student->marksheet_6th_sem = $this->sem_6;
+        $student->marksheet_7th_sem = $this->sem_7;
+        $student->marksheet_8th_sem = $this->sem_8;
 
     if (is_array($this->files) && isset($this->files[0]['file']) && !empty($this->files)) {
         if ($student->documents != null) {
@@ -221,6 +246,7 @@ class Updatestudent extends Component
     }
 
     $student->save();
+
     return redirect()->route('all-student');
 }
 
@@ -247,12 +273,12 @@ protected function createNewPdf($files, $student)
 
 
         $this->cousre = Cousre::where('university_id', $this->uuniversity)->get();
-        // $this->usession_name = '';
+        // $this->uselectedSession = '';
         // $this->uselectedCourse = '';
         // $this->uselectedspecialization = '';
         $this->sessions = admission_session::where('university_id', $this->uuniversity)->get();
         $courseIds = $this->cousre->pluck('id');
-        $this->specialization = specializations::whereIn('cousre_id', $this->uuniversity)->get();
+        $this->specialization = specializations::whereIn('cousre_id', $courseIds)->get();
 
     }
     public function updateduselectedCourse($selectedCourse)
@@ -261,6 +287,19 @@ protected function createNewPdf($files, $student)
         $this->specialization = specializations::where('cousre_id', $selectedCourse)->get();
 
     }
+    public function updatedUselectedSession($id){
+        $session_diff = admission_session::find($id);
+        // dd($session_diff->endmonth);
+
+        $startDate = Carbon::createFromFormat('Y-m', $session_diff->startmonth);
+$endDate = Carbon::createFromFormat('Y-m', $session_diff->endmonth);
+        $this->usemester = '';
+
+// Calculate the difference in months
+$this->monthDifference = $startDate->diffInMonths($endDate);
+        //dd($this->monthDifference);
+    }
+    
     public function render()
     {
         return view('livewire.updatestudent');

@@ -1,6 +1,6 @@
 <?php
 namespace App\Livewire;
-
+use Carbon\Carbon;
 use App\Models\University;
 use Illuminate\Validation\Rule;
 use App\Models\admission_session;
@@ -36,43 +36,60 @@ class SessionDetails extends Component
         $this->resetdata();
     }
     public function save()
-    {
-        $validatedData = $this->validate([
-            'startmonth' => 'required',
-            'endmonth' => 'required',
-            'university_id' => 'required'
-        ], [
-            'startmonth.required' => 'The start month is required.',
-            'endmonth.required' => 'The end month is required.',
-            'university_id.required' => 'Select the University',
-        ]);
-        $startDateTime = new DateTime($this->startmonth);
-        $endDateTime = new DateTime($this->endmonth);
-        $name = $startDateTime->format('F') . '-' . $endDateTime->format('F') . ' ' . $startDateTime->format('Y');
-        $this->name = $name;
-        $validatedData['name'] = $name;
-        $this->validate([
-            'name' => [
-                'required',
-                Rule::unique('admission_sessions')->where(function ($query) {
-                    return $query->where('name', $this->name)->where('university_id', $this->university_id);
-                }),
-            ],
-        ], [
-            'name.required' => 'The session name  is required.',
-            'name.unique' => 'The session  already exists.',
-        ]);
-        $admission_session = new admission_session;
-        $admission_session->name = $name;
-        $admission_session->startmonth = $this->startmonth;
-        $admission_session->endmonth = $this->endmonth;
-        $admission_session->university_id = $this->university_id;
-        $admission_session->save();
-        session()->flash('status', 'Session created successfully');
-        $this->resetdata();
-        $this->refreshData();
-        $this->showAddForm = false;
-    }
+{
+    $validatedData = $this->validate([
+        'startmonth' => 'required|date_format:Y-m',
+        'endmonth' => 'required|date_format:Y-m',
+        'university_id' => 'required'
+    ], [
+        'startmonth.required' => 'The start month is required.',
+        'endmonth.required' => 'The end month is required.',
+        'university_id.required' => 'Select the University',
+    ]);
+
+    // Calculate the month difference
+    $startDateTime = new DateTime($this->startmonth);
+$endDateTime = new DateTime($this->endmonth);
+$interval = $startDateTime->diff($endDateTime);
+$monthDiff = ($interval->y * 12) + $interval->m;
+
+// Check if the month difference is allowed
+if (!in_array($monthDiff, [6, 11, 12, 23, 24])) {
+    session()->flash('error', 'Enter the months correctly.');
+    return;
+}
+
+// $this->monthDifference = $monthDiff;
+
+
+    $name = $startDateTime->format('F') . '-' . $endDateTime->format('F') . ' ' . $startDateTime->format('Y');
+    $this->name = $name;
+    $validatedData['name'] = $name;
+
+    $this->validate([
+        'name' => [
+            'required',
+            Rule::unique('admission_sessions')->where(function ($query) {
+                return $query->where('name', $this->name)->where('university_id', $this->university_id);
+            }),
+        ],
+    ], [
+        'name.required' => 'The session name is required.',
+        'name.unique' => 'The session already exists.',
+    ]);
+
+    $admission_session = new admission_session;
+    $admission_session->name = $name;
+    $admission_session->startmonth = $this->startmonth;
+    $admission_session->endmonth = $this->endmonth;
+    $admission_session->university_id = $this->university_id;
+    $admission_session->save();
+
+    session()->flash('status', 'Session created successfully');
+    $this->resetdata();
+    $this->refreshData();
+    $this->showAddForm = false;
+}
     public $session_id;
     public function edit($id)
     {

@@ -14,6 +14,12 @@
         @error('name')
             <p class="text-red-500 text-xs italic">{{ $message }}</p>
         @enderror
+        @if(session()->has('error'))
+    <div class="alert alert-danger">
+        <p class="text-red-500 text-xs italic"> {{ session('error') }}</p>
+    </div>
+@endif
+
         <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg">
             <div class="mb-4">
                 <label class="block text-gray-700 font-bold mb-2" for="course">

@@ -260,12 +260,28 @@
         });
 
 
-        //   Livewire.on('postDeleted', function (data) {
-        //       Swal.fire({
-        //           title: 'Success!',
-        //           text: data.message,
-        //           icon: 'success'
-        //       });
-        //   });
+          Livewire.on('postDeleted', function (data) {
+              Swal.fire({
+                  title: 'Success!',
+                  text: data.message,
+                  icon: 'success'
+              });
+          });
+          Livewire.on('delete', function () {
+              Swal.fire({
+                  title: 'Success!',
+                  text: 'Data Deleted',
+                  icon: 'success'
+              });
+          });
+    });
+    document.addEventListener('livewire:load', function () {
+        Livewire.on('semesterUpdated', function () {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Semester updated successfully',
+                icon: 'success'
+            });
+        });
     });
 </script>

@@ -26,11 +26,14 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="session">
                     Session<span class="text-red-500">*</span>
                 </label>
-                <select wire:model="session_name" id="session" class="form-select">
+                <select wire:model.live="selectedSession" id="session" class="form-select">
                     <option value="">Choose Session</option>
+                    @if ($sessions)
                     @foreach ($sessions as $mb)
-                        <option value="{{ $mb->id }}">{{ $mb->name }}</option>
-                    @endforeach
+                    <option value="{{ $mb->id }}">{{ $mb->name }}</option>
+                @endforeach 
+                    @endif
+                    
                 </select>
                 @error('session_name')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -91,10 +94,21 @@
                 </label>
                 <select wire:model="semester" id="semester" class="form-select">
                     <option value=""> Select Semester </option>
-                    @for ($i = 1; $i < 9; $i++)
-                        <option value="{{ $i }} Semester"> {{ $i }} Semester </option>
-                    @endfor
+                    @if ($this->monthDifference >=11)
+                        @foreach ([2, 4, 6] as $i)
+                            <option value="{{ $i }}"> {{ $i }} Semester </option>
+                        @endforeach
+                    @elseif ($this->monthDifference >=  23)
+                        @foreach ([4, 8] as $i)
+                            <option value="{{ $i }}"> {{ $i }} Semester </option>
+                        @endforeach
+                    @else
+                        @for ($i = 1; $i < 9; $i++)
+                            <option value="{{ $i }}"> {{ $i }} Semester </option>
+                        @endfor
+                    @endif
                 </select>
+                
                 @error('semester')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
@@ -285,6 +299,94 @@
                 <input type="text" name="pass_back" id="pass_back" wire:model="pass_back">
                 <div>
                     @error('pass_back')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                    1 Semester
+                </label>
+                <input type="text" name="pass_back" id="pass_back" wire:model="sem_1">
+                <div>
+                    @error('sem_1')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                    2 Semester
+                </label>
+                <input type="text" name="pass_back" id="pass_back" wire:model="sem_2">
+                <div>
+                    @error('sem_2')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                    3 Semester
+                </label>
+                <input type="text" name="pass_back" id="pass_back" wire:model="sem_3">
+                <div>
+                    @error('sem_3')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                    4 Semester
+                </label>
+                <input type="text" name="pass_back" id="pass_back" wire:model="sem_4">
+                <div>
+                    @error('sem_4')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                    5 Semester
+                </label>
+                <input type="text" name="pass_back" id="pass_back" wire:model="sem_5">
+                <div>
+                    @error('sem_5')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                   6 Semester
+                </label>
+                <input type="text" name="pass_back" id="pass_back" wire:model="sem_6">
+                <div>
+                    @error('sem_6')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                   7 Semester
+                </label>
+                <input type="text" name="pass_back" id="pass_back" wire:model="sem_7">
+                <div>
+                    @error('sem_7')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class="    px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="university">
+                    8 Semester
+                </label>
+                <input type="text" name="pass_back" id="pass_back" wire:model="sem_8">
+                <div>
+                    @error('sem_8')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
