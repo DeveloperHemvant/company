@@ -42,7 +42,7 @@ Route::post('/login/user', [AdminController::class, 'userstore']);
 Route::get('/admin/login/', [AdminController::class, 'admincreate'])
     ->name('login.admin');
 Route::post('/admin/login', [AdminController::class, 'adminstore']);
-Route::get('/create/staff', [AdminController::class, 'staffcreate'])->name('login.staff');
+Route::get('/staff/login', [AdminController::class, 'staffcreate'])->name('login.staff');
 Route::post('/staff/login', [AdminController::class, 'staffstore']);
 
 Route::middleware([
@@ -95,5 +95,8 @@ Route::middleware([
     Route::get('/add-user', function () {
         return view('user/adduser');
     })->name('add-user');
+    Route::get('/parentform', function () {
+        return view('admin/parentcontact');
+    })->name('contactformdata');
 });
 
