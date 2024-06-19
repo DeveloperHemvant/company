@@ -3,19 +3,32 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Livewire\Frontend\About;
-///frontend Routes/////
-Route::get('/', function () {
-    return view('welcome');
+Route::prefix('')->group(function () {
+    Route::view('/', 'frontend/home')->name('home');
+    Route::view('/career', 'frontend/career')->name('career');
+    Route::view('/about', 'frontend/about')->name('about');
+    Route::view('/contact', 'frontend/contact')->name('contact');
+    Route::view('/campus-admission', 'frontend/campus-admission')->name('campus-admission');
+    Route::view('/online-courses', 'frontend/online-course')->name('online-courses');
+    Route::view('/distance-learning', 'frontend/distance-learning')->name('distance-learning');
+    Route::view('/phd-admission', 'frontend/phd-admission')->name('phd-admission');
+    Route::view('/thesis-writing', 'frontend/thesis-writing')->name('thesis-writing');
+    Route::view('/proof-reading', 'frontend/proof-reading')->name('proof-reading');
+    Route::view('/plagrim', 'frontend/plagrim')->name('plagrim');
+    Route::view('/journal', 'frontend/journal')->name('journal');
+    Route::view('/blog', 'frontend/blog')->name('blog');
+    Route::view('/terms', 'frontend/terms')->name('terms');
+    Route::view('/privacypolicy', 'frontend/privacypolicy')->name('privacypolicy');
+    Route::view('/refund', 'frontend/refund')->name('refund');
 });
-Route::get('/career', function () {
-    return view('frontend/career');
-})->name('career');
-Route::get('/about', function () {
-    return view('frontend/about');
-})->name('about');
-Route::get('/contact', function () {
-    return view('frontend/contact');
-})->name('contact');
+
+
+
+
+
+
+
+
 
 
 

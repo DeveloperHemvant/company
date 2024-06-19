@@ -23,8 +23,8 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 text-right">
-                   
-                    <img  class="img-fluid" src="{{ Vite::asset('resources/images/logo.svg') }}" alt="">
+
+                    <img class="img-fluid" src="{{ Vite::asset('resources/images/logo.svg') }}" alt="">
                 </div>
                 <div class="col-lg-6">
                     <h4 class="mb-2">Our Profile </h4>

@@ -16,7 +16,7 @@
                             completing your doctorate while managing work commitments.
                         </p>
                         <p class="text-center">
-                            <a href="phd-admission.html" class="btn btn-danger mr-4">Explore courses</a>
+                            <a href="{{route('phd-admission')}}" wire:navigate class="btn btn-danger mr-4">Explore courses</a>
                             <a href="tel:1111111111" class="btn btn-danger active"><i class="fa fa-whatsapp" aria-hidden="true"></i> Get Info</a>
                         </p>
                     </div>
