@@ -1587,3 +1587,11 @@ input::-webkit-input-placeholder {
 		padding: 30px 0px;
 	}
 }
+
+
+
+
+.slick-track .col-lg-4 {
+    max-width: 100% ;
+	width: 100% !important;
+}

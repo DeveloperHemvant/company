@@ -383,6 +383,6 @@
         });
     });
     </script>
-    
+  
     
 </x-guest-layout>
