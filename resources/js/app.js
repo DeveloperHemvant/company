@@ -1,6 +1,6 @@
 import "./bootstrap";
-import '../css/app.css'; 
-import '../css/custom.css'; 
+// import '../css/app.css'; 
+// import '../css/custom.css'; 
 // import { Livewire } from 'livewire';
 
 

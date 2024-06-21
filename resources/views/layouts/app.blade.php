@@ -19,7 +19,7 @@
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="icon"  href="{{ Vite::asset('resources/images/icon03.png') }}">
     <!-- Styles -->
     @livewireStyles
 </head>
@@ -51,7 +51,7 @@
     @livewireScripts
 
     <!-- Scripts -->
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    @vite([ 'resources/js/app.js'])
 
 
 

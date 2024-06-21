@@ -258,18 +258,10 @@
     "src": "resources/images/right-02.png"
   },
   "resources/js/app.js": {
-    "file": "assets/app-BgtPxAen.js",
+    "file": "assets/app-DCENeRmv.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true,
-    "css": [
-      "assets/app-mqP0ndRh.css",
-      "assets/custom-Do0J_To1.css"
-    ],
-    "assets": [
-      "assets/ba-C8-2M9qc.png",
-      "assets/call_btn-Cw_NhI2j.webp"
-    ]
+    "isEntry": true
   },
   "resources/js/scripts.js": {
     "file": "assets/scripts-qsC6Fciw.js",
