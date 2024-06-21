@@ -311,7 +311,7 @@
                                             Yes. A master’s degree with 50% marks is to be completed with the intention of
                                             pursuing a PhD. However, it is highly recommended that you have a master’s degree
                                             before applying for a PhD (Doctor of Philosophy) because it will give you an edge
-                                            over other applicants. <a href="blog-single.html">Read more</a>
+                                            over other applicants. <a href="{{route('blogsingle')}}">Read more</a>
                                         </div>
                                     </div>
                                 </div>
@@ -329,7 +329,7 @@
                                         data-parent="#accordionExample">
                                         <div class="card-body">
                                             Some placeholder content for the second accordion panel. This panel is hidden by
-                                            default. <a href="blog-single.html">Read more</a>
+                                            default. <a href="{{route('blogsingle')}}">Read more</a>
                                         </div>
                                     </div>
                                 </div>
@@ -347,7 +347,7 @@
                                         data-parent="#accordionExample">
                                         <div class="card-body">
                                             And lastly, the placeholder content for the third and final accordion panel. This
-                                            panel is hidden by default. <a href="blog-single.html">Read more</a>
+                                            panel is hidden by default. <a href="{{route('blogsingle')}}">Read more</a>
                                         </div>
                                     </div>
                                 </div>

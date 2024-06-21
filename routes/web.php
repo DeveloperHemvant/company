@@ -20,6 +20,7 @@ Route::prefix('')->group(function () {
     Route::view('/terms', 'frontend/terms')->name('terms');
     Route::view('/privacypolicy', 'frontend/privacypolicy')->name('privacypolicy');
     Route::view('/refund', 'frontend/refund')->name('refund');
+    Route::view('/single-blog', 'frontend/blog-single')->name('blogsingle');
 });
 
 
@@ -98,5 +99,6 @@ Route::middleware([
     Route::get('/parentform', function () {
         return view('admin/parentcontact');
     })->name('contactformdata');
+    
 });
 

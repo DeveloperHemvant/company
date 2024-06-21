@@ -1,4 +1,6 @@
 import "./bootstrap";
+import '../css/app.css'; 
+import '../css/custom.css'; 
 // import { Livewire } from 'livewire';
 
 
@@ -11,7 +13,9 @@ window.addEventListener("alert", (event) => {
         text: data[0].text,
       });
 });
-
-
+import.meta.glob([
+  '../images/**',
+  '../fonts/**',
+]);
   
 

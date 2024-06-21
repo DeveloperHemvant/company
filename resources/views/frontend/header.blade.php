@@ -3,6 +3,7 @@
         <div class="only-mob d-lg-none">
             <a href="#navbarResponsive" data-toggle="collapse" class="logo1">
                 <img src="{{ Vite::asset('resources/images/ic_menu_white.png') }}" alt="">
+                {{-- <img src="{{ Vite::image('ic_menu_white.png') }}" alt="Laravel Logo"> --}}
             </a>
             <a href="#" class="logo2">
                 <img src="{{ Vite::asset('resources/images/logo.svg') }}" alt="">
