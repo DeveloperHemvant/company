@@ -104,7 +104,7 @@
                     @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'staff')
                     <x-dropdown>
                         <x-slot name="trigger">
-                            <x-nav-link :active="request()->routeIs('add-user*')" class="cursor-pointer hover:text-blue-600">
+                            <x-nav-link :active="request()->routeIs('contactformdata*')" class="cursor-pointer hover:text-blue-600">
                                 {{ __('Parent Contact Form') }}
                             </x-nav-link>
                         </x-slot>
@@ -319,6 +319,20 @@
                 <x-slot name="content" class="py-2 bg-white border rounded shadow-lg">
                     <x-dropdown-link :href="route('add-user')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">Add
                         User</x-dropdown-link>
+                    {{-- <x-dropdown-link :href="route('all-student')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">All
+                        Student</x-dropdown-link> --}}
+                    <!-- Other dropdown links for programmes -->
+                </x-slot>
+            </x-dropdown>
+            <x-dropdown>
+                <x-slot name="trigger">
+                    <x-nav-link :active="request()->routeIs('contactformdata*')" class="cursor-pointer hover:text-blue-600">
+                        {{ __('Parent Contact Form') }}
+                    </x-nav-link>
+                </x-slot>
+                <x-slot name="content" class="py-2 bg-white border rounded shadow-lg">
+                    <x-dropdown-link :href="route('contactformdata')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">
+                        Parent Contact Form</x-dropdown-link>
                     {{-- <x-dropdown-link :href="route('all-student')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">All
                         Student</x-dropdown-link> --}}
                     <!-- Other dropdown links for programmes -->

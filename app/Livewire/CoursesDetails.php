@@ -9,13 +9,16 @@ use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CourseDataExport;
 
 class CoursesDetails extends Component
 {
     use WithPagination;
 
     public $showAddForm = false;
+    public $search = '';
+    public $u_search = '';
     public $c_id;
     public $showEditForm=false;
     #[Validate('required', message: 'Please Enter the Course Name', translate: false)]
@@ -151,10 +154,15 @@ class CoursesDetails extends Component
         $this->showEditForm = false;
 
     }
+    public function export(){
+        $coursesdata = Cousre::with('university')->where('course_name', 'like', '%' . $this->search . '%')->where('university_id', 'like', '%' . $this->u_search . '%')->get();
+        // dd($coursesdata);   
+        return Excel::download(new CourseDataExport($coursesdata), 'course.xlsx');     
+    }
 
     public function render()
     {
-        $courses = Cousre::with('university')->paginate(10);
+        $courses = Cousre::with('university')->where('course_name', 'like', '%' . $this->search . '%')->where('university_id', 'like', '%' . $this->u_search . '%')->paginate(10);
         // dd($courses);
         $universities = University::all();
         return view('livewire.courses-details', ['courses' => $courses, 'universities' => $universities]);

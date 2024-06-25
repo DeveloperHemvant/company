@@ -7,8 +7,10 @@ use App\Models\admission_session;
 use Livewire\Component;
 use DateTime;
 use Livewire\WithPagination;
+use App\Exports\AdmissionSessionExport;
 use DB;
 use Livewire\Attributes\On;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class SessionDetails extends Component
@@ -23,6 +25,8 @@ class SessionDetails extends Component
     public $universities;
     public $university_id;
     public $paginationData;
+    public $u_search='';
+    public $search='';
     public function mount()
     {
         
@@ -174,20 +178,34 @@ if (!in_array($monthDiff, [6, 11, 12, 23, 24])) {
         }
         $this->refreshData();
     }
-    public function refreshData(): void
+    public function export()
     {
-        //$this->paginationData = admission_session::with('university')->paginate(1);
-    }
-    public function render()
-    {   $sessionData = admission_session::with('university')
-        ->join('universities', 'admission_sessions.university_id', '=', 'universities.id')
-        ->orderBy('universities.university_name')
-        ->select('admission_sessions.*') // Ensure you select only the columns from admission_sessions to avoid conflicts
-        ->paginate(10);
+        $sessionData = admission_session::with('university')->where('name', 'like', '%' . $this->search . '%')->where('university_id', 'like', '%' . $this->u_search . '%')->get();
     
-        // $sessionData = admission_session::with('university')->paginate(10);
-        return view('livewire.session-details', [
-            'sessionData' => $sessionData,
-        ]);
+        // Apply search filters if they are not empty
+        return Excel::download(new AdmissionSessionExport($sessionData), 'session.xlsx');     
+        // dd($sessionData);
     }
+    
+    public function render()
+{
+        $query = admission_session::with('university')
+        ;
+        // dd($this->search);
+    // Apply search filters if they are not empty
+    if ($this->search) {
+        $query->where('admission_sessions.name', 'like', '%' . $this->search . '%');
+    }
+
+    if ($this->u_search) {
+        $query->where('admission_sessions.university_id', 'like', '%' . $this->u_search . '%');
+    }
+
+    $sessionData = $query->paginate(10);
+        // dd($sessionData);
+    return view('livewire.session-details', [
+        'sessionData' => $sessionData,
+    ]);
+}
+
 }

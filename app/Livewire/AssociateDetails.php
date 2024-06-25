@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\WithPagination;
 use App\Mail\Associate;
 use Mail;
+use App\Exports\AssociateExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Livewire\Attributes\On;
 class AssociateDetails extends Component
 {
     use WithPagination;
     public $showAddForm = false;
+    public $search = '';
     public function toggleAddForm()
     {
         $this->name = '';
@@ -211,9 +214,13 @@ class AssociateDetails extends Component
         $this->smobile ='';
         $this->landmobile = '';
     }
+    public function export(){
+        $export = User::where('usertype', '=', 'associate')->where('name', 'like', '%' . $this->search . '%')->where('email', 'like', '%' . $this->search . '%')->get();
+        return Excel::download(new AssociateExport($export), 'associate.xlsx');
+    }
     public function render()
     {
-        $data = User::where('usertype', '=', 'associate')->paginate(10);
+        $data = User::where('usertype', '=', 'associate')->where('name', 'like', '%' . $this->search . '%')->where('email', 'like', '%' . $this->search . '%')->paginate(10);
         return view('livewire.associate-details', ['data' => $data]);
     }
 }

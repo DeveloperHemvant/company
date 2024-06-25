@@ -11,10 +11,14 @@ use Livewire\WithPagination;
 use App\Mail\Associate;
 use Mail;
 use Livewire\Attributes\On;
+use App\Exports\UserExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Adduser extends Component
 {
     use WithPagination;
+    public $search = '';
+    public $u_search = '';
 
     public $showAddForm = false;
     public function toggleAddForm()
@@ -180,9 +184,13 @@ if(isset($this->usertype)) {
         $this->address = '';
         $this->password = '';
     }
+    public function export(){
+        $Exportdata = User::where('usertype', '=', 'staff')->where('name', 'like', '%' . $this->search . '%')->where('role', 'like', '%' . $this->u_search . '%')->get();
+        return Excel::download(new UserExport($Exportdata), 'user.xlsx');
+    }
     public function render()
     {
-        $data = User::where('usertype', '=', 'staff')->paginate(10);
+        $data = User::where('usertype', '=', 'staff')->where('name', 'like', '%' . $this->search . '%')->where('role', 'like', '%' . $this->u_search . '%')->paginate(10);
         return view('livewire.adduser', ['data' => $data]);
     }
 }

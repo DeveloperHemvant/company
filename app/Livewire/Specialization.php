@@ -8,10 +8,15 @@ use App\Models\Cousre;
 use App\Models\specializations;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SpecializationDataExport;
 class Specialization extends Component
 {
     use WithPagination;
+    public $search = '';
+    public $u_search = '';
+    public $c_search = '';
+    public $coursess;
     public $showAddForm = false;
     public $showEditForm = false;
     public $cousre;
@@ -53,6 +58,7 @@ class Specialization extends Component
     public function mount()
     {
         $this->university = University::all();
+        $this->coursess = Cousre::all();
         $this->refreshData();
     }
     public function toggleAddForm()
@@ -130,15 +136,18 @@ class Specialization extends Component
     }
     public function refreshData(): void
     {
-        $this->special_data = specializations::with(['cousre', 'university'])
-            ->join('universities', 'specializations.university_id', '=', 'universities.id')
-            ->join('cousres', 'specializations.cousre_id', '=', 'cousres.id')
-            ->orderBy('universities.university_name')
-            ->select('specializations.*')
+        $this->special_data = specializations::with(['cousre', 'university'])->where('specialization_name', 'like', '%' . $this->search . '%')->where('university_id', 'like', '%' . $this->u_search . '%')
             ->get();
+    }
+    public function export(){
+        $specialData = specializations::with(['cousre', 'university'])->where('cousre_id', 'like', '%' . $this->c_search . '%')->where('specialization_name', 'like', '%' . $this->search . '%')->where('university_id', 'like', '%' . $this->u_search . '%')
+        ->get();
+        return Excel::download(new SpecializationDataExport($specialData), 'specializtation.xlsx');     
     }
     public function render()
     {
+        $this->special_data = specializations::with(['cousre', 'university'])->where('cousre_id', 'like', '%' . $this->c_search . '%')->where('specialization_name', 'like', '%' . $this->search . '%')->where('university_id', 'like', '%' . $this->u_search . '%')
+            ->get();
         return view('livewire.specialization');
     }
 }

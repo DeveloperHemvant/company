@@ -7,6 +7,8 @@ use Livewire\Component;
 use App\Models\University;
 use Livewire\Attributes\On;
 use Illuminate\Validation\Rule;
+use App\Exports\UniversitiesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class AddUniversity extends Component
@@ -14,6 +16,8 @@ class AddUniversity extends Component
     use WithPagination;
     public $showAddForm = false;
     public $showEditForm = false;
+    public $search ;
+    public $filterdata;
     public $id;
     public function toggleAddForm()
     {
@@ -159,9 +163,22 @@ class AddUniversity extends Component
 
 
     }
+    public function export(){
+        $exportdata = University::where(function ($query) {
+            $query->where('university_name', 'like', '%' . $this->search . '%')
+                ->orWhere('university_code', 'like', '%' . $this->search . '%');
+        })->get();
+    
+    return Excel::download(new UniversitiesExport($exportdata), 'universities.xlsx');
+    }
     public function render()
     {
-        $data = University::paginate(10);
+        $data = University::
+        where(function ($query) {
+            $query->where('university_name', 'like', '%' . $this->search . '%')
+                ->orWhere('university_code', 'like', '%' . $this->search . '%');
+        })->orderBy('id', 'desc')->paginate(10);
+        
         return view('livewire.add-university',['data' => $data]);
     }
 }
