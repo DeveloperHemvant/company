@@ -21,6 +21,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon"  href="{{ Vite::asset('resources/images/icon03.png') }}">
     <!-- Styles -->
+    @vite('resources/css/app.css')
     @livewireStyles
 </head>
 

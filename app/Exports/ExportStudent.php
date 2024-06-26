@@ -74,7 +74,7 @@ class ExportStudent implements FromCollection, WithHeadings, WithMapping
     public function map($row): array
     {
 
-
+        
 
         return [
             $this->counter++,

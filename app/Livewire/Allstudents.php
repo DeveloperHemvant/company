@@ -109,7 +109,12 @@ class Allstudents extends Component
     //export the data////
     public function export_data()
     {
-        $data = Students::with('university', 'course', 'session', 'specialization')->get()->toArray();
+        $data = Students::with('university', 'course','session','specialization')
+        ->where(function ($query) {
+            $query->where('name', 'like', '%' . $this->search . '%')
+                ->orWhere('father_name', 'like', '%' . $this->search . '%')
+                ->orWhere('email_id', 'like', '%' . $this->search . '%');
+        })->where('university_id', 'like', '%' . $this->u_search . '%')->where('course_id', 'like', '%' . $this->c_search . '%')->get()->toArray();
         // dd($data);
         return Excel::download(new ExportStudent($data), 'students.xlsx');
     }
