@@ -77,7 +77,7 @@
                     <div class="flex flex-col md:flex-row md:space-x-3">
                         <div class="flex space-x-3 items-center mb-4 md:mb-0">
                             <label class="w-40 text-sm font-medium text-gray-900">University:</label>
-                            <select wire:model.live.debounce.150ms="u_search"
+                            <select wire:model.live.debounce.150ms="selectedUniversity"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                 <option value="">Select University</option>
                                 @foreach ($university as $item)
@@ -90,9 +90,24 @@
                             <select wire:model.live.debounce.150ms="c_search"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                 <option value="">Select Course</option>
-                                @foreach ($course as $item)
+                                @if ($coursefilter)
+                                @foreach ($coursefilter as $item)
                                     <option value="{{ $item->id }}">{{ $item->course_name }}</option>
                                 @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="flex space-x-3 items-center mb-4 md:mb-0">
+                            <label class="w-40 text-sm font-medium text-gray-900">Session:</label>
+                            <select wire:model.live.debounce.150ms="s_search"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <option value="">Select Session</option>
+                                @if ($sessionsfilter)
+                                @foreach ($sessionsfilter as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                                @endif
+                                
                             </select>
                         </div>
                     </div>
@@ -117,6 +132,9 @@
                                 <th scope="col"
                                     class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     University</th>
+                                    <th scope="col"
+                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Session</th>
                                 <th scope="col"
                                     class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Course</th>
@@ -140,6 +158,7 @@
                                             No University Data
                                         @endif
                                     </td>
+                                    <td class="px-4 py-3">{{ $studentData->session->name }}</td>
                                     <td class="px-4 py-3">
                                         @if (isset($studentData->course))
                                             {{ $studentData->course->course_name }}

@@ -174,9 +174,9 @@ if (!in_array($monthDiff, [6, 11, 12, 23, 24])) {
                 'position' => 'center',
                 'text' => 'Session deleted successfully.'
             ]);
-            $this->refreshData();
+            // $this->refreshData();
         }
-        $this->refreshData();
+        // $this->refreshData();
     }
     public function export()
     {

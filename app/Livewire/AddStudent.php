@@ -145,24 +145,6 @@ class AddStudent extends Component
             'files.*.file.mimes' => 'Each file must be of type: jpeg, png, jpg.',
             'files.*.file.max' => 'Each file must not be greater than 10MB.',
         ]);
-//         $session_diff = admission_session::find($validatedData['selectedSession']);
-//         // dd($session_diff->endmonth);
-
-//         $startDate = Carbon::createFromFormat('Y-m', $session_diff->startmonth);
-// $endDate = Carbon::createFromFormat('Y-m', $session_diff->endmonth);
-
-// // Calculate the difference in months
-// $this->monthDifference = $startDate->diffInMonths($endDate);
-
-        // dd($monthDifference);
-       
-
-
-
-
-
-
-
         $lastId = Students::latest('id')->value('id');
         $newId = $lastId + 1;
         $student = new Students;
@@ -172,24 +154,6 @@ class AddStudent extends Component
             $student->user_id = $validatedData['selectedassociate'];
             $student->associate = User::where(['id' => $validatedData['selectedassociate']])->pluck('name')->first();
         }
-        // else {
-        //     $faker = FakerFactory::create();
-        //     $newuser = User::factory()->create([
-        //         'name' => $this->refname,
-        //         'email' => $faker->unique()->safeEmail,
-        //         'city' => $faker->city,
-        //         'mobile' => $faker->phoneNumber,
-        //         'password' => Hash::make('password'), 
-        //         'address' => $faker->address,
-        //         'pincode' => $faker->postcode,
-        //         'state' => $faker->state,
-        //         'pname' => $faker->name,
-        //         'smobile' => $faker->phoneNumber,
-        //         'landmobile' => $faker->phoneNumber,
-        //     ]);
-        //     $student->user_id=$newuser->id;
-        //     $student->associate =User::where(['id' => $newuser->id])->pluck('name')->first();
-        // }
         $student->source = $validatedData['source'];
         $student->name = $validatedData['fname'];
         $student->father_name = $validatedData['father_name'];
@@ -209,10 +173,6 @@ class AddStudent extends Component
         $student->project_status = $validatedData['prj_status'];
         $student->uni_visit_date = $validatedData['visit_date'];
         $student->pass_back = $validatedData['pass_back'];
-        // if ($this->monthDifference >= 11) {
-        //     $validatedData['semester']=$validatedData['semester']+1;
-        //     // dd($validatedData['semester']);
-        // }
         $student->sem_year = $validatedData['semester'];
         $student->marksheet_1st_sem = $this->sem_1;
         $student->marksheet_2nd_sem = $this->sem_2;

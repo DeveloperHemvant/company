@@ -22,6 +22,8 @@ class Allstudents extends Component
     use WithPagination;
 
     use WithFileUploads;
+    public $sessionsfilter;
+    public $s_search = '';
     public $showDropdown = false;
     public $admissionSessions;
     public $uselectedSession;
@@ -29,11 +31,12 @@ class Allstudents extends Component
     public $perPage = 10;
     public $importForm = false;
     public $search = '';
-    public $u_search;
+    public $selectedUniversity;
     public $studentdata;
     public $monthDifference;
     public $university;
     public $course;
+    public $coursefilter;
     public $c_search;
     // public $st_id;
     public $c_id;
@@ -61,6 +64,7 @@ class Allstudents extends Component
     {
         $this->university = University::all();
         $this->course = Cousre::all();
+        $this->session = Cousre::all();
     }
     public function universitypassword($id)
     {
@@ -114,7 +118,8 @@ class Allstudents extends Component
             $query->where('name', 'like', '%' . $this->search . '%')
                 ->orWhere('father_name', 'like', '%' . $this->search . '%')
                 ->orWhere('email_id', 'like', '%' . $this->search . '%');
-        })->where('university_id', 'like', '%' . $this->u_search . '%')->where('course_id', 'like', '%' . $this->c_search . '%')->get()->toArray();
+        })->where('university_id', 'like', '%' . $this->selectedUniversity . '%')->where('course_id', 'like', '%' . $this->c_search . '%')
+        ->where('session_id', 'like', '%' . $this->s_search . '%')->get()->toArray();
         // dd($data);
         return Excel::download(new ExportStudent($data), 'students.xlsx');
     }
@@ -269,6 +274,14 @@ class Allstudents extends Component
         $this->monthDifference = $startDate->diffInMonths($endDate);
         //dd($this->monthDifference);
     }
+    public function updatedSelectedUniversity($selectedUniversity){
+        // dd($selectedUniversity);
+        if (!is_null($selectedUniversity)) {
+            $this->coursefilter = Cousre::where('university_id', $selectedUniversity)->get();
+            $this->sessionsfilter = admission_session::where('university_id', $selectedUniversity)->get();
+
+        }
+    }
     public function render()
     {
         $studentDatas = Students::with('university', 'course')
@@ -276,7 +289,8 @@ class Allstudents extends Component
                 $query->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('father_name', 'like', '%' . $this->search . '%')
                     ->orWhere('email_id', 'like', '%' . $this->search . '%');
-            })->where('university_id', 'like', '%' . $this->u_search . '%')->where('course_id', 'like', '%' . $this->c_search . '%')->orderBy('id', 'desc')->paginate($this->perPage);
+            })->where('university_id', 'like', '%' . $this->selectedUniversity . '%')->where('course_id', 'like', '%' . $this->c_search . '%')
+            ->where('session_id', 'like', '%' . $this->s_search . '%')->orderBy('id', 'desc')->paginate($this->perPage);
         return view('livewire.allstudents', ['studentDatas' => $studentDatas]);
     }
 }
