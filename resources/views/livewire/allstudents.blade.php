@@ -56,7 +56,7 @@
     </div>
 
     <section class="mt-10">
-        <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+        <div class="">
             <div class="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
                 <div class="md:flex items-center justify-between p-4">
                     <div class="flex md:w-auto w-full mb-4 md:mb-0">
@@ -85,18 +85,6 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="flex space-x-3 items-center">
-                            <label class="w-40 text-sm font-medium text-gray-900">Course:</label>
-                            <select wire:model.live.debounce.150ms="c_search"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                <option value="">Select Course</option>
-                                @if ($coursefilter)
-                                @foreach ($coursefilter as $item)
-                                    <option value="{{ $item->id }}">{{ $item->course_name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
                         <div class="flex space-x-3 items-center mb-4 md:mb-0">
                             <label class="w-40 text-sm font-medium text-gray-900">Session:</label>
                             <select wire:model.live.debounce.150ms="s_search"
@@ -110,6 +98,19 @@
                                 
                             </select>
                         </div>
+                        <div class="flex space-x-3 items-center">
+                            <label class="w-40 text-sm font-medium text-gray-900">Course:</label>
+                            <select wire:model.live.debounce.150ms="c_search"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <option value="">Select Course</option>
+                                @if ($coursefilter)
+                                @foreach ($coursefilter as $item)
+                                    <option value="{{ $item->id }}">{{ $item->course_name }}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -118,26 +119,27 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col"
-                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Sr. No.</th>
+                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Sr. No.</th>
+                            <th scope="col"
+                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Name</th>
+                                
+                            <th scope="col"
+                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Contact No.</th>
+                            {{-- <th scope="col"
+                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Father Name</th> --}}
+                             <th scope="col"
+                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Course</th>
                                 <th scope="col"
-                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Name</th>
+                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                University</th>
                                 <th scope="col"
-                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Email Id</th>
-                                <th scope="col"
-                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Father Name</th>
-                                <th scope="col"
-                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    University</th>
-                                    <th scope="col"
-                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Session</th>
-                                <th scope="col"
-                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Course</th>
+                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Session</th>
                                 <th scope="col"
                                     class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Actions</th>
@@ -149,8 +151,14 @@
                                 <tr class="border-b dark:border-gray-700">
                                     <td class="px-4 py-3 text-gray-900">{{ $count }}</td>
                                     <td class="px-4 py-3 text-gray-900">{{ $studentData->name }}</td>
-                                    <td class="px-4 py-3">{{ $studentData->email_id }}</td>
-                                    <td class="px-4 py-3">{{ $studentData->father_name }}</td>
+                                    <td class="px-4 py-3">{{ $studentData->mob_no }}</td>
+                                    <td class="px-4 py-3">
+                                        @if (isset($studentData->course))
+                                            {{ $studentData->course->course_name }}
+                                        @else
+                                            No Course Data
+                                        @endif
+                                    </td>
                                     <td class="px-4 py-3">
                                         @if (isset($studentData->university))
                                             {{ $studentData->university->university_name }}
@@ -159,13 +167,6 @@
                                         @endif
                                     </td>
                                     <td class="px-4 py-3">{{ $studentData->session->name }}</td>
-                                    <td class="px-4 py-3">
-                                        @if (isset($studentData->course))
-                                            {{ $studentData->course->course_name }}
-                                        @else
-                                            No Course Data
-                                        @endif
-                                    </td>
                                     <td class="px-4 py-3 flex items-center space-x-2">
                                         <a href="{{ route('update-student', ['id' => $studentData->id]) }}"
                                             title="Update the student"
@@ -239,7 +240,7 @@
                     </table>
                 </div>
 
-                <div class="py-4 px-3">
+                <div class="ml-auto w-[195px] pr-[17px]">
                     <div class="flex space-x-4 items-center mb-3">
                         <label class="w-32 text-sm font-medium text-gray-900">Per Page</label>
                         <select wire:model.live="perPage"
@@ -251,7 +252,10 @@
                         </select>
                     </div>
                 </div>
-                {{ $studentDatas->links() }}
+                <div class=" p-[17px]">
+                    {{ $studentDatas->links() }}
+                </div>
+              
             </div>
         </div>
     </section>

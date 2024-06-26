@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class Adduser extends Component
 {
     use WithPagination;
+    public $role;
     public $search = '';
     public $u_search = '';
 
@@ -44,6 +45,7 @@ class Adduser extends Component
     public $id;
     public $usertype;
     public $is_admin;
+    public $s_is_admin;
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -53,6 +55,8 @@ class Adduser extends Component
         $this->email = $user->email;
         $this->mobile = $user->mobile;
         $this->address = $user->address;
+        $this->s_is_admin = $user->role;
+        // dd($this->s_is_admin);
         $this->showAddForm = false;
         $this->showEditForm = true;
     }
@@ -71,6 +75,7 @@ class Adduser extends Component
             'email' => 'required|email',
             'mobile' => 'required|digits:10',
             'address' => 'required',
+            's_is_admin' => 'nullable|boolean',
             
         ];
         
@@ -91,13 +96,17 @@ class Adduser extends Component
         if ($student) {
             Students::where('user_id', $this->id)->update(['associate' => $validatedData['name']]);
         }
+        // dd($this->s_is_admin);
+        $this->role = $this->s_is_admin ? 'admin' : 'user';
+        // dd($this->role);
     if ($user) {
-        $user->update([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'mobile'=>$validatedData['mobile'],
-            'address'=>$validatedData['address'],
-        ]);
+            $user->name = $validatedData['name'];
+            $user->email = $validatedData['email'];
+            $user->mobile = $validatedData['mobile'];
+            $user->address = $validatedData['address'];
+            $user->role = $this->role;
+            $user->save();
+        
         session()->flash('status', 'User updated successfully');
     } else {
         session()->flash('status', 'Failed to update associate');

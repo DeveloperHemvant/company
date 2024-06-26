@@ -1,5 +1,5 @@
 <div class="mt-4">
-    <h2 class="text-lg font-bold mb-2">Registered Users</h2>
+    <h2 class="text-lg font-bold mb-2 pl-4">Registered Users</h2>
     <div class="md:flex items-center justify-between p-4">
         <div class="flex md:w-auto w-full mb-4 md:mb-0">
             <div class="relative w-full">

@@ -1,32 +1,35 @@
 <div>
     <div>
-        <button wire:click="toggleAddForm"
+        <div class="pl-4 pt-4">
+            <button wire:click="toggleAddForm"
             style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
             class="bg-blue-500 hover:bg-blue-700  font-bold py-2 px-4 rounded mb-4">
             {{ $showAddForm ? 'Cancel' : 'Add Specialization' }}
         </button>
         <x-button title="Export Specialization Data"
-    class="bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out hover:bg-green-700"
-    wire:click='export'>
-    <i class="fa-solid fa-user"></i><i class="fa-solid fa-right-to-bracket"></i>
-</x-button>
-        @if (session()->has('status'))
-        <div class="alert {{ session('status') ? 'text-green-500' : 'text-red-500' }}">
-            {{ session('status') }}
+            class="bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out hover:bg-green-700"
+            wire:click='export'>
+            <i class="fa-solid fa-user"></i><i class="fa-solid fa-right-to-bracket"></i>
+        </x-button>
         </div>
-    @endif
+        
+        @if (session()->has('status'))
+            <div class="alert {{ session('status') ? 'text-green-500' : 'text-red-500' }}">
+                {{ session('status') }}
+            </div>
+        @endif
         @if ($showAddForm)
             @if (session()->has('status'))
                 <div class="alert {{ session('status') ? 'alert-success' : 'alert-danger' }}">
                     {{ session('status') }}
                 </div>
             @endif
-            <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg">
+            <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
                 <div class="mb-4">
                     <label for="cousre_id" class="block text-gray-700 text-sm font-bold mb-2">University:<span
                             class="text-red-500">*</span></label>
                     <select wire:model.live="selecteduniversity" id="university_name"
-                        class="shadow appearance-none border rounded py-2 px-8 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select University</option>
                         @foreach ($university as $programme)
                             <option value="{{ $programme->id }}">{{ $programme->university_name }}</option>
@@ -40,44 +43,40 @@
                     <label for="cousre_id" class="block text-gray-700 text-sm font-bold mb-2">Courses:<span
                             class="text-red-500">*</span></label>
                     <select wire:model="course_id" id="university_name"
-                        class="shadow appearance-none border rounded py-2 px-8 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Course</option>
                         @if ($selecteduniversity != null)
                             @foreach ($cousre as $data)
                                 <option value="{{ $data->id }}">{{ $data->course_name }}</option>
                             @endforeach
                         @endif
-
                     </select>
                     @error('course_id')
                         <p class="text-red-500 text-xs italic">Course is required</p>
                     @enderror
-
                 </div>
                 <div class="mb-4">
                     <label for="sessions" class="block text-gray-700 text-sm font-bold mb-2">Specialization:<span
                             class="text-red-500">*</span></label>
-                    <x-input name="specialization_name" type="text" id="specialization_name" class="custom-class"
-                        wire:model="specialization_name" required />
+                    <x-input name="specialization_name" type="text" id="specialization_name"
+                        class="custom-class w-full" wire:model="specialization_name" required />
                     @error('specialization_name')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
-
                 </div>
-
                 <button type="submit"
-                    style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                    class="bg-green-500 hover:bg-green-700  font-bold py-2 px-4 rounded ml-2">Add
-                    Specialization</button>
+                    class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition-colors duration-300 ease-in-out">
+                    Add Specialization
+                </button>
             </form>
-
         @endif
+
         <div class="md:flex items-center justify-between p-4">
             <div class="flex md:w-auto w-full mb-4 md:mb-0">
                 <div class="relative w-full">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd"
                                 d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                                 clip-rule="evenodd" />
@@ -99,7 +98,7 @@
                         @endforeach
                     </select>
                 </div>
-                
+
             </div>
             <div class="flex flex-col md:flex-row md:space-x-3">
                 <div class="flex space-x-3 items-center mb-4 md:mb-0">
@@ -112,7 +111,7 @@
                         @endforeach
                     </select>
                 </div>
-                
+
             </div>
         </div>
         @if (empty($special_data))
@@ -123,17 +122,20 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SR No.</th>
-                    <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">University Name
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SR
+                            No.</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            University Name
                         </th>
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Course Name</th>
                         <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specialization Name
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Specialization Name
                         </th>
-                        
+
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Actions</th>
@@ -146,19 +148,19 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $proggramme->university->university_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $proggramme->cousre->course_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $proggramme->specialization_name }}</td>
-                            
+
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button wire:click="edit({{ $proggramme->id }})"
                                     style="background-color: #0fe419; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
                                     class="text-indigo-600 hover:text-indigo-900"><i
-                                    class="fa-solid fa-pen-to-square"></i></button>
-                                    @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
-                                <button
-                                    style="background-color: #ff0000; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                    wire:click="confirmDelete('{{ $proggramme->id }}')" wire:loading.attr="disabled"
-                                    class="text-red-600 hover:text-red-900 ml-2"><i
-                                    class="fa-solid fa-trash"></i></button>
-                                    @endif
+                                        class="fa-solid fa-pen-to-square"></i></button>
+                                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
+                                    <button
+                                        style="background-color: #ff0000; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+                                        wire:click="confirmDelete('{{ $proggramme->id }}')"
+                                        wire:loading.attr="disabled" class="text-red-600 hover:text-red-900 ml-2"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                @endif
                             </td>
                         </tr>
                         @if ($showEditForm && $proggramme->id === $s_id)
@@ -207,8 +209,9 @@
                                             <label for="sessions"
                                                 class="block text-gray-700 text-sm font-bold mb-2">Specialization:<span
                                                     class="text-red-500">*</span></label>
-                                            <x-input name="specialization_name" type="text" id="specialization_name"
-                                                class="custom-class" wire:model="specialization_name" required />
+                                            <x-input name="specialization_name" type="text"
+                                                id="specialization_name" class="custom-class"
+                                                wire:model="specialization_name" required />
                                             @error('specialization_name')
                                                 <p class="text-red-500 text-xs italic">{{ $message }}</p>
                                             @enderror

@@ -1,4 +1,7 @@
 <div>
+    <div class="pl-4 pt-4">
+
+    
     <button wire:click="toggleAddForm"
         style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
         class="bg-blue-500 hover:bg-blue-700  font-bold py-2 px-4 rounded mb-4">
@@ -9,6 +12,7 @@
     wire:click='export'>
     <i class="fa-solid fa-user"></i><i class="fa-solid fa-right-to-bracket"></i>
 </x-button>
+</div>
     @if (session()->has('status'))
         <div class="alert {{ session('status') ? 'text-green-500' : 'text-red-500' }}">
             {{ session('status') }}

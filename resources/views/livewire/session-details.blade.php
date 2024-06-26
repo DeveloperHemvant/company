@@ -1,16 +1,19 @@
 <div>
     @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
-    <button wire:click="toggleAddForm"
+    <div class="pl-4 pt-4">
+        <button wire:click="toggleAddForm"
         style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;">
         {{ $showAddForm ? 'Cancel' : 'Add Session' }}
     </button>
+    
+    
     @endif
     <x-button title="Export Session Data"
     class="bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none cursor-pointer transition-colors duration-300 ease-in-out hover:bg-green-700"
     wire:click='export'>
     <i class="fa-solid fa-user"></i><i class="fa-solid fa-right-to-bracket"></i>
 </x-button>
-
+</div>
     @if (session()->has('status'))
         <div class="alert {{ session('status') ? 'text-green-500' : 'text-red-500' }}">
             {{ session('status') }}

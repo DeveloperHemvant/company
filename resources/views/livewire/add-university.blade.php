@@ -1,10 +1,13 @@
-<div>
+<div >
     @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
-    <button
-    style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-    wire:click="toggleAddForm" class="bg-blue-500 hover:bg-blue-700  font-bold py-2 px-4 rounded mb-4">
-    {{ $showAddForm ? 'Cancel' : 'Add University' }}
-</button>
+    <div class="pl-4 pt-4">
+        <button
+        style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
+        wire:click="toggleAddForm" class=" pl-4 bg-blue-500 hover:bg-blue-700  font-bold py-2 px-4 rounded mb-4">
+        {{ $showAddForm ? 'Cancel' : 'Add University' }}
+    </button>
+    </div>
+    
     @endif
     
     @if (session()->has('status'))
@@ -44,7 +47,7 @@
             </div>
         </form>
     @endif
-    <div class="flex flex-col md:flex-row md:w-auto w-full mb-4 md:mb-0 items-center">
+    <div class="flex flex-col md:flex-row md:w-auto w-full mb-4 md:mb-0 items-center pl-4">
         <div class="relative w-full md:w-auto mb-4 md:mb-0 md:mr-4">
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"

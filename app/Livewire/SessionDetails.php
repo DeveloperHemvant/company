@@ -91,7 +91,7 @@ if (!in_array($monthDiff, [6, 11, 12, 23, 24])) {
 
     session()->flash('status', 'Session created successfully');
     $this->resetdata();
-    $this->refreshData();
+    // $this->refreshData();
     $this->showAddForm = false;
 }
     public $session_id;
@@ -135,7 +135,7 @@ if (!in_array($monthDiff, [6, 11, 12, 23, 24])) {
         session()->flash('status', 'Session Updated successfully');
         $this->resetdata();
         $this->showEditForm = false;
-        $this->refreshData();
+        // $this->refreshData();
     }
 
 
