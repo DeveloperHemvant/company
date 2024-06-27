@@ -26,6 +26,7 @@ class AddUniversity extends Component
 
         $this->showAddForm = !$this->showAddForm;
         $this->showEditForm = false;
+        session()->forget('status');
     }
     #[Validate('required', message: 'Please provide University Name', translate: false)]
     public $university_name = '';
@@ -44,7 +45,7 @@ class AddUniversity extends Component
                 Rule::unique('universities')->whereNull('deleted_at'),
             ],
         ]);
-
+        // dd($validatedData);
         if (University::create($validatedData)) {
             session()->flash('status', 'Unversity created successfully');
         } else {

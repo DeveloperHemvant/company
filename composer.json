@@ -14,8 +14,11 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.0",
         "maatwebsite/excel": "^3.1",
+        "mostafaznv/pdf-optimizer": "^1.1",
         "power-components/livewire-powergrid": "^5.6",
         "realrashid/sweet-alert": "^7.1",
+        "setasign/fpdf": "^1.8",
+        "setasign/fpdi": "^2.6",
         "setasign/fpdi-fpdf": "^2.3"
     },
     "require-dev": {

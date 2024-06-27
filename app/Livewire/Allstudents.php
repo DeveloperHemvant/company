@@ -108,7 +108,7 @@ class Allstudents extends Component
         // dd($student->aadhar_no);
         $student->save();
         $student->delete();
-        $this->dispatch('delete');
+        $this->dispatch('deleted');
     }
     //export the data////
     public function export_data()

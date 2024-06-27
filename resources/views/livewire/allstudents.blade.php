@@ -38,17 +38,21 @@
             <div class="mb-4">
                 <form wire:submit.prevent="importexceldata" class="mb-4">
                     <div class="mb-4">
-                        <label for="importData" class="block text-gray-700 text-sm font-bold mb-2">Upload Excel sheet</label>
-                        <input type="file" wire:model="importData" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                        <label for="importData" class="block text-gray-700 text-sm font-bold mb-2">Upload Excel
+                            sheet</label>
+                        <input type="file" wire:model="importData"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
                         @error('importData')
                             <div class="text-red-500">{{ $message }}</div>
                         @enderror
                     </div>
-                    <x-button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    <x-button type="submit"
+                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                         {{ __('Upload') }}
                     </x-button>
                 </form>
-                <x-button wire:click="cancelimportform" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <x-button wire:click="cancelimportform"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     {{ __('Cancel') }}
                 </x-button>
             </div>
@@ -91,11 +95,11 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                 <option value="">Select Session</option>
                                 @if ($sessionsfilter)
-                                @foreach ($sessionsfilter as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
+                                    @foreach ($sessionsfilter as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
                                 @endif
-                                
+
                             </select>
                         </div>
                         <div class="flex space-x-3 items-center">
@@ -104,13 +108,13 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                 <option value="">Select Course</option>
                                 @if ($coursefilter)
-                                @foreach ($coursefilter as $item)
-                                    <option value="{{ $item->id }}">{{ $item->course_name }}</option>
-                                @endforeach
+                                    @foreach ($coursefilter as $item)
+                                        <option value="{{ $item->id }}">{{ $item->course_name }}</option>
+                                    @endforeach
                                 @endif
                             </select>
                         </div>
-                        
+
                     </div>
                 </div>
 
@@ -119,27 +123,27 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col"
-                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Sr. No.</th>
-                            <th scope="col"
-                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Name</th>
-                                
-                            <th scope="col"
-                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Contact No.</th>
-                            {{-- <th scope="col"
+                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Sr. No.</th>
+                                <th scope="col"
+                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Name</th>
+
+                                <th scope="col"
+                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Contact No.</th>
+                                {{-- <th scope="col"
                                 class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Father Name</th> --}}
-                             <th scope="col"
-                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Course</th>
                                 <th scope="col"
-                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                University</th>
+                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Course</th>
                                 <th scope="col"
-                                class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Session</th>
+                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    University</th>
+                                <th scope="col"
+                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Session</th>
                                 <th scope="col"
                                     class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Actions</th>
@@ -255,7 +259,7 @@
                 <div class=" p-[17px]">
                     {{ $studentDatas->links() }}
                 </div>
-              
+
             </div>
         </div>
     </section>
@@ -285,12 +289,16 @@
                     icon: 'success'
                 });
             });
-            Livewire.on('delete', function() {
+            Livewire.on('deleted', function() {
                 Swal.fire({
                     title: 'Success!',
                     text: 'Data Deleted',
-                    icon: 'success'
+                    icon: 'success',
+                    timer: 2000, // Auto-dismiss after 2 seconds
+                    timerProgressBar: true, // Show progress bar
+                    showConfirmButton: false // Hide the "OK" button
                 });
+
             });
         });
         document.addEventListener('livewire:load', function() {

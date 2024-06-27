@@ -20,8 +20,9 @@
     @endif
     <div class="relative">
         @if ($showAddForm)
-            <form wire:submit.prevent="save" class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg"
+            <form wire:submit.prevent="save" class="mb-4  mx-auto p-4 bg-white shadow-md rounded-lg"
                 autocomplete="off">
+                <div class="grid grid-cols-4 gap-4">
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 font-bold mb-2">Associate Center Name<span
                             class="text-red-500">*</span></label>
@@ -138,6 +139,8 @@
                         Save
                     </button>
                 </div>
+            </div>
+
             </form>
 
             <div wire:loading wire:target="save"
@@ -215,8 +218,9 @@
                             <td colspan="2">
                                 <!-- Edit Associate Form -->
                                 <form wire:submit.prevent="update"
-                                    class="mb-4 max-w-lg mx-auto p-4 bg-white shadow-md rounded-lg"
+                                    class="mb-4 mx-auto p-4 bg-white shadow-md rounded-lg"
                                     autocomplete="off">
+                                    <div class="grid grid-cols-4 gap-4">
                                     <div class="mb-4">
                                         <label for="name" class="block text-gray-700 font-bold mb-2">Associate Center Name<span
                                                 class="text-red-500">*</span></label>
@@ -324,6 +328,8 @@
                                             Update
                                         </button>
                                     </div>
+                                </div>
+
                                 </form>
 
                             </td>

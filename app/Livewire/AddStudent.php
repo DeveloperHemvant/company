@@ -17,7 +17,11 @@ use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
-
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfReader;
+use Mostafaznv\PdfOptimizer\Laravel\Facade\PdfOptimizer;
+use Mostafaznv\PdfOptimizer\Enums\ColorConversionStrategy;
+use Mostafaznv\PdfOptimizer\Enums\PdfSettings;
 class AddStudent extends Component
 {
     public $sem_1, $sem_2, $sem_3, $sem_4, $sem_5, $sem_6, $sem_7, $sem_8;
@@ -60,7 +64,6 @@ class AddStudent extends Component
     public $files = [];
     public $monthDifference;
     use WithFileUploads;
-
     public function addFile()
     {
         $this->files[] = ['file' => null];
@@ -72,7 +75,7 @@ class AddStudent extends Component
     }
     public function addstudent()
     {
-        // try {
+        // Validate form input
         $validatedData = $this->validate([
             'selectedUniversity' => 'required',
             'selectedSession' => 'required',
@@ -105,74 +108,35 @@ class AddStudent extends Component
             'source' => 'required',
             'selectedassociate' => Rule::requiredIf($this->source === 'ASSOCIATE'),
             'semester' => 'required',
-            'files.*.file' => 'nullable|file|mimes:jpeg,png,jpg|max:10240',
-        ], [
-            'selectedUniversity.required' => 'The university selection is required.',
-            'selectedSession.required' => 'The session name is required.',
-            'selectedCourse.required' => 'The course selection is required.',
-            'selectedspecialization.required' => 'The specialization selection is required.',
-            'admission_type.required' => 'The admission type is required.',
-            'fname.required' => 'The first name is required.',
-            'father_name.required' => 'The father\'s name is required.',
-            'mother_name.required' => 'The mother\'s name is required.',
-            'dob.required' => 'The date of birth is required.',
-            'dob.date' => 'The date of birth must be a valid date.',
-            'email.required' => 'The email address is required.',
-            'email.email' => 'The email address must be a valid email.',
-            'mob.required' => 'The mobile number is required.',
-            'mob.digits' => 'The mobile number must be 10 digits.',
-            'address.required' => 'The address is required.',
-            'pmigration.required_with' => 'The migration date is required when pmigration is present.',
-            'pmigration.date' => 'The migration date must be a valid date.',
-            'fee.required_with' => 'The fee is required when fee is present.',
-            'fee.numeric' => 'The fee must be a valid number.',
-            'exam_status.required_with' => 'The exam status is required when exam status is present.',
-            'exam_status.string' => 'The exam status must be a valid string.',
-            'prj_status.required_with' => 'The project status is required when prj status is present.',
-            'prj_status.string' => 'The project status must be a valid string.',
-            'visit_date.required_with' => 'The visit date is required when visit date is present.',
-            'visit_date.date' => 'The visit date must be a valid date.',
-            'pass_back.required_with' => 'The pass back status is required when pass back is present.',
-            'pass_back.string' => 'The pass back status must be a valid string.',
-            'aadhar_no.required' => 'The Aadhar number is required.',
-            'aadhar_no.unique' => 'The Aadhar number has already been taken for this session and course.',
-            'source.required' => 'The source is required.',
-            'selectedassociate.required_if' => 'The associate selection is required when the source is ASSOCIATE.',
-            'refname.required_if' => 'The reference name is required when the source is not ASSOCIATE.',
-            'semester.required' => 'The semester is required.',
-            'files.*.file.required_with' => 'Each file is required when a file is present.',
-            'files.*.file.file' => 'Each file must be a valid file type.',
-            'files.*.file.mimes' => 'Each file must be of type: jpeg, png, jpg.',
-            'files.*.file.max' => 'Each file must not be greater than 10MB.',
+            'files.*.file' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:10240',
         ]);
+    
         $lastId = Students::latest('id')->value('id');
         $newId = $lastId + 1;
         $student = new Students;
         $student->id = $newId;
+    
+        // Assign validated data to the student model
         $student->university_id = $validatedData['selectedUniversity'];
-        if ($this->source === 'ASSOCIATE') {
-            $student->user_id = $validatedData['selectedassociate'];
-            $student->associate = User::where(['id' => $validatedData['selectedassociate']])->pluck('name')->first();
-        }
-        $student->source = $validatedData['source'];
+        $student->session_id = $validatedData['selectedSession'];
+        $student->course_id = $validatedData['selectedCourse'];
+        $student->specialization_id = $validatedData['selectedspecialization'];
+        $student->type = $validatedData['admission_type'];
         $student->name = $validatedData['fname'];
         $student->father_name = $validatedData['father_name'];
         $student->mother_name = $validatedData['mother_name'];
         $student->dob = $validatedData['dob'];
-        $student->aadhar_no = $validatedData['aadhar_no'];
         $student->email_id = $validatedData['email'];
-        $student->address = $validatedData['address'];
         $student->mob_no = $validatedData['mob'];
-        $student->course_id = $validatedData['selectedCourse'];
-        $student->specialization_id = $validatedData['selectedspecialization'];
-        $student->type = $validatedData['admission_type'];
-        $student->session_id = $validatedData['selectedSession'];
+        $student->address = $validatedData['address'];
         $student->previous_migration = $validatedData['pmigration'];
         $student->fee = $validatedData['fee'];
         $student->exam_status = $validatedData['exam_status'];
         $student->project_status = $validatedData['prj_status'];
         $student->uni_visit_date = $validatedData['visit_date'];
         $student->pass_back = $validatedData['pass_back'];
+        $student->aadhar_no = $validatedData['aadhar_no'];
+        $student->source = $validatedData['source'];
         $student->sem_year = $validatedData['semester'];
         $student->marksheet_1st_sem = $this->sem_1;
         $student->marksheet_2nd_sem = $this->sem_2;
@@ -182,39 +146,115 @@ class AddStudent extends Component
         $student->marksheet_6th_sem = $this->sem_6;
         $student->marksheet_7th_sem = $this->sem_7;
         $student->marksheet_8th_sem = $this->sem_8;
-
-        if ($this->files) {
-            $documents = [];
+    
+        // Handle associate data if source is 'ASSOCIATE'
+        if ($this->source === 'ASSOCIATE') {
+            $student->user_id = $validatedData['selectedassociate'];
+            $student->associate = User::where(['id' => $validatedData['selectedassociate']])->pluck('name')->first();
+        }
+    
+        // Process files if uploaded
+        if (count($this->files) > 0) {
+            $pdfFiles = [];
             foreach ($this->files as $file) {
                 if (isset($file['file'])) {
-                    $path = $file['file']->store('documents');
-                    $documents[] = storage_path('app/' . $path); // Full path for the image
+                    $path = $file['file']->store('documentspdf');
+                    $extension = pathinfo($path, PATHINFO_EXTENSION);
+                    if ($extension === 'pdf') {
+                        $pdfFiles[] = storage_path('app/' . $path); // Store absolute path
+                    } elseif (in_array($extension, ['png', 'jpeg', 'jpg'])) {
+                        $pdfFiles[] = $this->convertImageToPdf(storage_path('app/' . $path));
+                    }
                 }
             }
-
-            if (!empty($documents)) {
-                $pdf = Pdf::loadView('documentpdf', compact('documents'));
-                $pdfFileName = uniqid() . '.pdf';
-                $pdfPath = 'documentspdf/' . $pdfFileName;
-                Storage::disk('public')->put($pdfPath, $pdf->output());
-                $student->documents = $pdfPath;
+    
+            // Merge PDFs if any and optimize
+            if (!empty($pdfFiles)) {
+                $mergedPdfPath = 'documentspdf/' . uniqid() . '.pdf';
+                $pdf = new Fpdi();
+                foreach ($pdfFiles as $pdfFile) {
+                    $pageCount = $pdf->setSourceFile($pdfFile);
+                    for ($i = 1; $i <= $pageCount; $i++) {
+                        $tplIdx = $pdf->importPage($i);
+                        $pdf->AddPage();
+                        $pdf->useTemplate($tplIdx);
+                    }
+                }
+                $optimizedPdfPath = $this->optimizePdf($mergedPdfPath);
+                Storage::disk('public')->put($optimizedPdfPath, $pdf->Output('S'));
+                $student->documents = $optimizedPdfPath;
             }
         }
-
+    
+        // Save student record
         $student->save();
+    
+        // Reset form after saving
         $this->resetForm();
+    
+        // Redirect to all students page
         return redirect()->route('all-student');
-
-        // } catch (ValidationException $e) {
-        //     $errors = $e->validator->errors()->all();
-        //     session()->flash('error', $errors[0]);
-        // } catch (\Exception $e) {
-        //     // Handle other exceptions, such as database constraint violations
-        //     session()->flash('error', $e->getMessage());
-        // }
     }
+    
+    public function convertImageToPdf($imagePath)
+    {
+        $pdf = Pdf::loadView('documentpdf', ['imagePath' => $imagePath]);
+        $imagePdfPath = 'documentspdf/' . uniqid() . '.pdf';
+        $optimizedPdfPath = $this->optimizePdf($imagePdfPath);
+        Storage::put($optimizedPdfPath, $pdf->output());
+        return storage_path('app/' . $optimizedPdfPath); // Return absolute path
+    }
+    
+    protected function optimizePdf($pdfPath)
+    {
+        try {
+            // Optimize the PDF using PdfOptimizer
+            $optimizedPdfPath = 'documentspdf/' . uniqid() . '.pdf';
+            PdfOptimizer::fromDisk('public')
+                ->open($pdfPath)
+                ->toDisk('public')
+                ->settings(PdfSettings::SCREEN)
+                ->colorConversionStrategy(ColorConversionStrategy::DEVICE_INDEPENDENT_COLOR)
+                ->colorImageResolution(50)
+                ->optimize(storage_path('app/public/' . $optimizedPdfPath));
+    
+            return $optimizedPdfPath;
+        } catch (\Exception $e) {
+            // Handle any errors that occur during PDF optimization
+            \Log::error('Error optimizing PDF: ' . $e->getMessage());
+            return null;
+        }
+    }
+    
+    // public function convertImageToPdf($imagePath)
+    // {
+    //     $pdf = Pdf::loadView('documentpdf', ['imagePath' => $imagePath]);
+    //     $imagePdfPath = 'documentspdf/' . uniqid() . '.pdf';
+    //     $optimizedPdfPath = $this->optimizePdf($imagePdfPath);
+    //     Storage::put($optimizedPdfPath, $pdf->output());
+    //     return storage_path('app/' . $imagePdfPath);
+    // }
+    // protected function optimizePdf($pdfPath)
+    // {
+    //     try {
+    //         // Optimize the PDF using PdfOptimizer
+    //         $optimizedPdfPath = 'documentspdf/' . uniqid() . '.pdf';
+    //         PdfOptimizer::fromDisk('local')
+    //             ->open(storage_path('app/public/' . $pdfPath))
+    //             ->toDisk('local')
+    //             ->settings(PdfSettings::SCREEN)
+    //             ->colorConversionStrategy(ColorConversionStrategy::DEVICE_INDEPENDENT_COLOR)
+    //             ->colorImageResolution(50)
+    //             ->optimize(storage_path('app/public/' . $optimizedPdfPath));
 
-    private function resetForm()
+    //         return $optimizedPdfPath;
+    //     } catch (\Exception $e) {
+    //         // Handle any errors that occur during PDF optimization
+    //         \Log::error('Error optimizing PDF: ' . $e->getMessage());
+    //         return null;
+    //     }
+    // }
+    public function resetForm()
     {
         $this->university = null;
         $this->selectedSession = null;
@@ -247,7 +287,6 @@ class AddStudent extends Component
     public function mount()
     {
         $this->today = Carbon::today()->toDateString();
-        // $this->sessions = admission_session::all();
         $this->universities = University::all();
         $this->associate = User::where('usertype', 'associate')->get();
         $this->files[] = ['file' => null];
@@ -255,30 +294,23 @@ class AddStudent extends Component
     /* method to for dropdown */
     public function updatedSelectedUniversity($selectedUniversity)
     {
-
         if (!is_null($selectedUniversity)) {
             $this->cousre = Cousre::where('university_id', $selectedUniversity)->get();
             $this->sessions = admission_session::where('university_id', $selectedUniversity)->get();
-
         }
     }
     public function updatedSelectedCourse($selectedCourse)
     {
-        
         if (!is_null($selectedCourse)) {
             $this->specialization = specializations::where('cousre_id', $selectedCourse)->get();
         }
     }
-    public function updatedSelectedSession($id){
+    public function updatedSelectedSession($id)
+    {
         $session_diff = admission_session::find($id);
-        // dd($session_diff->endmonth);
-
         $startDate = Carbon::createFromFormat('Y-m', $session_diff->startmonth);
-$endDate = Carbon::createFromFormat('Y-m', $session_diff->endmonth);
-
-// Calculate the difference in months
-$this->monthDifference = $startDate->diffInMonths($endDate);
-        //dd($this->monthDifference);
+        $endDate = Carbon::createFromFormat('Y-m', $session_diff->endmonth);
+        $this->monthDifference = $startDate->diffInMonths($endDate);
     }
 
     public function render()

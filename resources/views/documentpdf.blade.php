@@ -11,11 +11,12 @@
     </style>
 </head>
 <body>
-    @foreach ($documents as $index => $document)
+    {{-- @foreach ($documents as $index => $document)
         <div @if($index < count($documents) - 1) class="page-break" @endif>
             <img src="{{ $document }}" style="width: 100%;">
         </div>
-    @endforeach
+    @endforeach --}}
+    <img src="{{ $imagePath }}" alt="Image" style="width: 100%; height: auto;">
 </body>
 </html>
 
