@@ -22,6 +22,9 @@ class Allstudents extends Component
     use WithPagination;
 
     use WithFileUploads;
+    public $viewid;
+    public $studentsingleview;
+    public $showViewDropdown=false;
     public $sessionsfilter;
     public $s_search = '';
     public $showDropdown = false;
@@ -178,9 +181,19 @@ class Allstudents extends Component
         // $this->monthDifference = '';
 
     }
+    public function viewstudent($id){
+        // dd("hello");
+        $this->viewid = $id;
+        $this->studentsingleview = Students::with('university', 'course','session','specialization')->find($id);
+        // dd($this->studentsingleview);
+        $this->showViewDropdown = true;
+
+    }
     public function hide()
     {
         $this->showDropdown = false;
+        $this->showViewDropdown = false;
+
     }
     public function updatesem()
     {

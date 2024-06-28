@@ -58,7 +58,7 @@ $interval = $startDateTime->diff($endDateTime);
 $monthDiff = ($interval->y * 12) + $interval->m;
 
 // Check if the month difference is allowed
-if (!in_array($monthDiff, [6, 11, 12, 23, 24])) {
+if (!in_array($monthDiff, [6, 11, 12, 23, 24,35,36,47,48])) {
     session()->flash('error', 'Enter the months correctly.');
     return;
 }
@@ -66,8 +66,9 @@ if (!in_array($monthDiff, [6, 11, 12, 23, 24])) {
 // $this->monthDifference = $monthDiff;
 
 
-    $name = $startDateTime->format('F') . '-' . $endDateTime->format('F') . ' ' . $startDateTime->format('Y');
+    $name = $startDateTime->format('F'). ' ' . $startDateTime->format('Y') . '-' . $endDateTime->format('F') . ' ' . $endDateTime->format('Y');
     $this->name = $name;
+        // dd($this->name);
     $validatedData['name'] = $name;
 
     $this->validate([
@@ -201,7 +202,7 @@ if (!in_array($monthDiff, [6, 11, 12, 23, 24])) {
         $query->where('admission_sessions.university_id', 'like', '%' . $this->u_search . '%');
     }
 
-    $sessionData = $query->paginate(10);
+    $sessionData = $query->orderBy('id', 'desc')->paginate(10);
         // dd($sessionData);
     return view('livewire.session-details', [
         'sessionData' => $sessionData,

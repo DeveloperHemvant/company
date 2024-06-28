@@ -94,12 +94,20 @@
                 </label>
                 <select wire:model="semester" id="semester" class="form-select">
                     <option value=""> Select Semester </option>
-                    @if ($this->monthDifference >=11)
+                    @if ($this->monthDifference > 6 && $this->monthDifference <= 12)
                         @foreach ([2, 4, 6] as $i)
                             <option value="{{ $i }}"> {{ $i }} Semester </option>
                         @endforeach
-                    @elseif ($this->monthDifference >=  23)
+                    @elseif ($this->monthDifference >= 13 && $this->monthDifference <= 24)
                         @foreach ([4, 8] as $i)
+                            <option value="{{ $i }}"> {{ $i }} Semester </option>
+                        @endforeach
+                        @elseif ($this->monthDifference >= 25 && $this->monthDifference <= 36)
+                        @foreach ([6, 8] as $i)
+                            <option value="{{ $i }}"> {{ $i }} Semester </option>
+                        @endforeach
+                        @elseif ($this->monthDifference >= 37 && $this->monthDifference <= 48)
+                        @foreach ([ 8] as $i)
                             <option value="{{ $i }}"> {{ $i }} Semester </option>
                         @endforeach
                     @else

@@ -50,6 +50,20 @@ class AdminController extends Controller
         }else{
             session()->flash('error', 'Email and Password not matched');
         }
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 'user'])) {
+
+            $request->session()->regenerate();
+            return redirect()->intended('/dashboard');
+        }else{
+            session()->flash('error', 'Email and Password not matched');
+        }
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 'admin'])) {
+
+            $request->session()->regenerate();
+            return redirect()->intended('/dashboard');
+        }else{
+            session()->flash('error', 'Email and Password not matched');
+        }
 
         throw ValidationException::withMessages([
             'email' => [trans('auth.failed')],

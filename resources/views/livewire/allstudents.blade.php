@@ -146,6 +146,9 @@
                                     Session</th>
                                 <th scope="col"
                                     class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Registration No</th>
+                                <th scope="col"
+                                    class="px-4 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Actions</th>
                             </tr>
                         </thead>
@@ -171,7 +174,13 @@
                                         @endif
                                     </td>
                                     <td class="px-4 py-3">{{ $studentData->session->name }}</td>
+                                    <td class="px-4 py-3">{{ $studentData->uni_reg_no }}</td>
                                     <td class="px-4 py-3 flex items-center space-x-2">
+                                        <x-button wire:click="viewstudent({{ $studentData->id }})"
+                                            title="Enter the university details"
+                                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </x-button>
                                         <a href="{{ route('update-student', ['id' => $studentData->id]) }}"
                                             title="Update the student"
                                             class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
@@ -265,6 +274,8 @@
     </section>
 
     @include('livewire.student-modal')
+    @include('livewire.student-view-modal')
+
 
     <script>
         window.addEventListener('delete', function() {
