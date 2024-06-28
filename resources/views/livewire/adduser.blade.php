@@ -14,7 +14,7 @@
     
     @if (session()->has('status'))
         <div class="alert {{ session('status') ? 'alert-success' : 'alert-danger' }}">
-           <p class="text-green-500 text-sm">{{ session('status') }}</p> {{ session('status') }}
+           <p class="text-green-500 text-sm">{{ session('status') }}</p> 
         </div>
     @endif
     <div class="relative">

@@ -118,7 +118,7 @@ if (!in_array($monthDiff, [6, 11, 12, 23, 24,35,36,47,48])) {
         ]);
         $startDateTime = new DateTime($this->startmonth);
         $endDateTime = new DateTime($this->endmonth);
-        $name = $startDateTime->format('F') . '-' . $endDateTime->format('F') . ' ' . $startDateTime->format('Y');
+        $name = $startDateTime->format('F') . $startDateTime->format('Y') . '-' . $endDateTime->format('F') . ' ' . $startDateTime->format('Y');
         $validatedData['name'] = $name;
         $admission_session = admission_session::find($this->session_id);
         if (!$admission_session) {

@@ -149,13 +149,13 @@ class Adduser extends Component
             'password.required' => 'The password is required.',
             'password.regex' => 'The password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.',
         ]);
-        $this->usertype = 'staff';
+        // $this->usertype = 'staff';
         // dd($this->is_admin);
 
 // If the usertype is provided in the form, override the default value
-if(isset($this->usertype)) {
-    $validatedData['usertype'] = $this->usertype;
-}
+// if(isset($this->usertype)) {
+//     $validatedData['usertype'] = $this->usertype;
+// }
 
         $user = new User;
         $user->name = $validatedData['name'];
