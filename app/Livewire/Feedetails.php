@@ -44,7 +44,7 @@ class Feedetails extends Component
     }
     public function loadFeeDetails()
     {
-        $this->feeDetails = FeeDetail::where('received_from', 'like', '%' . $this->search . '%')->where('received_from', 'like', '%' . $this->rsearch . '%')->get();
+        $this->feeDetails = FeeDetail::where('received_from', 'like', '%' . $this->search . '%')->where('received_from', 'like', '%' . $this->rsearch . '%')->orderBy('id', 'desc')->get();
     }
     public function save()
     {
@@ -147,7 +147,7 @@ class Feedetails extends Component
         //         ->orWhere('father_name', 'like', '%' . $this->search . '%')
         //         ->orWhere('email_id', 'like', '%' . $this->search . '%');
         // })
-        $this->feeDetails = FeeDetail::where('mode', 'like', '%' . $this->search . '%')->where('received_from', 'like', '%' . $this->rsearch . '%')->get();
+        $this->feeDetails = FeeDetail::where('mode', 'like', '%' . $this->search . '%')->where('received_from', 'like', '%' . $this->rsearch . '%')->orderBy('id', 'desc')->get();
         return view('livewire.feedetails');
     }
 }

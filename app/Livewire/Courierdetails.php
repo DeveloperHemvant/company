@@ -153,7 +153,7 @@ class Courierdetails extends Component
         $this->records = CourierRecord::where('form_type', 'like', '%' . $this->s_formType . '%')
         ->where('tracking_no', 'like', '%' . $this->s_tracking_no . '%')
         ->where('delivery_status', 'like', '%' . $this->s_delivery . '%')->where('particular_details', 'like', '%' . $this->search . '%')
-        ->get();
+        ->orderBy('id', 'desc')->get();
         return view('livewire.courierdetails');
     }
 }
