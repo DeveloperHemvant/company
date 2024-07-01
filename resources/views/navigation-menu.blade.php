@@ -116,6 +116,22 @@
                             <!-- Other dropdown links for programmes -->
                         </x-slot>
                     </x-dropdown>
+                    <x-dropdown>
+                        <x-slot name="trigger">
+                            <x-nav-link :active="request()->routeIs('feedetails*')" class="cursor-pointer hover:text-blue-600">
+                                {{ __('Fee and Courier') }}
+                            </x-nav-link>
+                        </x-slot>
+                        <x-slot name="content" class="py-2 bg-white border rounded shadow-lg">
+                            <x-dropdown-link :href="route('feedetails')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">
+                                Fee Details
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('courierdetails')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">
+                                All Courier Details
+                            </x-dropdown-link>
+                            <!-- Other dropdown links for programmes -->
+                        </x-slot>
+                    </x-dropdown>
                     @endif
                     
                 </div>
@@ -335,6 +351,22 @@
                         Parent Contact Form</x-dropdown-link>
                     {{-- <x-dropdown-link :href="route('all-student')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">All
                         Student</x-dropdown-link> --}}
+                    <!-- Other dropdown links for programmes -->
+                </x-slot>
+            </x-dropdown>
+            <x-dropdown>
+                <x-slot name="trigger">
+                    <x-nav-link :active="request()->routeIs('feedetails*')" class="cursor-pointer hover:text-blue-600">
+                        {{ __('Fee and Courier') }}
+                    </x-nav-link>
+                </x-slot>
+                <x-slot name="content" class="py-2 bg-white border rounded shadow-lg">
+                    <x-dropdown-link :href="route('feedetails')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">
+                        Fee Details
+                    </x-dropdown-link>
+                    <x-dropdown-link :href="route('courierdetails')" wire:navigate class="block px-4 py-2 hover:bg-gray-100">
+                        All Courier Details
+                    </x-dropdown-link>
                     <!-- Other dropdown links for programmes -->
                 </x-slot>
             </x-dropdown>

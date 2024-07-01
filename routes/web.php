@@ -99,6 +99,13 @@ Route::middleware([
     Route::get('/parentform', function () {
         return view('admin/parentcontact');
     })->name('contactformdata');
+    Route::get('/feedetails', function () {
+        return view('admin.feedetails');
+    })->name('feedetails');
+    
+    Route::get('/courierdetails', function () {
+        return view('admin.courierdetails');
+    })->name('courierdetails');
     
 });
 
