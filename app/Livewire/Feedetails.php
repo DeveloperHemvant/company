@@ -6,11 +6,13 @@ use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\FeeDetailsExport;
 use Livewire\Attributes\On;
+use Livewire\WithPagination;
 
 use Livewire\Component;
 
 class Feedetails extends Component
 {
+    use WithPagination;
     public $deleteid;
     public $search = '';
     public $showAddForm = false;
@@ -146,7 +148,6 @@ class Feedetails extends Component
         //         ->orWhere('email_id', 'like', '%' . $this->search . '%');
         // })
         $this->feeDetails = FeeDetail::where('mode', 'like', '%' . $this->search . '%')->where('received_from', 'like', '%' . $this->rsearch . '%')->get();
-        // dd($this->feeDetails);
         return view('livewire.feedetails');
     }
 }

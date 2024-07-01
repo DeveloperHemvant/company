@@ -37,7 +37,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">ASSOCIATE/UNIVERSITY/DIRECT<span
-                                class="text-red-500">*</span></label><br>
+                                class="text-red-500">*</span></label>
                         <select id="formType" wire:model='formType'
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                             <option value="">Select</option>
@@ -202,7 +202,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <button wire:click="edit({{ $record->id }})"
                                         style="background-color: #1e40af; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; border: none; outline: none; cursor: pointer; transition: background-color 0.3s ease;"
-                                        class="text-blue-500 hover:text-blue-700">Edit</button>
+                                        class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-pen-to-square"></i></button>
 
                                     @if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
                                         <button wire:click="deleteconfirmation({{ $record->id }})"
@@ -238,7 +238,7 @@
                                                 <div class="mb-4">
                                                     <label
                                                         class="block text-gray-700 font-bold mb-2">ASSOCIATE/UNIVERSITY/DIRECT<span
-                                                            class="text-red-500">*</span></label><br>
+                                                            class="text-red-500">*</span></label>
                                                     <select id="formType" wire:model='formType'
                                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                                         <option value="">Select</option>

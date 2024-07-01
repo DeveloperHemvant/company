@@ -135,6 +135,13 @@ class Courierdetails extends Component
     }
     public function toggleAddForm()
     {
+        $this->type = '';
+        $this->particular_details = '';
+        $this->courier_type = '';
+        $this->tracking_no = '';
+        $this->delivery_status = '';
+        $this->remarks = '';
+        $this->formType = '';
 
         $this->showAddForm = !$this->showAddForm;
         $this->showEditForm = false;
